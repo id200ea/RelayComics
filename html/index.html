@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body style="padding:0px; margin:0px; background-color:#fff;font-family:'Open Sans',sans-serif,arial,helvetica,verdana">
+
+<!-- #region Jssor Slider Begin -->
+<!-- Generator: Jssor Slider Maker -->
+<!-- Source: https://www.jssor.com -->
+<script src="../js/jssor.slider-25.1.0.min.js" type="text/javascript"></script>
+<script src="../js/TreeModel.js" type="text/javascript"></script>
+<script src="../js/CartoonModel.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="../css/ImgaeSlider.css">
+<style>
+    div[id^="jssor_"] {
+        padding: 1px;
+        top: 0px;
+        width: 2000px;
+    }
+    [data-u="slides"] {
+        width: 2000px;
+    }
+
+    .floating-btn {
+        background: #181717;
+    }
+
+    .floating-container {
+        position: fixed;
+        right: 1em;
+        bottom: 1em;
+        padding: 2.6em;
+    //overflow: hidden;
+    //background: white;
+    }
+
+    .navigation {
+        position: fixed;
+        top: 0; right: 0; bottom: 0; left: 0;
+    //background: rgba(67, 163, 141, .1);
+    }
+
+    .floating-btn ~ .navigation {
+        display: block;
+        opacity: 1;
+        z-index: 50;
+    }
+
+    .floating-btn.is--off ~ .navigation {
+        display: none;
+        opacity: 0;
+    }
+
+
+    .menu {
+        padding: 0;
+        text-align: center;
+    }
+
+    .menu__item {
+        color: #fff;
+        font-size: 3.5em;
+    }
+
+    .menu__item A {
+        display: block;
+        color: inherit;
+    }
+
+    .menu__item:hover {
+        box-shadow: 0 2px 3px rgba(37, 144, 119, .8) inset, 0 -2px 3px rgba(37, 144, 119, .8) inset;
+    }
+
+    .menu__item:hover A {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, .4);
+    }
+    .floating-btn {
+        position: fixed;
+        right: 2em;
+        bottom: 2em;
+        padding: 3.2em 2em;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 60;
+        outline: none;
+    }
+
+    .floating-btn.is--off .menu-icon {
+        background: #000;
+    }
+
+    .menu-icon {
+        display: block;
+        width: 3em;
+        height: 0em;
+        background: transparent;
+    }
+
+    .menu-icon:before,
+    .menu-icon:after {
+        content: "";
+        position: absolute;
+        left: 2em;
+        display: block;
+        width: 3em;
+        height: .3em;
+        background: #fff;
+        transition: transform .2s;
+    }
+
+    .floating-btn.is--off .menu-icon:before,
+    .floating-btn.is--off .menu-icon:after {
+        transform: rotate(0);
+        background: inherit;
+    }
+
+    .floating-btn.is--off .menu-icon:before {
+        top: 3.0em;
+    }
+
+    .floating-btn.is--off .menu-icon:after {
+        bottom: 3.0em;
+        transform: rotate(90deg);
+    }
+
+    .is--off {
+        background: rgb(78, 198, 170);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+    }
+</style>
+<script type="text/javascript">
+    function GetElementInsideContainer(containerID, childID) {
+        var elm = {};
+        var elms = document.getElementById(containerID).getElementsByTagName("*");
+        for (var i = 0; i < elms.length; i++) {
+            if (elms[i].getAttribute("data-u") === childID) {
+                elm = elms[i];
+                break;
+            }
+        }
+        return elm;
+    }
+
+    create_slider = function (cuts, a) {
+        var orislider = document.getElementById('image_slider');
+
+        var slider = orislider.cloneNode(true);
+
+        slider = orislider.cloneNode(true);
+        slider.id = slider.id+"_"+a.toString();
+        slider.style.display = "block"
+        slider.children[0].id = "jssor_" + a.toString();
+        document.body.appendChild(slider);
+
+        var sliders = GetElementInsideContainer(slider.id, "slides");
+        for(var i = 1 ; i<=cuts._len ; i++) {
+            var imagediv = document.createElement("div");
+            var image = document.createElement("img");
+            image.setAttribute("data-u", "image");
+            image.src = cuts.searchCutAt(i).cutsrc;
+            imagediv.appendChild(image);
+            sliders.appendChild(imagediv);
+        }
+
+        slider_init("jssor_" + a.toString());
+    }
+
+    slider_init = function (a) {
+
+        var options = {
+            $AutoPlay: 0,
+            $SlideWidth: 600,
+            $Cols: 4,
+            $Align: 700,
+            $ArrowNavigatorOptions: {
+                $Class: $JssorArrowNavigator$
+            },
+        };
+
+        var slider = new $JssorSlider$(a, options);
+
+        /*#region responsive code begin*/
+        /*remove responsive code if you don't want the slider scales while window resizing*/
+        function ScaleSlider() {
+            var refSize = slider.$Elmt.parentNode.clientWidth;
+            if (refSize) {
+                refSize = Math.min(refSize, 2000);
+                slider.$ScaleWidth(refSize);
+            }
+            else {
+                window.setTimeout(ScaleSlider, 30);
+            }
+        }
+
+        ScaleSlider();
+        $Jssor$.$AddEvent(window, "load", ScaleSlider);
+        $Jssor$.$AddEvent(window, "resize", ScaleSlider);
+        $Jssor$.$AddEvent(window, "orientationchange", ScaleSlider);
+        /*#endregion responsive code end*/
+    };
+
+</script>
+<button class="floating-btn is--off" id="sub-scrn-btn">
+    <span class="menu-icon"></span>
+</button>
+<div id="image_slider" style="display:none">
+    <div id="jssor_">
+        <!-- Loading Screen -->
+        <div data-u="loading" class="jssorl-004-double-tail-spin">
+            <img src="../img/double-tail-spin.svg"/>
+        </div>
+        <div data-u="slides">
+        </div>
+        <!-- Arrow Navigator -->
+        <div data-u="arrowleft" class="jssora051" data-autocenter="2"
+             data-scale="0.75" data-scale-left="0.75">
+            <svg viewbox="0 0 16000 16000" style="position:absolute;top:0;left:0;width:100%;height:100%;">
+                <polyline class="a" points="11040,1920 4960,8000 11040,14080 "></polyline>
+            </svg>
+        </div>
+
+        <div data-u="arrowright" class="jssora051" data-autocenter="2"
+             data-scale="0.75" data-scale-right="0.75">
+            <svg viewbox="0 0 16000 16000" style="position:absolute;top:0;left:0;width:100%;height:100%;">
+                <polyline class="a" points="4960,1920 11040,8000 4960,14080 "></polyline>
+            </svg>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var testCuts = new CutList();
+    testCuts.add("../img/001.jpg");
+    testCuts.add("../img/002.jpg");
+    testCuts.add("../img/003.jpg");
+    testCuts.add("../img/004.jpg");
+    testCuts.add("../img/005.jpg");
+    testCuts.add("../img/006.jpg");
+    testCuts.add("../img/007.jpg");
+    testCuts.add("../img/008.jpg");
+    testCuts.add("../img/009.jpg");
+    testCuts.add("../img/010.jpg");
+
+    create_slider(testCuts, 1);
+    create_slider(testCuts, 2);
+    create_slider(testCuts, 3);
+    create_slider(testCuts, 4);
+    create_slider(testCuts, 5);
+    create_slider(testCuts, 6);
+
+    var index = 7;
+    pre=1;
+    cur_slider = document.getElementById('image_slider_'+pre.toString());
+    window.onscroll = function (ev) {
+        var top  = window.pageYOffset || document.documentElement.scrollTop;
+        cur = (parseInt((top+190)/380)+2).toString()
+        if(pre!=cur){
+            cur_slider.style.border="none";
+            cur_slider = document.getElementById('image_slider_'+cur.toString());
+            console.log(cur_slider);
+            cur_slider.style.border = "3px solid green"
+            pre = cur;
+        }
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            create_slider(testCuts, index++);
+        }
+    };
+    (function (){
+        "use strict";
+
+        var floatingBtn = document.getElementById("sub-scrn-btn");
+
+        floatingBtn.addEventListener("click", function (e) {
+            var btn = e.currentTarget;
+            btn.classList.toggle("is--off");
+        });
+
+    })();
+</script>
+<!-- #endregion Jssor Slider End -->
+</body>
+</html>
