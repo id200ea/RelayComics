@@ -24,6 +24,7 @@ window.onload = function(){
     drawCanvas.addEventListener("mouseout", listener);
 
     draw = drawPen;  //함수 포인터 사용 기본 Pen 등록
+    changeColor();
 }
  
 function listener(event){

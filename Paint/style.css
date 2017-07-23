@@ -1,14 +1,14 @@
 div{
 	float: left;
-	margin: 5px;
 }
 #centerBox{
 	width: 500px;
 	height: 500px;
+	margin: 5px;
 }
 /*Canvas CSS*/
 .canvasBox{
-	/*position: absolute;*/
+	position: absolute;
 	background-color: transparent;
 	border: 1px solid black;
 	width: 500px;
@@ -27,6 +27,7 @@ div{
 	background: gray;
 	width: 100px;
 	height: 500px;
+	margin: 5px;
 }
 /*Tools*/
 .drawTool{
@@ -43,6 +44,7 @@ div{
 	background: gray;
 	width: 200px;
 	height: 300px;
+	margin: 5px;
 }
 #plusBox{
 	background: blue;

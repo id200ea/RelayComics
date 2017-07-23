@@ -6,6 +6,7 @@
 	<script src="canvas.js"></script>
 	<script src="draw_tool.js"></script>
 	<script src="layers.js"></script>
+	<script src="jscolor.js"></script>
 </head>
 <body>
 	<div id="leftBox">
@@ -18,9 +19,11 @@
 		<canvas class="canvasBox" id="drawBox" width="500" height="500"></canvas>
 		<canvas class="canvasBox" id="viewBox1" width="500" height="500"></canvas>
 	</div>
+	Color <input class="jscolor" id="colorBox" value="ab2567" onchange="changeColor()">
 	<div id="optionBox">
 		<div id="plusBox" title="PLUS" href="javascript:void(0)" onclick="addLayer();"></div>
 		<div class="layerBox" id="layer1" title="LAYER" href="javascript:void(0)" onclick="changeLayer(event);">Layer1</div>
+
 	</div>
 </body>
 </html>

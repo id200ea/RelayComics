@@ -1,3 +1,11 @@
+var color;
+
+function changeColor(){
+    color = "#" + document.getElementById("colorBox").value;
+    alert(color);
+}
+
+
 function selectFunc(event){
     alert(event.target.title +" Register");
 
