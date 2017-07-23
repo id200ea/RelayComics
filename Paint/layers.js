@@ -7,7 +7,7 @@ function changeLayer(event){
 	alert(id +" Register");
 }
 
-var layerCount = 2;
+var layerCount = 1;
 
 function addLayer() {
 	var newCanvas = document.createElement("canvas");
@@ -15,6 +15,7 @@ function addLayer() {
 	newCanvas.id="viewBox"+layerCount;
 	newCanvas.width="500";
 	newCanvas.height="500";
+	newCanvas.zindex=-layerCount;	//작을수록 앞으로 나온다.
 	document.getElementById("centerBox").appendChild(newCanvas);
 
 	var newLayer = document.createElement("div");

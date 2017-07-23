@@ -25,6 +25,7 @@ window.onload = function(){
 
     draw = drawPen;  //함수 포인터 사용 기본 Pen 등록
     changeColor();
+    addLayer();
 }
  
 function listener(event){

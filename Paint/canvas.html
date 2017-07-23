@@ -14,16 +14,16 @@
 		<div class="drawTool" id="line" title="LINE" href="javascript:void(0)" onclick="selectFunc(event);">Line</div>
 		<div class="drawTool" id="rect" title="RECT" href="javascript:void(0)" onclick="selectFunc(event);">Rect</div>
 		<div class="drawTool" id="clear" title="CLEAR" href="javascript:void(0)" onclick="drawClear();">ClearLayer</div>
+		<div class="drawTool" id="clear" title="CLEAR" href="javascript:void(0)">AutoColor</div>
+		<div class="drawTool" id="clear" title="CLEAR" href="javascript:void(0)">Style</div>
 	</div>
 	<div id="centerBox">
 		<canvas class="canvasBox" id="drawBox" width="500" height="500"></canvas>
 		<canvas class="canvasBox" id="viewBox1" width="500" height="500"></canvas>
 	</div>
-	Color <input class="jscolor" id="colorBox" value="ab2567" onchange="changeColor()">
 	<div id="optionBox">
+		<input class="jscolor" id="colorBox" value="66E398" onchange="changeColor()">
 		<div id="plusBox" title="PLUS" href="javascript:void(0)" onclick="addLayer();"></div>
-		<div class="layerBox" id="layer1" title="LAYER" href="javascript:void(0)" onclick="changeLayer(event);">Layer1</div>
-
 	</div>
 </body>
 </html>
