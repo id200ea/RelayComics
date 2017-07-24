@@ -17,6 +17,7 @@ function Cartoon(title, rootNum, rootImgSrc){
 Cut.prototype.addChild = function(num, imgSrc) {
     var child = new Cut(num, imgSrc, this);
     this.child.push(child);
+    return child;
 };
 
 
@@ -96,3 +97,5 @@ CutList.prototype.searchCutAt = function(position) {
 
     return cur;
 };
+
+module.exports = Cartoon;
