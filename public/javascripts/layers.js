@@ -8,6 +8,8 @@ function changeLayer(event){
 }
 
 var layerCount = 1;
+var canvasList = new Array(); //canvas를 저장
+var layerList = new Array(); //옵션 Box의 Layer DIV를 저장
 
 function addLayer() {
 	var newCanvas = document.createElement("canvas");
@@ -18,6 +20,8 @@ function addLayer() {
 	newCanvas.zindex=-layerCount;	//작을수록 앞으로 나온다.
 	document.getElementById("centerBox").appendChild(newCanvas);
 
+	canvasList.push(newCanvas);
+
 	var newLayer = document.createElement("div");
 	newLayer.className="layerBox";
 	newLayer.id="layer"+layerCount;
@@ -27,5 +31,24 @@ function addLayer() {
 	newLayer.onclick=changeLayer;
 	document.getElementById("optionBox").appendChild(newLayer);
 
+	layerList.push(newLayer);
+
 	layerCount++;
-}	
+}
+
+function mergeLayer() {
+    var mergeCanvas, mergeCtx, i;
+
+    mergeCanvas = document.createElement("canvas");
+    mergeCanvas.className="canvasBox";
+    mergeCanvas.width="500";
+    mergeCanvas.height="500";
+
+    mergeCtx = mergeCanvas.getContext("2d");
+
+	for(i=0;i<canvasList.length;i++)
+        mergeCtx.drawImage(canvasList[i], 0, 0);
+
+
+
+}

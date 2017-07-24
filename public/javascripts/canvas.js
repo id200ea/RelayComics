@@ -10,12 +10,11 @@ var draw;  //함수 포인터
 
 
 window.onload = function(){
-	//캔버스에 그림을 그릴려면 '그리기 컨텍스트'를 얻어야 한다.
-	//canvas의 DOM 객체를 얻는다
     drawCanvas = document.getElementById("drawBox");
-    viewCanvas = document.getElementById("viewBox1");
-    //DOM 객체로부터 2D 컨텍스트를 얻는다
     drwaCtx = drawCanvas.getContext("2d");
+
+    addLayer();
+    viewCanvas = document.getElementById("viewBox1");
     viewCtx = viewCanvas.getContext("2d");
  
     drawCanvas.addEventListener("mousemove", listener);
@@ -25,7 +24,6 @@ window.onload = function(){
 
     draw = drawPen;  //함수 포인터 사용 기본 Pen 등록
     changeColor();
-    addLayer();
 }
  
 function listener(event){
