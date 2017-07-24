@@ -1,0 +1,119 @@
+div[id^="jssor_"] {
+    position: relative;
+    margin: auto;
+    padding: 10px;
+    top: 20px;
+    bottom: 0px;
+    left: 0px;
+    width: 1800px;
+    height: 380px;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+[data-u="loading"] {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+[data-u="loading"] img {
+    margin-top: -19px;
+    position: relative;
+    top: 50%;
+    width: 38px;
+    height: 38px;
+}
+
+[data-u="slides"] {
+    cursor: default;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 1800px;
+    height: 380px;
+    overflow: hidden;
+}
+[data-u="arrowright"] {
+    width: 65px;
+    height: 65px;
+    top: 0px;
+    right: 45px;
+}
+[data-u="arrowleft"] {
+    width: 65px;
+    height: 65px;
+    top: 0px;
+    left: 45px;
+}
+
+.jssorl-004-double-tail-spin img {
+    animation-name: jssorl-004-double-tail-spin;
+    animation-duration: 0.0001s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes jssorl-004-double-tail-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.jssorb051 .i {
+    position: absolute;
+    cursor: pointer;
+}
+
+.jssorb051 .i .b {
+    fill: #fff;
+    fill-opacity: 0.5;
+    stroke: gray;
+    stroke-width: 400;
+    stroke-miterlimit: 10;
+    stroke-opacity: 0.5;
+}
+
+.jssorb051 .i:hover .b {
+    fill-opacity: .7;
+}
+
+.jssorb051 .iav .b {
+    fill-opacity: 1;
+}
+
+.jssorb051 .i.idn {
+    opacity: .3;
+}
+
+.jssora051 {
+    display: block;
+    position: absolute;
+    cursor: pointer;
+}
+
+.jssora051 .a {
+    fill: none;
+    stroke: gray;
+    stroke-width: 360;
+    stroke-miterlimit: 10;
+}
+
+.jssora051:hover {
+    opacity: .8;
+}
+
+.jssora051.jssora051dn {
+    opacity: .5;
+}
+
+.jssora051.jssora051ds {
+    opacity: .3;
+    pointer-events: none;
+}
