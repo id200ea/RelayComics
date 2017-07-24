@@ -49,6 +49,10 @@ function mergeLayer() {
 	for(i=0;i<canvasList.length;i++)
         mergeCtx.drawImage(canvasList[i], 0, 0);
 
+    var dataURL = mergeCanvas.toDataURL('image/png');
+    dataURL = dataURL.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+    dataURL = dataURL.replace(/^data:application\/octet-stream/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=Canvas.png');
 
+    alert(dataURL);
 
 }
