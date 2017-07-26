@@ -13,7 +13,7 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');;
+app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -27,6 +27,13 @@ app.use('/', main);
 app.use('/detail', detail);
 app.use('/canvas', canvas);
 
+app.get('/image_receiver', function (req, res) {
+    var image_Base64 = req.query.title.replace('data:image/png;base64,','');  //utf-8 decoding 하자
+    var B_Image_Str = new Buffer(image_Base64, 'base64');
+
+    console.log(B_Image_Str);
+    res.send(B_Image_Str);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

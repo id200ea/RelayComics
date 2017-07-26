@@ -50,9 +50,17 @@ function mergeLayer() {
         mergeCtx.drawImage(canvasList[i], 0, 0);
 
     var dataURL = mergeCanvas.toDataURL('image/png');
-    dataURL = dataURL.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
-    dataURL = dataURL.replace(/^data:application\/octet-stream/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=Canvas.png');
 
-    alert(dataURL);
+    var form = document.createElement('form');
+    form.method = 'get';
+    form.action = '/image_receiver';
 
+    var element = document.createElement('input');
+    element.type='hidden';
+    element.name='title';
+    element.value=dataURL;
+    form.appendChild(element);
+
+    document.body.appendChild(form);
+    form.submit();
 }
