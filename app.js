@@ -27,13 +27,15 @@ app.use('/', main);
 app.use('/detail', detail);
 app.use('/canvas', canvas);
 
+//지응 코드
 app.get('/image_receiver', function (req, res) {
-    var image_Base64 = req.query.title.replace('data:image/png;base64,','');  //utf-8 decoding 하자
-    var B_Image_Str = new Buffer(image_Base64, 'base64');
-
-    console.log(B_Image_Str);
-    res.send(B_Image_Str);
+    var image_Base64 = req.query.title.replace('data:image/png;base64,','');  //Decoding 전처리
+    var B_Image_Str = new Buffer(image_Base64, 'base64');  //Decoding 부분
+    var fs = require('fs');  //파일 입출력 모듈
+    fs.writeFile('image_transmission/image.png', B_Image_Str);  //파일 출력
+    res.send("전송완료");  //여기에 그림 파일 보내주면 될듯.
 });
+//지응 코드 끝
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
