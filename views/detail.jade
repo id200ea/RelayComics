@@ -8,234 +8,36 @@ html
         // #region Jssor Slider Begin
         // Generator: Jssor Slider Maker
         // Source: https://www.jssor.com
-        script(src='../javascripts/jssor.slider-25.1.0.min.js', type='text/javascript')
-        script(src='../javascripts/TreeModel.js', type='text/javascript')
+        script(src='../javascripts/image_slider.js', type='text/javascript')
         script(src='../javascripts/CartoonModel.js', type='text/javascript')
-        link(rel='stylesheet', type='text/css', href='../stylesheets/ImgaeSlider.css')
-        style.
-            div[id^="jssor_"] {
-                padding: 1px;
-                top: 0px;
-                width: 2000px;
-            }
-            [data-u="slides"] {
-                width: 2000px;
-            }
-            .floating-btn {
-                background: #181717;
-            }
-            .floating-container {
-                position: fixed;
-                right: 1em;
-                bottom: 1em;
-                padding: 2.6em;
-            //overflow: hidden;
-            //background: white;
-            }
-            .navigation {
-                position: fixed;
-                top: 0; right: 0; bottom: 0; left: 0;
-            //background: rgba(67, 163, 141, .1);
-            }
-            .floating-btn ~ .navigation {
-                display: block;
-                opacity: 1;
-                z-index: 50;
-            }
-            .floating-btn.is--off ~ .navigation {
-                display: none;
-                opacity: 0;
-            }
-            .menu {
-                padding: 0;
-                text-align: center;
-            }
-            .menu__item {
-                color: #fff;
-                font-size: 3.5em;
-            }
-            .menu__item A {
-                display: block;
-                color: inherit;
-            }
-            .menu__item:hover {
-                box-shadow: 0 2px 3px rgba(37, 144, 119, .8) inset, 0 -2px 3px rgba(37, 144, 119, .8) inset;
-            }
-            .menu__item:hover A {
-                text-shadow: 0 2px 4px rgba(0, 0, 0, .4);
-            }
-            .floating-btn {
-                position: fixed;
-                right: 2em;
-                bottom: 2em;
-                padding: 3.2em 2em;
-                border: none;
-                border-radius: 50%;
-                cursor: pointer;
-                z-index: 60;
-                outline: none;
-            }
-            .floating-btn.is--off .menu-icon {
-                background: #000;
-            }
-            .menu-icon {
-                display: block;
-                width: 3em;
-                height: 0em;
-                background: transparent;
-            }
-            .menu-icon:before,
-            .menu-icon:after {
-                content: "";
-                position: absolute;
-                left: 2em;
-                display: block;
-                width: 3em;
-                height: .3em;
-                background: #fff;
-                transition: transform .2s;
-            }
-            .floating-btn.is--off .menu-icon:before,
-            .floating-btn.is--off .menu-icon:after {
-                transform: rotate(0);
-                background: inherit;
-            }
-            .floating-btn.is--off .menu-icon:before {
-                top: 3.0em;
-            }
-            .floating-btn.is--off .menu-icon:after {
-                bottom: 3.0em;
-                transform: rotate(90deg);
-            }
-            .is--off {
-                background: rgb(78, 198, 170);
-                box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
-            }
+        script(src='../javascripts/TreeModel.js', type='text/javascript')
+        link(rel='stylesheet', type='text/css', href='../stylesheets/image_slider.css')
+        link(rel='stylesheet', type='text/css', href='../stylesheets/floating_button.css')
         script(type='text/javascript').
-            cutnum = [];
-            story = [];
-            function GetElementInsideContainer(containerID, childID) {
-                var elm = {};
-                var elms = document.getElementById(containerID).getElementsByTagName("*");
-                for (var i = 0; i < elms.length; i++) {
-                    if (elms[i].getAttribute("data-u") === childID) {
-                        elm = elms[i];
-                        break;
-                    }
-                }
-                return elm;
-            }
-            create_slider = function (cuts, a) {
-                var orislider = document.getElementById('image_slider');
-                var slider = orislider.cloneNode(true);
-                slider = orislider.cloneNode(true);
-                slider.id = slider.id+"_"+a.toString();
-                slider.style.display = "block"
-                slider.children[0].id = "jssor_" + a.toString();
-                document.body.appendChild(slider);
-                var sliders = GetElementInsideContainer(slider.id, "slides");
-                for(var i = 0 ; i<cuts.length ; i++) {
-                    imagediv = document.createElement("div");
-                    image = document.createElement("img");
-                    image.setAttribute("data-u", "image");
-                    image.id = a.toString()+"_"+i.toString();
-                    image.src = cuts[i].imgSrc;
-                    imagediv.appendChild(image);
-                    sliders.appendChild(imagediv);
-                }
-                for(var i=0 ; i<5-cuts.length ; i++){
-                    imagediv = document.createElement("div");
-                    image = document.createElement("img");
-                    image.setAttribute("data-u", "image");
-                    image.src = "../images/end.png";
-                    imagediv.appendChild(image);
-                    sliders.appendChild(imagediv);
-                }
-                cutnum[a] = 0;
-                var right = GetElementInsideContainer(slider.id, "arrowright");
-                right.onclick = function () {
-                    cutnum[a]++;
-                    var len = cutnum.length;
-                    for(var i=a+1 ; i<len ; i++){
-                        document.getElementById("image_slider_"+i.toString()).remove();
-                        cutnum.pop();
-                    }
-                    var temp = story[a][cutnum[a]];
-                    for (i = a+1; temp.child.length != 0; temp = temp.child[0], i++) {
-                        story[i] = temp.child;
-                        create_slider(story[i], i);
-                    }
-                }
-                var left = GetElementInsideContainer(slider.id, "arrowleft");
-                left.onclick = function () {
-                    cutnum[a]--;
-                    var len = cutnum.length;
-                    for (var i = a + 1; i < len; i++) {
-                        document.getElementById("image_slider_" + i.toString()).remove();
-                        cutnum.pop();
-                    }
-                    var temp = story[a][cutnum[a]];
-                    console.log(temp);
-                    for (i = a + 1; temp.child.length != 0; temp = temp.child[0], i++) {
-                        story[i] = temp.child;
-                        create_slider(story[i], i);
-                    }
-                }
-                slider_init("jssor_" + a.toString());
-            }
-            slider_init = function (a) {
-                var options = {
-                    $AutoPlay: 0,
-                    $SlideWidth: 600,
-                    $Cols: 4,
-                    $Align: 700,
-                    $ArrowNavigatorOptions: {
-                        $Class: $JssorArrowNavigator$
-                    },
-                };
-                var slider = new $JssorSlider$(a, options);
-                /*#region responsive code begin*/
-                /*remove responsive code if you don't want the slider scales while window resizing*/
-                function ScaleSlider() {
-                    var refSize = slider.$Elmt.parentNode.clientWidth;
-                    if (refSize) {
-                        refSize = Math.min(refSize, 2000);
-                        slider.$ScaleWidth(refSize);
-                    }
-                    else {
-                        window.setTimeout(ScaleSlider, 30);
-                    }
-                }
-                ScaleSlider();
-                $Jssor$.$AddEvent(window, "load", ScaleSlider);
-                $Jssor$.$AddEvent(window, "resize", ScaleSlider);
-                $Jssor$.$AddEvent(window, "orientationchange", ScaleSlider);
-                /*#endregion responsive code end*/
-            };
+        button#load-btn
+            sapn.menu-icon
         button#sub-scrn-btn.floating-btn.is--off
             span.menu-icon
-        #image_slider(style='display:none')
-            #jssor_
-                // Loading Screen
-                .jssorl-004-double-tail-spin(data-u='loading')
-                    img(src='../images/double-tail-spin.svg')
-                div(data-u='slides')
-                // Arrow Navigator
-                .jssora051(data-u='arrowleft', data-autocenter='2', data-scale='0.75', data-scale-left='0.75')
-                    svg(viewbox='0 0 16000 16000', style='position:absolute;top:0;left:0;width:100%;height:100%;')
-                        polyline.a(points='11040,1920 4960,8000 11040,14080 ')
-                .jssora051(data-u='arrowright', data-autocenter='2', data-scale='0.75', data-scale-right='0.75')
-                    svg(viewbox='0 0 16000 16000', style='position:absolute;top:0;left:0;width:100%;height:100%;')
-                        polyline.a(points='4960,1920 11040,8000 4960,14080 ')
         script(type='text/javascript').
-            var test = new Cartoon("testComic", 1, "../images/001.jpg");
+            sliderOpt = {
+                imageWidth: 500,
+                imageHeigth: 350,
+                gravity:"center"
+            };
+            story = [];
+            slider = [];
+            sliderData = [];
+            var test;
+            var i;
+
+            test = new Cartoon("testComic", 1, "../images/001.jpg");
             test.root.addChild(2, "../images/a.png");
             test.root.addChild(3, "../images/b.png");
             test.root.addChild(10, "../images/c.png");
             test.root.child[0].addChild(4, "../images/aa.png");
             test.root.child[0].addChild(5, "../images/ab.png");
             test.root.child[0].addChild(6, "../images/ac.png");
-            test.root.child[0].addChild(7, "../images/ad.png");
+            test.root.child[0].addChild(7, "../images/ac.png");
             test.root.child[1].addChild(11, "../images/ba.png");
             test.root.child[1].addChild(12, "../images/bb.png");
             test.root.child[1].addChild(13, "../images/bc.png");
@@ -255,28 +57,35 @@ html
             test.root.child[1].child[0].child[0].addChild(25, "../images/baaa.png");
             test.root.child[1].child[0].child[0].addChild(26, "../images/baab.png");
             test.root.child[1].child[0].child[0].addChild(27, "../images/baac.png");
+
             var temp = test.root;
-            var i
-            for(i=0 ;temp.child.length!=0; temp = temp.child[0], i++){
+            for (var i = 0; temp.child.length > 0; temp = temp.child[0], i++) {
                 story.push(temp.child);
-                create_slider(story[i], i);
+                sliderData[i] = new ImageSlider(i, sliderOpt);
+                slider[i] = sliderData[i].create(temp.child);
+                document.body.appendChild(slider[i]);
+                sliderData[i].prev.addEventListener("click", function (event) {
+                    storyChange(event)
+                }, false);
+                sliderData[i].next.addEventListener("click", function (event) {
+                    storyChange(event)
+                }, false);
             }
-            var index = i;
+
+            index = 0;
             pre=1;
-            cur_slider = document.getElementById('image_slider_'+pre.toString());
             window.onscroll = function (ev) {
                 var top  = window.pageYOffset || document.documentElement.scrollTop;
-                var imageHeight = document.getElementById('1_1').getBoundingClientRect().height;
+                var imageHeight = 350;
                 cur = (parseInt((top+window.innerHeight/2)/imageHeight)).toString()
                 if(pre!=cur){
-                    cur_slider.style.border="none";
-                    cur_slider = document.getElementById('image_slider_'+cur.toString());
-                    console.log(cur_slider);
-                    cur_slider.style.border = "3px solid green"
+                    slider[pre].style.border="none";
+                    slider[cur].style.border = "3px solid green"
                     pre = cur;
                 }
                 if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    create_slider(testCuts, index++);
+                    console.log("scroll end");
+                    //create_slider(testCuts, index++);
                 }
             };
             (function (){
@@ -287,4 +96,49 @@ html
                     btn.classList.toggle("is--off");
                 });
             })();
-        // #endregion Jssor Slider End
+            window.onload = function () {
+            }
+            window.onresize = function () {
+                slider.forEach(function (v, i) {
+                    v.changeWindowSize();
+                });
+            }
+            function storyChange(e) {
+                var info = e.target.id.split("_");
+                var eventType = info[0];
+                var sliderNum = parseInt(info[1]);
+                var eventSlider = sliderData[sliderNum];
+                while (sliderNum + 1 < slider.length) {
+                    sliderData.pop();
+                    story.pop();
+                    slider.pop().remove();
+                };
+                var temp
+                if(eventType=="prev"){
+                    if(sliderData[sliderNum].currentImage==0)
+                        temp = story[sliderNum][eventSlider.li_items.length-1];
+                    else
+                        temp = story[sliderNum][eventSlider.currentImage - 1];
+                } else if(eventType=="next"){
+                    if (sliderData[sliderNum].currentImage == eventSlider.li_items.length-1)
+                        temp = story[sliderNum][0];
+                    else
+                        temp = story[sliderNum][eventSlider.currentImage + 1];
+                }
+                for(var i=sliderNum+1 ; temp.child.length>0 ; temp = temp.child[0], i++)
+                {
+                    story.push(temp.child);
+                    sliderData[i] = new ImageSlider(i, sliderOpt);
+                    slider[i] = sliderData[i].create(temp.child);
+                    document.body.appendChild(slider[i]);
+                    sliderData[i].prev.addEventListener("click", function (event) {
+                        storyChange(event)
+                    }, false);
+                    sliderData[i].next.addEventListener("click", function (event) {
+                        storyChange(event)
+                    }, false);
+                }
+                console.log(story);
+            }
+
+// #endregion Jssor Slider End
