@@ -4,7 +4,21 @@ function changeLayer(event){
 	viewCanvas = document.getElementById(id);
     viewCtx = viewCanvas.getContext("2d");
 
-	alert(id +" Register");
+    colorLayer(event.target.id);
+
+    //Auto Draw Layer선택
+    if(auto_Color_Flag == 1) {
+        sendCanvas(viewCanvas,2);
+        auto_Color_Flag = 0;
+    }
+}
+
+var lay;
+function colorLayer(id){
+    if(lay)
+        lay.style.backgroundColor = "#FFFFFF";
+    lay = document.getElementById(id);
+    lay.style.backgroundColor = 'pink';
 }
 
 var layerCount = 1;
@@ -22,21 +36,44 @@ function addLayer() {
 
 	canvasList.push(newCanvas);
 
-	var newLayer = document.createElement("div");
-	newLayer.className="layerBox";
-	newLayer.id="layer"+layerCount;
-	newLayer.innerText="Layer"+layerCount;
-	newLayer.title="LAYER";
-	newLayer.href="javascript:void(0)"
-	newLayer.onclick=changeLayer;
-	document.getElementById("optionBox").appendChild(newLayer);
+    var deleteButton = document.createElement("div");
+    deleteButton.id = 'deleteButton';
+    deleteButton.title='DELETE';
+    deleteButton.href="javascript:void(0)";
+    deleteButton.onclick=deleteLayer;
 
-	layerList.push(newLayer);
+    var clearButton = document.createElement("div");
+    clearButton.id = 'clearButton';
+    clearButton.title='CLEAR';
+    clearButton.href="javascript:void(0)";
+    clearButton.onclick=clearLayer;
+
+	var mergeButton = document.createElement("div");
+    mergeButton.id = 'mergeButton';
+    mergeButton.title='MERGE_UP';
+    mergeButton.href="javascript:void(0)";
+    mergeButton.onclick=mergeUpLayer;
+
+    var newLayer = document.createElement("div");
+    newLayer.className="layerBox";
+    newLayer.id="layer"+layerCount;
+    newLayer.innerText="Layer"+layerCount;
+    newLayer.title="LAYER";
+    newLayer.href="javascript:void(0)"
+    newLayer.onclick=changeLayer;
+    newLayer.appendChild(deleteButton);
+    newLayer.appendChild(clearButton);
+    newLayer.appendChild(mergeButton);
+    document.getElementById("optionBox").appendChild(newLayer);
+
+    layerList.push(newLayer);
 
 	layerCount++;
+
+    newLayer.click();
 }
 
-function mergeLayer() {
+function mergeAllLayer() {
     var mergeCanvas, mergeCtx, i;
 
     mergeCanvas = document.createElement("canvas");
@@ -48,19 +85,57 @@ function mergeLayer() {
 
 	for(i=0;i<canvasList.length;i++)
         mergeCtx.drawImage(canvasList[i], 0, 0);
+}
 
-    var dataURL = mergeCanvas.toDataURL('image/png');
+function sendCanvas(main_canvas, flag) {
 
-    var form = document.createElement('form');
-    form.method = 'get';
-    form.action = '/image_receiver';
+    var xhr = new XMLHttpRequest();
+    var url = '/image_receiver?';
+    if(flag==1)
+        url+='image='+main_canvas.toDataURL('image/jpeg');
+    else
+        url+='image='+main_canvas.toDataURL('image/png');
+    url+='&flag='+flag;
 
-    var element = document.createElement('input');
-    element.type='hidden';
-    element.name='title';
-    element.value=dataURL;
-    form.appendChild(element);
+    xhr.open('GET', url);
+    xhr.onreadystatechange = mergeUpLayer();
+    xhr.send(null);
+}
 
-    document.body.appendChild(form);
-    form.submit();
+function mergeUpLayer() {
+	alert(this.parentNode);
+}
+
+function clearLayer() {
+    var parentLayer = this.parentNode;
+
+    var id = "viewBox" + parentLayer.id.replace(/[^0-9]/g, "");  //문자열에서 숫자만 추출
+    viewCanvas = document.getElementById(id);
+    viewCtx = viewCanvas.getContext("2d");
+
+    viewCtx.clearRect(0,0,viewCanvas.width,viewCanvas.height);
+
+    colorLayer(parentLayer.id);
+}
+
+function deleteLayer() {
+    var parentLayer = this.parentNode;
+
+    var id = "viewBox" + parentLayer.id.replace(/[^0-9]/g, "");  //문자열에서 숫자만 추출
+    viewCanvas = document.getElementById(id);
+    viewCtx = viewCanvas.getContext("2d");
+
+    var i;
+    for(i=0;i<canvasList.length; i++) {
+        if(canvasList[i] == viewCanvas)
+            canvasList.splice(i, 1);
+        if(layerList[i] == parentLayer)
+            layerList.splice(i, 1);
+    }
+    //리스트도 제거
+
+    parentLayer.parentNode.removeChild(parentLayer);
+    viewCanvas.parentNode.removeChild(viewCanvas);
+
+    colorLayer(parentLayer.id);
 }

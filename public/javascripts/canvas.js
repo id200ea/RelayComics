@@ -23,7 +23,9 @@ window.onload = function(){
     drawCanvas.addEventListener("mouseout", listener);
 
     draw = drawPen;  //함수 포인터 사용 기본 Pen 등록
-    changeColor();
+    colorTool("pencil");
+
+    changeColor(); //ColorBox
 }
  
 function listener(event){
@@ -52,7 +54,8 @@ function initDraw(event){
 }
 
 function finishDraw(){
-    viewCtx.drawImage(drawCanvas, 0, 0);
+    if(viewCtx)
+        viewCtx.drawImage(drawCanvas, 0, 0);
     drwaCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
     pos.drawable = false;
     pos.X = -1;

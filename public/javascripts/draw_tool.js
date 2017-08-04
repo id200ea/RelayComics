@@ -17,7 +17,15 @@ function selectFunc(event){
     		draw = drawRect;  //함수 포인터 사용 기본 Pen 등록
             break;
     }
-    alert(event.target.title +" Register");
+    colorTool(event.target.id);
+}
+
+var tool;
+function colorTool(id){
+    if(tool)
+        tool.style.backgroundColor = "#FFFFFF";
+    tool = document.getElementById(id);
+    tool.style.backgroundColor = 'pink';
 }
 
 function drawPen(event){
@@ -57,7 +65,9 @@ function drawRect(event){
     drwaCtx.closePath();
 }
 
-function drawClear(event){
-    viewCtx.clearRect(0,0,viewCanvas.width,viewCanvas.height);
-    drwaCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
+var auto_Color_Flag;
+function autoColor() {
+    alert("두개의 레이어를 선택해 주세요.");
+    auto_Color_Flag = 1;
+    main_canvas = 0;
 }

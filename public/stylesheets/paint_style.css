@@ -61,13 +61,29 @@ div{
 	width: 20px;
 	height: 20px;
 }
-#saveBox{
+#mergeButton{
 	float: right;
 	margin-bottom: 5px;
 	border-radius: 100px;
 	background: red;
-	width: 20px;
-	height: 20px;
+	width: 10px;
+	height: 10px;
+}
+#clearButton{
+	float: right;
+	margin-bottom: 5px;
+	border-radius: 100px;
+	background: green;
+	width: 10px;
+	height: 10px;
+}
+#deleteButton{
+	float: right;
+	margin-bottom: 5px;
+	border-radius: 100px;
+	background: blue;
+	width: 10px;
+	height: 10px;
 }
 .layerBox{
 	text-align: center;

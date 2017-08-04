@@ -29,11 +29,23 @@ app.use('/canvas', canvas);
 
 //지응 코드
 app.get('/image_receiver', function (req, res) {
-    var image_Base64 = req.query.title.replace('data:image/png;base64,','');  //Decoding 전처리
-    var B_Image_Str = new Buffer(image_Base64, 'base64');  //Decoding 부분
+
+    var main_image_base64, main_image_str;
+    var come = req.query.image.replace(/\s/gi, '+');
+    //a 바꾸어질 문자, b 는 바뀔 문자가 되겠다.  g: 전역 검색 i: 대/소문자 구분 안함
+
     var fs = require('fs');  //파일 입출력 모듈
-    fs.writeFile('image_transmission/image.png', B_Image_Str);  //파일 출력
-    res.send("전송완료");  //여기에 그림 파일 보내주면 될듯.
+
+    if(req.query.flag==1) {
+        main_image_base64 = come.replace('data:image/jpeg;base64,','');  //Decoding 전처리
+        main_image_str = new Buffer(main_image_base64, 'base64');  //Decoding 부분
+        fs.writeFile('image_transmissions/main_image.jpeg', main_image_str);  //파일 출력
+    }
+    else {
+        main_image_base64 = come.replace('data:image/png;base64,','');  //Decoding 전처리
+        main_image_str = new Buffer(main_image_base64, 'base64');  //Decoding 부분
+        fs.writeFile('image_transmissions/main_image.png', main_image_str);  //파일 출력
+    }
 });
 //지응 코드 끝
 

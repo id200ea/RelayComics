@@ -13,9 +13,9 @@
 		<div class="drawTool" id="pencil" title="PEN" href="javascript:void(0)" onclick="selectFunc(event);">Pencil</div>
 		<div class="drawTool" id="line" title="LINE" href="javascript:void(0)" onclick="selectFunc(event);">Line</div>
 		<div class="drawTool" id="rect" title="RECT" href="javascript:void(0)" onclick="selectFunc(event);">Rect</div>
-		<div class="drawTool" id="clear" title="CLEAR" href="javascript:void(0)" onclick="drawClear();">ClearLayer</div>
-		<div class="drawTool" title="CLEAR" href="javascript:void(0)">AutoColor</div>
-		<div class="drawTool" title="CLEAR" href="javascript:void(0)">Style</div>
+		<div class="drawTool" id="edge" title="EDGE" href="javascript:void(0)">Edge</div>
+		<div class="drawTool" id="auto" title="AUTOCOLOR" href="javascript:void(0)" onclick="autoColor();">AutoColor</div>
+		<div class="drawTool" title="SAVE" href="javascript:void(0)" onclick="allSave();">Save</div>
 	</div>
 	<div id="centerBox">
 		<canvas class="canvasBox" id="drawBox" width="500" height="500"></canvas>
@@ -23,7 +23,6 @@
 	<div id="optionBox">
 		<input class="jscolor" id="colorBox" value="66E398" onchange="changeColor()">
 		<div id="plusBox" title="PLUS" href="javascript:void(0)" onclick="addLayer();"></div>
-		<div id="saveBox" title="MERGE_SAVE" href="javascript:void(0)" onclick="mergeLayer();"></div>
 	</div>
 </body>
 </html>
