@@ -103,7 +103,28 @@ function sendCanvas(main_canvas, flag) {
 }
 
 function mergeUpLayer() {
-	alert(this.parentNode);
+    var parentLayer = this.parentNode;
+    var v2, i;
+
+    for(i=1;i<canvasList.length; i++) {
+        if(layerList[i] == parentLayer) {
+            viewCanvas = document.getElementById("viewBox" + layerList[i-1].id.replace(/[^0-9]/g, ""));
+            viewCtx = viewCanvas.getContext("2d");
+
+            v2 = document.getElementById("viewBox" + layerList[i].id.replace(/[^0-9]/g, ""));
+            viewCtx.drawImage(v2, 0, 0);
+
+            colorLayer(layerList[i-1].id);
+
+            layerList.splice(i, 1);
+            canvasList.splice(i, 1);
+
+            parentLayer.parentNode.removeChild(parentLayer);
+            v2.parentNode.removeChild(v2);
+            break;
+        }
+    }
+
 }
 
 function clearLayer() {
