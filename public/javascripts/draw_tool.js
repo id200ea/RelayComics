@@ -68,7 +68,6 @@ function fileIn(obj) {
     var filepoint = obj.value.substring(pathpoint+1,obj.length);
     var filetype = filepoint.toLowerCase();
     if(filetype=='jpg'|| filetype=='jpeg'|| filetype=='png' || filetype=='gif'  || filetype=='bmp'){
-
         var reader = new FileReader();
         reader.readAsDataURL(obj.files[0]);
         reader.onload = function  () {

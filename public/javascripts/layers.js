@@ -8,8 +8,14 @@ function changeLayer(event){
 
     //Auto Draw Layer선택
     if(auto_Color_Flag == 1) {
+        sendCanvas(viewCanvas,1);
+        auto_Color_Flag = 2;
+        alert("첫번째 레이어 선택완료 두번째 레이어를 선택하세요.");
+    }
+    else if(auto_Color_Flag == 2) {
         sendCanvas(viewCanvas,2);
         auto_Color_Flag = 0;
+        alert("두 레이어를 모두 선택했습니다.");
     }
 }
 

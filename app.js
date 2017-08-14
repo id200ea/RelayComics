@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var detail = require('./routes/cartoon_detail');
 var main = require('./routes/mian');
 var canvas = require('./routes/canvas');
+//var PythonClient = require('python-shell');  // 수정
 
 var app = express();
 
@@ -27,6 +28,31 @@ app.use('/', main);
 app.use('/detail', detail);
 app.use('/canvas', canvas);
 
+//주영 코드
+var arg = {
+    img_path : './image_transmissions/input.png',
+    mask_path : './image_transmissions/mask.png',
+    out_path : './image_transmissions/outout.png'
+}
+function set_img_path(_imgPath){
+    arg.img_path = _img_path;
+}
+function set_mask_path(_maskPath){
+    args.mask_path = _maskPath;
+}
+function set_out_path(_outPath){
+    args.out_path = _outPath;
+}
+
+var options = {
+    mode : 'text',
+    pythonPath : '',
+    pythonOptions : ['-u'],
+    scriptPath : '',
+    args : [arg.img_path, arg.mask_path, arg.out_path]
+};
+//주영 코드 끝
+
 //지응 코드
 app.get('/image_receiver', function (req, res) {
 
@@ -39,12 +65,12 @@ app.get('/image_receiver', function (req, res) {
     if(req.query.flag==1) {
         main_image_base64 = come.replace('data:image/jpeg;base64,','');  //Decoding 전처리
         main_image_str = new Buffer(main_image_base64, 'base64');  //Decoding 부분
-        fs.writeFile('image_transmissions/main_image.jpeg', main_image_str);  //파일 출력
+        fs.writeFile('image_transmissions/input.png', main_image_str);  //파일 출력
     }
     else {
         main_image_base64 = come.replace('data:image/png;base64,','');  //Decoding 전처리
         main_image_str = new Buffer(main_image_base64, 'base64');  //Decoding 부분
-        fs.writeFile('image_transmissions/main_image.png', main_image_str);  //파일 출력
+        fs.writeFile('image_transmissions/mask.png', main_image_str);  //파일 출력
     }
 });
 //지응 코드 끝
