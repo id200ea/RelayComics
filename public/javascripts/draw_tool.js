@@ -68,8 +68,16 @@ function fileIn(obj) {
     var filepoint = obj.value.substring(pathpoint+1,obj.length);
     var filetype = filepoint.toLowerCase();
     if(filetype=='jpg'|| filetype=='jpeg'|| filetype=='png' || filetype=='gif'  || filetype=='bmp'){
-        obj.select();
-        alert(obj);
+
+        var reader = new FileReader();
+        reader.readAsDataURL(obj.files[0]);
+        reader.onload = function  () {
+            var tempImage = new Image(); //drawImage 메서드에 넣기 위해 이미지 객체화
+            tempImage.src = reader.result; //data-uri를 이미지 객체에 주입
+            tempImage.onload = function () {
+                viewCtx.drawImage(this, 0, 0);
+            }
+        }
     }
     else{
         alert("이미지 파일만 선택할 수 있습니다.");

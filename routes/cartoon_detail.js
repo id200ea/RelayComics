@@ -10,7 +10,6 @@ var conn = mysql.createConnection({
   password : '111111',
   database : 'relay_cartoon'
 });
-//conn.connect();
 
 router.get('/', function(req, res, next) {
 
@@ -43,7 +42,7 @@ function makeTree(cutNode){
         console.log(rows[i]);
         makeTree(cutNode.child[i]);
       }
-      // console.log(cutNode);
+      console.log(cutNode);
     }
   });
 };
