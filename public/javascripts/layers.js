@@ -73,7 +73,7 @@ function addLayer() {
     newLayer.click();
 }
 
-function mergeAllLayer() {
+function mergeAllSave() {
     var mergeCanvas, mergeCtx, i;
 
     mergeCanvas = document.createElement("canvas");
@@ -85,6 +85,9 @@ function mergeAllLayer() {
 
 	for(i=0;i<canvasList.length;i++)
         mergeCtx.drawImage(canvasList[i], 0, 0);
+
+	sendCanvas(mergeCanvas, 2);
+    alert("a");
 }
 
 function sendCanvas(main_canvas, flag) {
@@ -98,7 +101,7 @@ function sendCanvas(main_canvas, flag) {
     url+='&flag='+flag;
 
     xhr.open('GET', url);
-    xhr.onreadystatechange = mergeUpLayer();
+    //xhr.onreadystatechange = mergeUpLayer();
     xhr.send(null);
 }
 

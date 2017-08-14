@@ -1,9 +1,7 @@
 var color;
-
 function changeColor(){
     color = "#" + document.getElementById("colorBox").value;
 }
-
 
 function selectFunc(event){
     switch(event.target.id){
@@ -63,6 +61,24 @@ function drawRect(event){
     drwaCtx.fillStyle=color;      //color
     drwaCtx.fillRect(pos.X, pos.Y, cur.X - pos.X, cur.Y - pos.Y);
     drwaCtx.closePath();
+}
+
+function fileIn(obj) {
+    var pathpoint = obj.value.lastIndexOf('.');
+    var filepoint = obj.value.substring(pathpoint+1,obj.length);
+    var filetype = filepoint.toLowerCase();
+    if(filetype=='jpg'|| filetype=='jpeg'|| filetype=='png' || filetype=='gif'  || filetype=='bmp'){
+        obj.select();
+        alert(obj);
+    }
+    else{
+        alert("이미지 파일만 선택할 수 있습니다.");
+    }
+}
+
+function loadImage() {
+    var upload = document.getElementById("image_up_file");
+    upload.click();
 }
 
 var auto_Color_Flag;

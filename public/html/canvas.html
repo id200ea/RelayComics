@@ -10,12 +10,16 @@
 </head>
 <body>
 	<div id="leftBox">
-		<div class="drawTool" id="pencil" title="PEN" href="javascript:void(0)" onclick="selectFunc(event);">Pencil</div>
+		<div class="drawTool" id="pencil" title="PEN" href="javascript:void(0)" onclick="selectFunc(event);">Pen</div>
 		<div class="drawTool" id="line" title="LINE" href="javascript:void(0)" onclick="selectFunc(event);">Line</div>
 		<div class="drawTool" id="rect" title="RECT" href="javascript:void(0)" onclick="selectFunc(event);">Rect</div>
+
+        <input type="file" id="image_up_file" style="display: none;" accept="image/*" onchange="fileIn(this)"/>
+        <div class="drawTool" id="load" title="LOAD" href="javascript:void(0)" onclick="loadImage();">Load</div>
+
 		<div class="drawTool" id="edge" title="EDGE" href="javascript:void(0)">Edge</div>
 		<div class="drawTool" id="auto" title="AUTOCOLOR" href="javascript:void(0)" onclick="autoColor();">AutoColor</div>
-		<div class="drawTool" title="SAVE" href="javascript:void(0)" onclick="allSave();">Save</div>
+		<div class="drawTool" title="SAVE" href="javascript:void(0)" onclick="mergeAllSave();">Save</div>
 	</div>
 	<div id="centerBox">
 		<canvas class="canvasBox" id="drawBox" width="500" height="500"></canvas>
