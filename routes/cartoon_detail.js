@@ -11,6 +11,8 @@ var conn = mysql.createConnection({
   database : 'relay_cartoon'
 });
 
+conn.connect();
+
 router.get('/', function(req, res, next) {
 
   // // makeTree 테스트
