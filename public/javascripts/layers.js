@@ -37,7 +37,7 @@ function addLayer() {
 	newCanvas.id="viewBox"+layerCount;
 	newCanvas.width="500";
 	newCanvas.height="500";
-	newCanvas.zindex=-layerCount;	//작을수록 앞으로 나온다.
+	newCanvas.zindex=layerCount;	//작을수록 앞으로 나온다.
 	document.getElementById("centerBox").appendChild(newCanvas);
 
 	canvasList.push(newCanvas);
@@ -93,19 +93,14 @@ function mergeAllSave() {
         mergeCtx.drawImage(canvasList[i], 0, 0);
 
 	sendCanvas(mergeCanvas, 2);
-    alert("a");
 }
 
 function sendCanvas(main_canvas, flag) {
 
     var xhr = new XMLHttpRequest();
     var url = '/image_receiver?';
-    if(flag==1)
-        url+='image='+main_canvas.toDataURL('image/jpeg');
-    else
-        url+='image='+main_canvas.toDataURL('image/png');
+    url+='image='+main_canvas.toDataURL('image/png');
     url+='&flag='+flag;
-
     xhr.open('GET', url);
     //xhr.onreadystatechange = mergeUpLayer();
     xhr.send(null);

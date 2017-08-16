@@ -11,7 +11,7 @@ var conn = mysql.createConnection({
   database : 'relay_cartoon'
 });
 
-conn.connect();
+//conn.connect();
 
 router.get('/', function(req, res, next) {
 

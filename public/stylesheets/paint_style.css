@@ -1,3 +1,8 @@
+body{
+	background-color: rgb(106, 155, 181);
+	width: 900px;
+	margin: 0 auto;
+}
 div{
 	float: left;
 }
@@ -25,6 +30,7 @@ div{
 #leftBox{
 	padding: 5px;
 	background: gray;
+	border: 1px solid black;
 	width: 100px;
 	height: 500px;
 	margin: 5px;
@@ -43,6 +49,7 @@ div{
 	text-align: center;
 	overflow-y:scroll;
 	background: gray;
+	border: 1px solid black;
 	width: 200px;
 	height: 300px;
 	margin: 5px;
