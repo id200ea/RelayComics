@@ -31,9 +31,14 @@ ImageSlider.prototype.create = function(list){
     list.forEach(function(v,i){
         var li = document.createElement("li");
         var img = document.createElement("img");
+        var heartDiv = document.createElement("div");
         fitImageSize(img, v.imgSrc, instance.imageWidth, instance.imageHeigth);
+        heartDiv.classList.add("heart-shape");
+        heartDiv.onclick = function(){this.classList.toggle("is-on")};
+        heartDiv.style.opacity = "0.5";
         if(i>0)
-            img.style.opacity="0.5";
+            li.style.opacity="0.5";
+        li.appendChild(heartDiv);
         li.appendChild(img);
         instance.ul.appendChild(li);
     });
@@ -118,8 +123,8 @@ ImageSlider.prototype.slideTo = function(imageToGo){
             instance.ul.style.left = parseInt(instance.currentPostion + direction * delta * instance.imageWidth * numOfImageToGo+instance.left) + 'px';
             if(delta>=0.5)
             {
-                instance.li_items[imageToGo].children[0].style.opacity = delta;
-                instance.li_items[instance.currentImage].children[0].style.opacity=1.5-delta;
+                instance.li_items[instance.currentImage].style.opacity=1.5-delta;
+                instance.li_items[imageToGo].style.opacity = delta;
             }
         },
         callback:function(){
