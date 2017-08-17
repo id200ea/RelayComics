@@ -2,20 +2,23 @@
  * Created by bgh29 on 2017-07-18.
  */
 
-function Cut(num, imgSrc, parent){
+function Cut(num, imgSrc, like, parent){
     this.num = num;
     this.imgSrc = imgSrc;
+    this.like = like;
     this.parent = parent || null;
     this.child = [];
 }
 
-function Cartoon(title, rootNum, rootImgSrc){
+function Cartoon(title, like, rootNum, rootImgSrc){
     this.title = title;
+    this.like = like;
+
     this.root = new Cut(rootNum, rootImgSrc);
 }
 
-Cut.prototype.addChild = function(num, imgSrc) {
-    var child = new Cut(num, imgSrc, this);
+Cut.prototype.addChild = function(num, imgSrc, like) {
+    var child = new Cut(num, imgSrc, like, this);
     this.child.push(child);
     return child;
 };
