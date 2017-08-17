@@ -101,8 +101,10 @@ function sendCanvas(main_canvas, flag) {
     var url = '/image_receiver?';
     url+='image='+main_canvas.toDataURL('image/png');
     url+='&flag='+flag;
+    xhr.onreadystatechange = function response() {
+        console.log("bbb");
+    };
     xhr.open('GET', url);
-    //xhr.onreadystatechange = mergeUpLayer();
     xhr.send(null);
 }
 

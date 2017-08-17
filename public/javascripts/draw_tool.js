@@ -14,6 +14,13 @@ function selectFunc(event){
         case "rect":
     		draw = drawRect;  //함수 포인터 사용 기본 Pen 등록
             break;
+        case "auto":
+            if(auto_Color_Flag == 1 || auto_Color_Flag == 2) {
+                auto_Color_Flag = 0;
+                alert("취소되었습니다.");
+            }
+            else autoColor();
+            break;
     }
     colorTool(event.target.id);
 }
@@ -92,5 +99,4 @@ var auto_Color_Flag;
 function autoColor() {
     alert("두개의 레이어를 선택해 주세요.");
     auto_Color_Flag = 1;
-    main_canvas = 0;
 }
