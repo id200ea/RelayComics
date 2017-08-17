@@ -32,14 +32,21 @@ ImageSlider.prototype.create = function(list){
         var li = document.createElement("li");
         var img = document.createElement("img");
         var heartDiv = document.createElement("div");
+        var crossDiv = document.createElement("div");
         fitImageSize(img, v.imgSrc, instance.imageWidth, instance.imageHeigth);
         heartDiv.classList.add("heart-shape");
         heartDiv.onclick = function(){this.classList.toggle("is-on")};
         heartDiv.style.opacity = "0.5";
-        if(i>0)
+        crossDiv.classList.add("x-shape");
+        crossDiv.onclick = function(){this.classList.toggle("is-on")};
+        if(i>0){
             li.style.opacity="0.5";
-        li.appendChild(heartDiv);
+            heartDiv.style.visibility="hidden";
+            crossDiv.style.visibility="hidden";
+        }
         li.appendChild(img);
+        li.appendChild(heartDiv);
+        li.appendChild(crossDiv);
         instance.ul.appendChild(li);
     });
 
@@ -125,6 +132,10 @@ ImageSlider.prototype.slideTo = function(imageToGo){
             {
                 instance.li_items[instance.currentImage].style.opacity=1.5-delta;
                 instance.li_items[imageToGo].style.opacity = delta;
+            }
+            for(i=1 ; i<instance.li_items[imageToGo].children.length ; i++){
+                instance.li_items[instance.currentImage].children[i].style.visibility = "hidden";
+                instance.li_items[imageToGo].children[i].style.visibility = "visible";
             }
         },
         callback:function(){
