@@ -15,7 +15,6 @@ function changeLayer(event){
     else if(auto_Color_Flag == 2) {
         sendCanvas(viewCanvas,2);
         auto_Color_Flag = 0;
-        alert("두 레이어를 모두 선택했습니다.");
     }
 }
 
@@ -101,13 +100,22 @@ function sendCanvas(main_canvas, flag) {
     var url = '/image_receiver?';
     url+='image='+main_canvas.toDataURL('image/png');
     url+='&flag='+flag;
-    xhr.onreadystatechange = function response() {
-        console.log("bbb");
+    xhr.onreadystatechange = function rspns() {
+        if(xhr.readyState==1 || xhr.readyState==2 || xhr.readyState==3 ){
+            //채색 로딩중
+        }
+        else if(xhr.readyState==4){
+            addLayer();
+            var img = new Image();
+            img.onload = function() {
+                viewCtx.drawImage(img, 0, 0);
+            };
+            img.src = "data:image/png;base64,"+xhr.responseText;
+        }
     };
     xhr.open('GET', url);
     xhr.send(null);
 }
-
 function mergeUpLayer() {
     var parentLayer = this.parentNode;
     var v2, i;

@@ -2,7 +2,7 @@ body{
 	background-color: rgb(106, 155, 181);
 	width: 900px;
 	margin: 0 auto;
-	user-select: none;  /* 드레그 금지 */
+	/*user-select: none;  /* 드레그 금지 */
 }
 div{
 	float: left;
