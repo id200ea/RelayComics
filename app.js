@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var detail = require('./routes/cartoon_detail');
 var main = require('./routes/mian');
 var canvas = require('./routes/canvas');
-//var PythonClient = require('python-shell');  // 수정
+var pyshell = require('python-shell'); 
 
 var app = express();
 
@@ -32,7 +32,7 @@ app.use('/canvas', canvas);
 var arg = {
     img_path : './image_transmissions/input.png',
     mask_path : './image_transmissions/mask.png',
-    out_path : './image_transmissions/outout.png'
+    out_path : './image_transmissions/output.png'
 }
 function set_img_path(_imgPath){
     arg.img_path = _img_path;
@@ -69,7 +69,12 @@ app.get('/image_receiver', function (req, res) {
     }
     else {
         fs.writeFile('image_transmissions/mask.png', main_image_str);  //파일 출력
+	colorpy = new pyshell('PythonClient.py',options);
     }
+    colorpy.on('close',function(message){
+	
+	
+    });
 });
 //지응 코드 끝
 
