@@ -69,11 +69,10 @@ app.get('/image_receiver', function (req, res) {
     }
     else {
         fs.writeFile('image_transmissions/mask.png', main_image_str);  //파일 출력
-	colorpy = new pyshell('PythonClient.py',options);
+	    colorpy = new pyshell('PythonClient.py',options);
     }
     colorpy.on('close',function(message){
-	
-	
+
     });
 });
 //지응 코드 끝
