@@ -67,12 +67,16 @@ app.get('/image_receiver', function (req, res) {
     if(req.query.flag==1) {
         fs.writeFile('image_transmissions/input.png', main_image_str);  //파일 출력
     }
-    else {
+    else if(req.query.flag==2){
         fs.writeFile('image_transmissions/mask.png', main_image_str);  //파일 출력
-        colorpy = new pyshell('PythonClient.py',options);
+        colorpy = new pyshell('PythonClient.py', options);
+    }
+    else if(req.query.flag==3){
+        fs.writeFile('public/images/new_' + req.query.parent +".png", main_image_str);  //파일 출력
     }
     colorpy.on('close',function(message){
-        var bitmap = fs.readFileSync("image_transmissions/output.jpg");
+        //아래 파일 respon 코드
+        var bitmap = fs.readFileSync("public/images");
         var buff = new Buffer(bitmap).toString('base64');
         res.end(buff);
     });

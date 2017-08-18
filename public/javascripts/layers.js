@@ -91,7 +91,7 @@ function mergeAllSave() {
 	for(i=0;i<canvasList.length;i++)
         mergeCtx.drawImage(canvasList[i], 0, 0);
 
-	sendCanvas(mergeCanvas, 2);
+	sendCanvas(mergeCanvas, 3);
 }
 
 function sendCanvas(main_canvas, flag) {
@@ -100,12 +100,26 @@ function sendCanvas(main_canvas, flag) {
     var url = '/image_receiver?';
     url+='image='+main_canvas.toDataURL('image/png');
     url+='&flag='+flag;
+
+    if(flag==3) {
+        url += '&parent=' + parentNum;  //주소에서 부모의 정보를 읽어온다.
+        /*
+        var xhr_To_DB = new XMLHttpRequest();
+        var url_To_DB  = '/add_cut?';
+        url_To_DB +='src='+'public/images/new_' + parentNum +".png"
+        url_To_DB+='&p_num=' + parentNum;
+        xhr_To_DB.open('GET', url);
+        xhr_To_DB.send(null);
+        */
+    }
+
     xhr.onreadystatechange = function rspns() {
         if(xhr.readyState==1 || xhr.readyState==2 || xhr.readyState==3 ){
             //채색 로딩중
         }
         else if(xhr.readyState==4){
             addLayer();
+            //get전송을 할때마다 레이어가 추가되는 버그가 있음 고쳐야 함.
             var img = new Image();
             img.onload = function() {
                 viewCtx.drawImage(img, 0, 0);
@@ -113,9 +127,12 @@ function sendCanvas(main_canvas, flag) {
             img.src = "data:image/png;base64,"+xhr.responseText;
         }
     };
+    //버그
+
     xhr.open('GET', url);
     xhr.send(null);
 }
+
 function mergeUpLayer() {
     var parentLayer = this.parentNode;
     var v2, i;

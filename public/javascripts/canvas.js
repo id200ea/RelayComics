@@ -8,8 +8,22 @@ var drawCanvas, drwaCtx;
 var viewCanvas, viewCtx;
 var draw;  //함수 포인터
 
+function getQuerystring(paramName){
+    var _tempUrl = window.location.search.substring(1); //url에서 처음부터 '?'까지 삭제
+    var _tempArray = _tempUrl.split('&'); // '&'을 기준으로 분리하기
+
+    for(var i = 0; _tempArray.length; i++) {
+        var _keyValuePair = _tempArray[i].split('=');
+        if(_keyValuePair[0] == paramName){
+             return _keyValuePair[1];
+        }
+    }
+}
+var parentNum; //부모 번호
 
 window.onload = function(){
+    parentNum =getQuerystring("parentNum");
+
     drawCanvas = document.getElementById("drawBox");
     drwaCtx = drawCanvas.getContext("2d");
 
