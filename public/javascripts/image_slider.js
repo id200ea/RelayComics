@@ -35,7 +35,22 @@ ImageSlider.prototype.create = function(list){
         var crossDiv = document.createElement("div");
         fitImageSize(img, v.imgSrc, instance.imageWidth, instance.imageHeigth);
         heartDiv.classList.add("heart-shape");
-        heartDiv.onclick = function(){this.classList.toggle("is-on")};
+        heartDiv.onclick = function(){
+          this.classList.toggle("is-on");
+          var xhr = new XMLHttpRequest();
+          var url = '/modi_like?';
+          url += 'num=' + v.num.toString();
+          if(this.classList.length==1){
+            url += '&flag=del';
+          } else {
+            url += '&flag=add';
+          }
+          xhr.onreadystatechange = function response() {
+            console.log("bbb");
+          };
+          xhr.open('GET', url);
+          xhr.send(null);
+        };
         heartDiv.style.opacity = "0.5";
         crossDiv.classList.add("x-shape");
         crossDiv.onclick = function(){this.classList.toggle("is-on")};

@@ -77,6 +77,8 @@ html
             test.root.child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].addChild(13, "../images/bc.png");
             test.root.child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].addChild(14, "../images/bd.png");
 
+            test = JSON.parse(!{JSON.stringify(cartoon)});
+
             var temp = test.root;
             for (index = 0; temp.child.length > 0 && index<loadCnt ; temp = temp.child[0], index++) {
                 story.push(temp.child);

@@ -8,7 +8,9 @@ var bodyParser = require('body-parser');
 var detail = require('./routes/cartoon_detail');
 var main = require('./routes/mian');
 var canvas = require('./routes/canvas');
-var pyshell = require('python-shell'); 
+var pyshell = require('python-shell');
+
+var sql = require('./public/javascripts/CartoonSQL');
 
 var app = express();
 
@@ -82,6 +84,15 @@ app.get('/image_receiver', function (req, res) {
     });
 });
 //지응 코드 끝
+
+app.get('/modi_like', function (req, res) {
+  cutNum = parseInt(req.param('num'));
+  if(req.param('flag')=='add'){
+    sql.upCutLike(cutNum);
+  }else {
+    sql.downCutLike(cutNum);
+  }
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

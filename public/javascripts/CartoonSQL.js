@@ -8,7 +8,7 @@ var conn = mysql.createConnection({
   password : '111111',
   database : 'relay_cartoon'
 });
-conn.connect();
+// conn.connect();
 
 /* ======================================================= */
 /* Make Tree SQL Query */
@@ -50,11 +50,11 @@ exports.addCut = function addCut(cartoonNum, cutAuthor, cutStory, cutSrc, parent
     } else if(parentNum != null){
       // Cut Add
       console.log('cut 테이블에 추가되었습니다.');
-      addTreepaths(parentNum, row.insertId);
+      exports.addTreepaths(parentNum, row.insertId);
     } else {
       // Cartoon First Cut Create
       console.log('title cut이 생성되었습니다.');
-      addFirstCut(cartoonNum, row.insertId)
+      exports.addFirstCut(cartoonNum, row.insertId)
     }
   });
 };
@@ -63,17 +63,18 @@ exports.addCut = function addCut(cartoonNum, cutAuthor, cutStory, cutSrc, parent
    or "Childless Cut Delete" delCut(cutNum) */
 exports.delCut = function delCut(cutNum, childExist){
   this.cutNum = cutNum;
+  // Exist : 1
   this.childExist = childExist || null;
 
-  if(childExist != null){
-    // Child Exist Cut Delete
-    delComment(cutNum, null);
-    alterCut(cutNum, "anyone", "컷을 그려주세요.", "/img/empty.jpg");
+  if(childExist){
+    // Child Exist Cut Alter
+    exports.delComment(cutNum, null);
+    exports.alterCut(cutNum, "anyone", "컷을 그려주세요.", "/img/empty.jpg");
     console.log(cutNum + '컷 모두 사용 가능한 컷이 생성되었습니다.');
   } else {
     // Childless Cut Delete
-    delComment(cutNum);
-    delTreepaths(cutNum);
+    exports.delComment(cutNum);
+    exports.delTreepaths(cutNum);
 
     var sql_del_cut = 'DELETE FROM Cut WHERE cut_num = ' + cutNum.toString();
     conn.query(sql_del_cut, function(err, row) {
@@ -179,6 +180,7 @@ exports.delComment = function delComment(cutNum, userId){
 
   var sql_del_comment = 'DELETE FROM Comment WHERE ';
 
+  // 존재여부 따지는거 필요함...
   if(userId*cutNum) {
     // Comment Delete
     sql_del_comment = sql_del_comment + 'comnt_id = ' + userId.toString() + ' AND cut_num = ' + cutNum.toString();
@@ -230,7 +232,7 @@ exports.addCartoon = function addCartoon(cartoonTitle, cartoonTag1, cartoonTag2,
       console.log(err);
     } else {
       console.log('cartoon 테이블에 추가되었습니다.');
-      addcut(row.insertId, "anyone", "타이틀입니다.", "/img/empty.jpg");
+      exports.addcut(row.insertId, "anyone", "타이틀입니다.", "/img/empty.jpg");
     }
   });
 };
@@ -239,8 +241,8 @@ exports.addCartoon = function addCartoon(cartoonTitle, cartoonTag1, cartoonTag2,
 exports.delCartoon = function delCartoon(cartoonNum){
   this.cartoonNum = cartoonNum;
 
-  delFirstCut(cartoonNum);
-  delLike(null, cartoonNum);
+  exports.delFirstCut(cartoonNum);
+  exports.delLike(null, cartoonNum);
 
   var sql_del_cartoon = 'DELETE FROM Cartoon WHERE cartoon_num = ' + cartoonNum.toString();
   conn.query(sql_del_cartoon, function(err, row){
@@ -263,15 +265,14 @@ exports.listCartoon = function listCartoon(){
     } else {
       for (var i = 0; i < rows.length; i++) {
         list[i] = new Cartoon(rows[i].cartoon_title, rows[i].cartoon_like, rows[i].first_cut, rows[i].cut_src);
-        makeCartoon(list[i].root);
+        exports.makeCartoon(list[i].root);
       }
     }
   });
 };
 
 /* "Make Cartoon" makeCartoon(cutNode) */
-// 외부에서 부르는 함수가 아니기에 exports 안붙임
-function makeCartoon(cutNode){
+exports.makeCartoon = function makeCartoon(cutNode){
   this.cutNode = cutNode;
 
   var sql_descendants = 'SELECT c.* FROM Cut AS c JOIN Treepaths AS t ON c.cut_num = t.descendant WHERE t.ancestor = ' + cutNode.num.toString() + ' ORDER BY cut_like DESC';
@@ -310,11 +311,11 @@ exports.delUser = function delUser(userId){
   this.userId = userId;
 
   // User Withdrawal & Cartoon like Delete
-  delLike(userId);
+  exports.delLike(userId);
   // Comment Delete
-  delComment(userId);
+  exports.delComment(userId);
   // cut 삭제 or 변경 - 새로 만들어야 함
-  alterCuts(userId, "컷을 그려주세요.", "/img/empty.jpg");
+  exports.alterCuts(userId, "컷을 그려주세요.", "/img/empty.jpg");
 
   // User Withdrawal
   var sql_leave_user = 'DELETE FROM User WHERE user_id = ' + userId.toString();
@@ -409,7 +410,7 @@ exports.addFirstCut = function addFirstCut(cartoonNum, firstCut){
 exports.delFirstCut = function delFirstCut(cartoonNum){
   this.cartoonNum = cartoonNum;
 
-  returnFirstCut(cartoonNum);
+  exports.returnFirstCut(cartoonNum);
   var sql_del_firstcut = 'DELETE FROM Cartoon_first_cut WHERE cartoon_num = ' + cartoonNum.toString();
   conn.query(sql_del_firstcut, function(err, row){
     if(err){
@@ -419,6 +420,136 @@ exports.delFirstCut = function delFirstCut(cartoonNum){
     }
   });
 };
+
+/* ======================================================= */
+/* Cartoon_like_log SQL Query */
+
+/* "Cartoon Like" upCartoonLike(cartoonNum, userId) */
+exports.upCartoonLike = function upCartoonLike(cartoonNum, userId){
+  this.cartoonNum = cartoonNum;
+  this.userId = userId;
+
+  var sql_up_cartoon_like = [];
+  sql_up_cartoon_like[0] = 'UPDATE Cartoon SET cartoon_like = cartoon_like + 1 WHERE cartoon_num = ' + cartoonNum.toString();
+  sql_up_cartoon_like[1] = 'INSERT INTO Cartoon_like_log values (' + cartoonNum.toString() + ', "' + userId.toString() + '", now())';
+
+  for (var i = 0; i < sql_up_cartoon_like.length; i++) {
+    conn.query(sql_up_cartoon_like[i], function(err, rows) {
+      if(err){
+        console.log(err);
+      } else {
+        console.log('바뀜');
+      }
+    });
+  }
+};
+
+/* "Cartoon Dislike" downCartoonLike(cartoonNum, userId) */
+exports.downCartoonLike = function downCartoonLike(cartoonNum, userId){
+  this.cartoonNum = cartoonNum;
+  this.userId = userId;
+
+  var sql_down_cartoon_like = [];
+  sql_down_cartoon_like[0] = 'UPDATE Cartoon SET cartoon_like = cartoon_like - 1 WHERE cartoon_num = ' + cartoonNum.toString();
+  sql_down_cartoon_like[1] = 'DELETE FROM Cartoon_like_log WHERE cartoon_num = ' + cartoonNum.toString() + ' AND user_id = "' + userId.toString() + '"';
+
+  for (var i = 0; i < sql_down_cartoon_like.length; i++) {
+    conn.query(sql_down_cartoon_like[i], function(err, rows) {
+      if(err){
+        console.log(err);
+      } else {
+        console.log('바뀜');
+      }
+    });
+  }
+};
+
+/* ======================================================= */
+/* Cut_like_log SQL Query */
+
+/* "Cut Like" upCutLike(cutNum, userId) */
+exports.upCutLike = function upCutLike(cutNum, userId){
+  this.cutNum = cutNum;
+  this.userId = userId;
+
+  var sql_up_cut_like = [];
+  sql_up_cut_like[0] = 'UPDATE Cut SET cut_like = cut_like + 1 WHERE cut_num = ' + cutNum.toString();
+  sql_up_cut_like[1] = 'INSERT INTO Cut_like_log values (' + cutNum.toString() + ', "' + userId.toString() + '", now())';
+
+  for (var i = 0; i < sql_up_cut_like.length; i++) {
+    conn.query(sql_up_cut_like[i], function(err, rows) {
+      if(err){
+        console.log(err);
+      } else {
+        console.log('바뀜');
+      }
+    });
+  }
+};
+
+/* "Cut Dislike" downCutLike(cutNum, userId) */
+exports.downCutLike = function downCutLike(cutNum, userId){
+  this.cutNum = cutNum;
+  this.userId = userId;
+
+  var sql_down_cut_like = [];
+  sql_down_cut_like[0] = 'UPDATE Cut SET cut_like = cut_like - 1 WHERE cut_num = ' + cutNum.toString();
+  sql_down_cut_like[1] = 'DELETE FROM Cut_like_log WHERE cut_num = ' + cutNum.toString() + ' AND user_id = "' + userId.toString() + '"';
+
+  for (var i = 0; i < sql_down_cut_like.length; i++) {
+    conn.query(sql_down_cut_like[i], function(err, rows) {
+      if(err){
+        console.log(err);
+      } else {
+        console.log('바뀜');
+      }
+    });
+  }
+};
+
+/* ======================================================= */
+/* Comment_like_log SQL Query */
+
+/* "Comment Like" upCommentLike(commentNum, userId) */
+exports.upCommentLike = function upCommentLike(commentNum, userId){
+  this.commentNum = commentNum;
+  this.userId = userId;
+
+  var sql_up_comment_like = [];
+  sql_up_comment_like[0] = 'UPDATE Comment SET comnt_like = comnt_like + 1 WHERE comnt_num = ' + commentNum.toString();
+  sql_up_comment_like[1] = 'INSERT INTO Comment_like_log values (' + commentNum.toString() + ', "' + userId.toString() + '", now())';
+
+  for (var i = 0; i < sql_up_comment_like.length; i++) {
+    conn.query(sql_up_comment_like[i], function(err, rows) {
+      if(err){
+        console.log(err);
+      } else {
+        console.log('바뀜');
+      }
+    });
+  }
+};
+
+/* "Comment Dislike" downCommentLike(commentNum, userId) */
+exports.downCommentLike = function downCommentLike(commentNum){
+  this.commentNum = commentNum;
+  this.userId = userId;
+
+  var sql_down_comment_like = [];
+  sql_down_comment_like[0] = 'UPDATE Comment SET comnt_like = comnt_like + 1 WHERE comnt_num = ' + commentNum.toString();
+  sql_down_comment_like[1] = 'DELETE FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ' AND user_id = "' + userId.toString() + '"';
+
+  for (var i = 0; i < sql_down_comment_like.length; i++) {
+    conn.query(sql_down_comment_like[i], function(err, rows) {
+      if(err){
+        console.log(err);
+      } else {
+        console.log('바뀜');
+      }
+    });
+  }
+};
+
 
 /* ======================================================= */
 // KEEP
@@ -433,7 +564,7 @@ exports.returnFirstCut = function returnFirstCut(cartoonNum){
       console.log(err);
     } else {
       for (var i = 0; i < row.length; i++) {
-        checkAncs(row[i].first_cut);
+        exports.checkAncs(row[i].first_cut);
       }
     }
   });
@@ -449,93 +580,13 @@ exports.checkAncs = function checkAncs(cutNum){
     } else {
       for (var i = 0; i < rows.length; i++){
         if(rows[i].Exist == 0){
-          delComment(cutNum);
-          delCut(cutNum);
+          exports.delComment(cutNum);
+          exports.delCut(cutNum);
         }
       }
     }
   });
 };
-
-exports.upCutLike = function upCutLike(cutNum){
-  this.cutNum = cutNum;
-
-  var sql_up_cut_like = 'UPDATE Cut SET cut_like = cut_like + 1 WHERE cut_num = ' + cutNum.toString();
-  conn.query(sql_up_cut_like, function(err, rows) {
-    if(err){
-      console.log(err);
-    } else {
-      console.log('바뀜');
-    }
-  });
-};
-
-exports.downCutLike = function downCutLike(cutNum){
-  this.cutNum = cutNum;
-
-  var sql_down_cut_like = 'UPDATE Cut SET cut_like = cut_like - 1 WHERE cut_num = ' + cutNum.toString();
-  conn.query(sql_down_cut_like, function(err, rows) {
-    if(err){
-      console.log(err);
-    } else {
-      console.log('바뀜');
-    }
-  });
-};
-
-exports.upCartoonLike = function upCartoonLike(cartoonNum){
-  this.cartoonNum = cartoonNum;
-
-  var sql_up_cartoon_like = 'UPDATE Cartoon SET cartoon_like = cartoon_like + 1 WHERE cartoon_num = ' + cartoonNum.toString();
-  conn.query(sql_up_cartoon_like, function(err, rows) {
-    if(err){
-      console.log(err);
-    } else {
-      console.log('바뀜');
-    }
-  });
-};
-
-exports.downCartoonLike = function downCartoonLike(cartoonNum){
-  this.cartoonNum = cartoonNum;
-
-  var sql_down_cartoon_like = 'UPDATE Cartoon SET cartoon_like = cartoon_like - 1 WHERE cartoon_num = ' + cartoonNum.toString();
-  conn.query(sql_down_cartoon_like, function(err, rows) {
-    if(err){
-      console.log(err);
-    } else {
-      console.log('바뀜');
-    }
-  });
-};
-
-exports.upCommentLike = function upCommentLike(commentNum){
-  this.commentNum = commentNum;
-
-  var sql_up_comment_like = 'UPDATE Comment SET comnt_like = comnt_like + 1 WHERE comnt_num = ' + commentNum.toString();
-  conn.query(sql_up_comment_like, function(err, rows) {
-    if(err){
-      console.log(err);
-    } else {
-      console.log('바뀜');
-    }
-  });
-};
-
-exports.downCommentLike = function downCommentLike(commentNum){
-  this.commentNum = commentNum;
-
-  var sql_down_comment_like = 'UPDATE Comment SET comnt_like = comnt_like + 1 WHERE comnt_num = ' + commentNum.toString();
-  conn.query(sql_down_comment_like, function(err, rows) {
-    if(err){
-      console.log(err);
-    } else {
-      console.log('바뀜');
-    }
-  });
-};
-
-
 
 // exports.output = function output(num){
 //   this.num = num;
