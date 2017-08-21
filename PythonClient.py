@@ -40,11 +40,17 @@ if __name__ == '__main__':
     # HOST = gethostbyname('colorization')
     
     # if you use the Win & Linux uncomment sentence
-    HOST = socket.gethostbyname(socket.gethostname())
+    HOST = socket.gethostbyname('colorization')
     
     PORT = 50007
     print(socket.gethostname(), HOST, PORT)
-    img = cv2.imread(sys.argv[1])
+
+    img = cv2.imread(sys.argv[1],cv2.IMREAD_UNCHANGED)
+    ap = (img[:,:,3:4] == 0)
+    ap = ap.astype(np.uint8)*255
+    img[:,:,0:3] += ap
+    img = img[:,:,:3]
+
     mask = cv2.imread(sys.argv[2],cv2.IMREAD_UNCHANGED)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
