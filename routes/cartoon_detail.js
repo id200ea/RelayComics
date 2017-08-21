@@ -15,9 +15,11 @@ function circularStringify(circularObject){
     });
 }
 router.get('/', function(req, res, next) {
+    console.log(req.query.title);
+    console.log(req.query.rootCutNum);
 
   // makeTree 테스트
-  var test = new Cartoon("testTitle", 1,1, "img");
+  var test = new Cartoon(req.query.title, 1, parseInt(req.query.rootCutNum), "img");
   sql.makeTree(test.root);
   setTimeout(function(){
     console.log(test);

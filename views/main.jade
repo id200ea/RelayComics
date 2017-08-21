@@ -12,30 +12,34 @@ html
         script(src='../javascripts/CartoonModel.js', type='text/javascript')
         link(rel='stylesheet', type='text/css', href='../stylesheets/image_slider.css')
         script(type='text/javascript').
-            test = JSON.parse(!{JSON.stringify(cartoon)});
-            console.log(test);
             sliderOpt = {
                 imageWidth:500,
                 imageHeigth:350
             };
-            imageList = [];
-            for(var i=1 ; i<10 ; i++){
-                imageList.push(new Cut(0, "../images/00"+i.toString()+".jpg"))
+            cartoonlist = JSON.parse(!{JSON.stringify(cartoon)});
+            var tempStory =[];
+            var tempCut;
+            for(var i=0 ; i<cartoonlist.length ; i++){
+                tempStory[i]=[];
+                for(tempCut = cartoonlist[i].root.child[0]; tempCut.child.length>0 ; tempCut = tempCut.child[0])
+                    tempStory[i].push(tempCut);
+                console.log(tempStory[i]);
             }
-            for(var i=0 ; i<10 ; i++){
+
+            for(var i=0 ; i<cartoonlist.length;  i++){
                 var cartoonDiv = document.createElement("div");
                 cartoonDiv.id = "Cartoon_"+i.toString();
                 var title  = document.createElement("span");
-                title.id = "title";
+                title.id = "cartoonlist";
                 cartoonDiv.appendChild(title);
                 console.log(cartoonDiv);
                 var titleFont = document.createElement("font");
                 titleFont.size=8;
                 title.appendChild(titleFont);
                 var link = document.createElement("a");
-                link.href= "detail";
+                link.href= "detail?title="+cartoonlist[i].title+"&rootCutNum="+cartoonlist[i].root.num.toString();
                 link.style.textDecoration="none";
-                link.innerHTML = "TITLE"+i.toString();
+                link.innerHTML = cartoonlist[i].title;
                 titleFont.appendChild(link);
                 var tag  = document.createElement("span");
                 tag.id = "tag";
@@ -44,7 +48,7 @@ html
                 tagFont.size=5;
                 tag.appendChild(tagFont);
                 tagFont.innerHTML = "#tag1 #tag2 #tag3";
-                cartoonDiv.appendChild(new ImageSlider(i, sliderOpt).create(imageList));
+                cartoonDiv.appendChild(new ImageSlider(i, sliderOpt).create(tempStory[i]));
                 document.body.appendChild(cartoonDiv);
             }
             var index = 5;
