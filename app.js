@@ -87,10 +87,11 @@ app.get('/image_receiver', function (req, res) {
 
 app.get('/modi_like', function (req, res) {
   cutNum = parseInt(req.param('num'));
+  console.log(req.param('num')+", "+ req.param('flag'));
   if(req.param('flag')=='add'){
-    sql.upCutLike(cutNum);
+    sql.upCutLike(cutNum, 'bgh');
   }else {
-    sql.downCutLike(cutNum);
+    sql.downCutLike(cutNum, 'bgh');
   }
 });
 

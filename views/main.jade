@@ -12,6 +12,8 @@ html
         script(src='../javascripts/CartoonModel.js', type='text/javascript')
         link(rel='stylesheet', type='text/css', href='../stylesheets/image_slider.css')
         script(type='text/javascript').
+            test = JSON.parse(!{JSON.stringify(cartoon)});
+            console.log(test);
             sliderOpt = {
                 imageWidth:500,
                 imageHeigth:350

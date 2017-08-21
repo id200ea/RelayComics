@@ -479,7 +479,7 @@ exports.upCutLike = function upCutLike(cutNum, userId){
       if(err){
         console.log(err);
       } else {
-        console.log('바뀜');
+        // console.log('바뀜');
       }
     });
   }
