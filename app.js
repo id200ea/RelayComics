@@ -87,9 +87,9 @@ app.get('/image_receiver', function (req, res) {
 
 // Cut Like
 app.get('/modi_like', function (req, res) {
-  cutNum = parseInt(req.param('num'));
-  console.log(req.param('num')+", "+ req.param('flag'));
-  if(req.param('flag')=='add'){
+  cutNum = parseInt(req.query.num);
+  console.log(req.query.num.toString()+", "+ req.query.flag);
+  if(req.query.flag=='add'){
     sql.upCutLike(cutNum, 'bgh');
   }else {
     sql.downCutLike(cutNum, 'bgh');
@@ -98,22 +98,19 @@ app.get('/modi_like', function (req, res) {
 
 // Add Cut
 app.get('/add_cut', function (req, res) {
-  cartoonNum = parseInt(req.param('t_num'));
   // cutAuthor = req.param('user');
-  cutStory = req.param('story');
-  cutSrc = req.param('src');
-  parentNum = parseInt(req.param('p_num'));
-  if(req.param('flag') == 'add')
-  sql.addCut(cartoonNum, 'kke', cutStory, cutSrc, parentNum);
+  //cutStory = req.query.story;
+  cutSrc = req.query.src;
+  parentNum = parseInt(req.query.pnum);
+  sql.addCut(null, 'kke', "asd", cutSrc, parentNum);
 });
 
 // Delete Cut
 app.get('/del_cut', function (req, res) {
-  cutNum = parseInt(req.param('num'));
+  cutNum = parseInt(req.query.num);
   // Exist : 1
-  childExist = parseInt(req.param('child'));
-  // childExist = req.param('user');
-  if(req.param('flag') == 'del'){
+  childExist = parseInt(req.query.child);
+  if(req.query.flag == 'del'){
     sql.delCut(cutNum, childExist);
   }
 });

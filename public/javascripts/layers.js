@@ -103,14 +103,13 @@ function sendCanvas(main_canvas, flag) {
 
     if(flag==3) {
         url += '&parent=' + parentNum;  //주소에서 부모의 정보를 읽어온다.
-        /*
+
         var xhr_To_DB = new XMLHttpRequest();
         var url_To_DB  = '/add_cut?';
-        url_To_DB +='src='+'public/images/new_' + parentNum +".png"
-        url_To_DB+='&p_num=' + parentNum;
-        xhr_To_DB.open('GET', url);
+        url_To_DB +='src='+'../images/new_' + parentNum.toString() +".png"
+        url_To_DB+='&pnum=' + parentNum.toString();
+        xhr_To_DB.open('GET', url_To_DB);
         xhr_To_DB.send(null);
-        */
     }
 
     xhr.onreadystatechange = function rspns() {
@@ -127,10 +126,10 @@ function sendCanvas(main_canvas, flag) {
             img.src = "data:image/png;base64,"+xhr.responseText;
         }
     };
-    //버그
 
     xhr.open('GET', url);
     xhr.send(null);
+    window.location="http://localhost:3000/";
 }
 
 function mergeUpLayer() {
