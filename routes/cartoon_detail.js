@@ -16,14 +16,15 @@ function circularStringify(circularObject){
 }
 router.get('/', function(req, res, next) {
 
-  // // makeTree 테스트
-  // var test = new Cartoon("testTitle", 1, "img");
-  // makeTree(test.root);
-  // setTimeout(function(){
-  //   console.log(test);
-  //   res.render('detail', {cartoon:circularStringify(test)});
-  // }, 600);
-
+  // makeTree 테스트
+  var test = new Cartoon("testTitle", 1,1, "img");
+  sql.makeTree(test.root);
+  setTimeout(function(){
+    console.log(test);
+    res.render('detail', {cartoon:circularStringify(test)});
+  }, 600);
+  
+/*
     test = new Cartoon("testComic", 1, "../images/001.jpg");
     test.root.addChild(2, "../images/a.png");
     test.root.addChild(3, "../images/b.png");
@@ -56,9 +57,9 @@ router.get('/', function(req, res, next) {
     test.root.child[0].child[0].child[0].child[0].child[0].child[0 ].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].addChild(12, "../images/bb.png");
     test.root.child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].addChild(13, "../images/bc.png");
     test.root.child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].child[0].addChild(14, "../images/bd.png");
-
+*/
     console.log(test);
-    res.render('detail', {please:circularStringify(test)});
+    // res.render('detail', {please:circularStringify(test)});
 });
 
 module.exports = router;

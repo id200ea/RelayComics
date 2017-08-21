@@ -14,7 +14,8 @@ var conn = mysql.createConnection({
 /* Cartoon List SQL Query */
 
 /* "Cartoon List Output" listCartoon() */
-exports.listCartoon = function listCartoon(){
+exports.listCartoon = function listCartoon(test){
+  this.test = test;
   var list = [];
   var sql_list_cartoon = 'SELECT cartoon_num, cartoon_title, cartoon_like, first_cut, cut_src FROM Cartoon JOIN Cartoon_first_cut USING (cartoon_num) JOIN Cut WHERE first_cut = cut_num ORDER BY cartoon_like DESC';
 
@@ -26,6 +27,13 @@ exports.listCartoon = function listCartoon(){
         list[i] = new Cartoon(rows[i].cartoon_title, rows[i].cartoon_like, rows[i].first_cut, rows[i].cut_src);
         makeCartoon(list[i].root);
       }
+      setTimeout(function() {
+        for (var i = 0; i < list.length; i++) {
+          test[i] = list[i];
+          console.log('111111111');
+          console.log(test[i]);
+        }
+      }, 600);
     }
   });
 };

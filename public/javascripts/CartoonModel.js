@@ -14,7 +14,7 @@ function Cartoon(title, like, rootNum, rootImgSrc){
     this.title = title;
     this.like = like;
 
-    this.root = new Cut(rootNum, rootImgSrc);
+    this.root = new Cut(rootNum, rootImgSrc, 0);
 }
 
 Cut.prototype.addChild = function(num, imgSrc, like) {
