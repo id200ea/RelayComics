@@ -45,11 +45,11 @@ ImageSlider.prototype.create = function(list){
           } else {
             url += '&flag=add';
           }
-          xhr.onreadystatechange = function response() {
-            console.log("bbb");
-          };
-          xhr.open('GET', url);
-          xhr.send(null);
+          fetch(url).then(function (res) {
+                console.log(res.text()+"a");
+            }).then(function (html) {
+                console.log("a");
+            });
         };
         heartDiv.style.opacity = "0.5";
         crossDiv.classList.add("x-shape");
