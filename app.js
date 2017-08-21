@@ -85,6 +85,7 @@ app.get('/image_receiver', function (req, res) {
 });
 //지응 코드 끝
 
+// Cut Like
 app.get('/modi_like', function (req, res) {
   cutNum = parseInt(req.param('num'));
   console.log(req.param('num')+", "+ req.param('flag'));
@@ -92,6 +93,28 @@ app.get('/modi_like', function (req, res) {
     sql.upCutLike(cutNum, 'bgh');
   }else {
     sql.downCutLike(cutNum, 'bgh');
+  }
+});
+
+// Add Cut
+app.get('/add_cut', function (req, res) {
+  cartoonNum = parseInt(req.param('t_num'));
+  // cutAuthor = req.param('user');
+  cutStory = req.param('story');
+  cutSrc = req.param('src');
+  parentNum = parseInt(req.param('p_num'));
+  if(req.param('flag') == 'add')
+  sql.addCut(cartoonNum, 'kke', cutStory, cutSrc, parentNum);
+});
+
+// Delete Cut
+app.get('/del_cut', function (req, res) {
+  cutNum = parseInt(req.param('num'));
+  // Exist : 1
+  childExist = parseInt(req.param('child'));
+  // childExist = req.param('user');
+  if(req.param('flag') == 'del'){
+    sql.delCut(cutNum, childExist);
   }
 });
 
