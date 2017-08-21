@@ -148,7 +148,7 @@ exports.addCut = function addCut(cartoonNum, cutAuthor, cutStory, cutSrc, parent
     if(err){
       console.log(err);
     } else if(parentNum != null){
-      // Cut Add
+      // Add Cut
       console.log('cut 테이블에 추가되었습니다.');
       exports.addTreepaths(parentNum, row.insertId);
     } else {
@@ -173,6 +173,7 @@ exports.delCut = function delCut(cutNum, childExist){
     sql_del_cut[0] = 'DELETE FROM Cut_like_log WHERE cut_num = ' + cutNum.toString();
     sql_del_cut[1] = 'UPDATE Cut SET cut_author = "anyone", cut_story = "컷을 그려주세요.", cut_src = "../images/empty.png" WHERE cut_num = ' + cutNum.toString();
   } else {
+    // Childless Cut Delete
     sql_del_cut[0] = 'DELETE FROM Cut_like_log WHERE cut_num = ' + cutNum.toString();
     sql_del_cut[1] = 'DELETE FROM Treepaths WHERE descendant = ' + cutNum.toString();
     sql_del_cut[2] = 'DELETE FROM Cut WHERE cut_num = ' + cutNum.toString();
@@ -288,7 +289,7 @@ exports.addComment = function addComment(cutNum, userId, comntCnt){
 /* "Comment Delete" delComment(cutNum, userId)
    or "User Withdrawal" delComment(null, userId)
    or "Cut Delete" delComment(cutNum, null) */
-exports.delComment = function delComment(cutNum, userId){
+exports._delComment = function _delComment(cutNum, userId){
   this.cutNum = cutNum || null;
   this.userId = userId || null;
 
@@ -313,6 +314,26 @@ exports.delComment = function delComment(cutNum, userId){
       console.log('댓글이 삭제되었습니다.');
     }
   });
+};
+
+/* "Comment Delete" delComment(cutNum, userId) */
+exports.delComment = function delComment(commentNum){
+  this.commentNum = commentNum;
+  // this.userId = userId;
+
+  var sql_del_comment = [];
+  sql_del_comment[0] = 'DELETE FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString();
+  sql_del_comment[1] = 'DELETE FROM Comment WHERE comnt_num = ' + commentNum.toString();
+
+  for (var i = 0; i < sql_del_comment.length; i++) {
+    conn.query(sql_del_comment[i], function(err, row){
+      if(err){
+        console.log(err);
+      } else {
+        console.log('댓글이 삭제되었습니다.');
+      }
+    });
+  }
 };
 
 /* "Comment List Output" listComment(cutNum) */
@@ -429,14 +450,14 @@ exports.upCartoonLike = function upCartoonLike(cartoonNum, userId){
 
   var sql_up_cartoon_like = [];
   sql_up_cartoon_like[0] = 'INSERT INTO Cartoon_like_log values (' + cartoonNum.toString() + ', "' + userId.toString() + '", now())';
-  sql_up_cartoon_like[1] = 'UPDATE Cartoon SET cartoon_like = cartoon_like + 1 WHERE cartoon_num = ' + cartoonNum.toString();
+  sql_up_cartoon_like[1] = 'UPDATE Cartoon SET cartoon_like = (SELECT COUNT(*) FROM Cartoon_like_log WHERE cartoon_num = ' + cartoonNum.toString() + ') WHERE cartoon_num = ' + cartoonNum.toString();
 
   for (var i = 0; i < sql_up_cartoon_like.length; i++) {
     conn.query(sql_up_cartoon_like[i], function(err, rows) {
       if(err){
         console.log(err);
       } else {
-        console.log('바뀜');
+        // console.log('바뀜');
       }
     });
   }
@@ -449,14 +470,14 @@ exports.downCartoonLike = function downCartoonLike(cartoonNum, userId){
 
   var sql_down_cartoon_like = [];
   sql_down_cartoon_like[0] = 'DELETE FROM Cartoon_like_log WHERE cartoon_num = ' + cartoonNum.toString() + ' AND user_id = "' + userId.toString() + '"';
-  sql_down_cartoon_like[1] = 'UPDATE Cartoon SET cartoon_like = cartoon_like - 1 WHERE cartoon_num = ' + cartoonNum.toString();
+  sql_down_cartoon_like[1] = 'UPDATE Cartoon SET cartoon_like = (SELECT COUNT(*) FROM Cartoon_like_log WHERE cartoon_num = ' + cartoonNum.toString() + ') WHERE cartoon_num = ' + cartoonNum.toString();
 
   for (var i = 0; i < sql_down_cartoon_like.length; i++) {
     conn.query(sql_down_cartoon_like[i], function(err, rows) {
       if(err){
         console.log(err);
       } else {
-        console.log('바뀜');
+        // console.log('바뀜');
       }
     });
   }
@@ -472,7 +493,7 @@ exports.upCutLike = function upCutLike(cutNum, userId){
 
   var sql_up_cut_like = [];
   sql_up_cut_like[0] = 'INSERT INTO Cut_like_log values (' + cutNum.toString() + ', "' + userId.toString() + '", now())';
-  sql_up_cut_like[1] = 'UPDATE Cut SET cut_like = cut_like + 1 WHERE cut_num = ' + cutNum.toString();
+  sql_up_cut_like[1] = 'UPDATE Cut SET cut_like = (SELECT COUNT(*) FROM Cut_like_log WHERE cut_num = ' + cutNum.toString() + ') WHERE cut_num = ' + cutNum.toString();
 
   for (var i = 0; i < sql_up_cut_like.length; i++) {
     conn.query(sql_up_cut_like[i], function(err, rows) {
@@ -492,14 +513,14 @@ exports.downCutLike = function downCutLike(cutNum, userId){
 
   var sql_down_cut_like = [];
   sql_down_cut_like[0] = 'DELETE FROM Cut_like_log WHERE cut_num = ' + cutNum.toString() + ' AND user_id = "' + userId.toString() + '"';
-  sql_down_cut_like[1] = 'UPDATE Cut SET cut_like = cut_like - 1 WHERE cut_num = ' + cutNum.toString();
+  sql_down_cut_like[1] = 'UPDATE Cut SET cut_like = (SELECT COUNT(*) FROM Cut_like_log WHERE cut_num = ' + cutNum.toString() + ') WHERE cut_num = ' + cutNum.toString();
 
   for (var i = 0; i < sql_down_cut_like.length; i++) {
     conn.query(sql_down_cut_like[i], function(err, rows) {
       if(err){
         console.log(err);
       } else {
-        console.log('바뀜');
+        // console.log('바뀜');
       }
     });
   };
@@ -515,14 +536,14 @@ exports.upCommentLike = function upCommentLike(commentNum, userId){
 
   var sql_up_comment_like = [];
   sql_up_comment_like[0] = 'INSERT INTO Comment_like_log values (' + commentNum.toString() + ', "' + userId.toString() + '", now())';
-  sql_up_comment_like[1] = 'UPDATE Comment SET comnt_like = comnt_like + 1 WHERE comnt_num = ' + commentNum.toString();
+  sql_up_comment_like[1] = 'UPDATE Comment SET comnt_like = (SELECT COUNT(*) FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ') WHERE comnt_num = ' + commentNum.toString();
 
   for (var i = 0; i < sql_up_comment_like.length; i++) {
     conn.query(sql_up_comment_like[i], function(err, rows) {
       if(err){
         console.log(err);
       } else {
-        console.log('바뀜');
+        // console.log('바뀜');
       }
     });
   };
@@ -535,14 +556,14 @@ exports.downCommentLike = function downCommentLike(commentNum, userId){
 
   var sql_down_comment_like = [];
   sql_down_comment_like[0] = 'DELETE FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ' AND user_id = "' + userId.toString() + '"';
-  sql_down_comment_like[1] = 'UPDATE Comment SET comnt_like = comnt_like - 1 WHERE comnt_num = ' + commentNum.toString();
+  sql_down_comment_like[1] = 'UPDATE Comment SET comnt_like = (SELECT COUNT(*) FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ') WHERE comnt_num = ' + commentNum.toString();
 
   for (var i = 0; i < sql_down_comment_like.length; i++) {
     conn.query(sql_down_comment_like[i], function(err, rows) {
       if(err){
         console.log(err);
       } else {
-        console.log('바뀜');
+        // console.log('바뀜');
       }
     });
   };
