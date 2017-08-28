@@ -100,8 +100,6 @@ function sendCanvas(main_canvas, flag) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/image_receiver', true);
     xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
-    xhr.setRequestHeader("Cache-Control","no-cache, must-revalidate");
-    xhr.setRequestHeader("Pragma","no-cache");
 
     var params = "image=";
     params += main_canvas.toDataURL('image/png');
