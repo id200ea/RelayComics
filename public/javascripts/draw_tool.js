@@ -2,19 +2,22 @@ var color;
 function changeColor(){
     color = "#" + document.getElementById("colorBox").value;
 }
+//현재 선택된 컬러의 값을 가져오는 함수 자동 실행되므로, color 변수만 사용하면 된다.
 
+//함수 포인터, 그리기 도구를 함수 포인터에 넣어 각각 다르게 사용하는 것.
 function selectFunc(event){
     switch(event.target.id){
-        case "pencil":
+        case "pencil":  //id 값을 사용한다.
     		draw = drawPen;  //함수 포인터 사용 기본 Pen 등록
             break;
         case "line":
-    		draw = drawLine;  //함수 포인터 사용 기본 Pen 등록
+    		draw = drawLine;  //함수 포인터 사용
             break;
         case "rect":
-    		draw = drawRect;  //함수 포인터 사용 기본 Pen 등록
+    		draw = drawRect;  //함수 포인터 사용
             break;
         case "auto":
+            draw = 0; //draw기능 초기화.
             if(auto_Color_Flag == 1 || auto_Color_Flag == 2) {
                 auto_Color_Flag = 0;
                 alert("취소되었습니다.");
@@ -25,6 +28,7 @@ function selectFunc(event){
     colorTool(event.target.id);
 }
 
+//selectFunc에 포함된 기능들 중에서 선택을 하면 색이 바뀌는 기능
 var tool;
 function colorTool(id){
     if(tool)
@@ -33,6 +37,7 @@ function colorTool(id){
     tool.style.backgroundColor = 'pink';
 }
 
+//Pen 그닥 어렵진 않다. 찬찬히 살펴보자.
 function drawPen(event){
     drwaCtx.save();
     drwaCtx.beginPath();
@@ -50,6 +55,7 @@ function drawPen(event){
     drwaCtx.restore();
 }
 
+//Line 순서대로 보면 어려운건 없을 듯하다.
 function drawLine(event){
     drwaCtx.beginPath();
     drwaCtx.moveTo(pos.X,pos.Y);
@@ -61,6 +67,7 @@ function drawLine(event){
     drwaCtx.closePath();
 }
 
+//사각형 기능
 function drawRect(event){
     drwaCtx.beginPath();
     var cur = getPosition(event);
@@ -70,6 +77,7 @@ function drawRect(event){
     drwaCtx.closePath();
 }
 
+//Load 기능, (볼필요 없을 듯하다)
 function fileIn(obj) {
     var pathpoint = obj.value.lastIndexOf('.');
     var filepoint = obj.value.substring(pathpoint+1,obj.length);
@@ -89,12 +97,13 @@ function fileIn(obj) {
         alert("이미지 파일만 선택할 수 있습니다.");
     }
 }
-
+//위의 함수를 호출하기 위한 함수. (볼 필요는 없다)
 function loadImage() {
     var upload = document.getElementById("image_up_file");
     upload.click();
 }
 
+//오토 컬러를 하기위해 Flag값을 바뀌가며 레이어를 선택하려는 함수, Layer.js 에 changeLayer와 연관이 있다.
 var auto_Color_Flag;
 function autoColor() {
     alert("두개의 레이어를 선택해 주세요.");
