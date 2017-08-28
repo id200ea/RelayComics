@@ -115,6 +115,30 @@ app.get('/del_cut', function (req, res) {
   }
 });
 
+// Add Cartoon
+app.get('/add_cartoon', function (req, res) {
+  cartoonTitle = req.query.title;
+  // cartoonTag1 = req.query.tag1;
+  // cartoonTag2 = req.query.tag2;
+  // cartoonTag3 = req.query.tag3;
+  // sql.addCartoon(cartoonTitle, cartoonTag1, cartoonTag2, cartoonTag3);
+  sql.addCartoon(cartoonTitle, '#드라마', '#학원', '#일상');
+})
+
+// Add Comment
+app.get('/add_comnt', function (req, res) {
+  cutNum = req.query.num;
+  // userId = req.query.user;
+  comntCnt = req.query.cnt;
+
+  sql.addComment(cutNum, 'jje', comntCnt);
+});
+
+// Delete Comment
+app.get('/del_comnt', function (req, res) {
+  // 뀨?
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

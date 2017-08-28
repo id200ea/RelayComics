@@ -336,17 +336,48 @@ exports.delComment = function delComment(commentNum){
   }
 };
 
+/* "Alter Comment" alterComment(commentNum) */
+exports.alterComment = function alterComment(commentNum, commentCnt){
+  this.commentNum = commentNum;
+  this.commentCnt = commentCnt;
+
+  var sql_alter_comment = 'UPDATE Comment SET comnt_cnt = ' + commentCnt.toString() + ', comnt_date = now() WHERE comnt_num = ' + commentNum.toString();
+
+  conn.query(sql_alter_comment, function(err, row){
+    if(err){
+      console.log(err);
+    } else {
+      console.log('comment 변경');
+    }
+  });
+};
+
 /* "Comment List Output" listComment(cutNum) */
 exports.listComment = function listComment(cutNum){
   this.cutNum = cutNum;
 
   var sql_list_comment = 'SELECT * FROM Comment WHERE cut_num = ' + cutNum.toString() + 'ORDER BY comnt_like DESC';
 
-  conn.query(sql_comment_list, function(err, row){
+  conn.query(sql_list_comment, function(err, row){
     if(err){
       console.log(err);
     } else {
       console.log('cut의 comment list 출력');
+    }
+  });
+};
+
+/* "Comment Count" countComment(cutNum) */
+exports.countComment = function countComment(cutNum){
+  this.cutNum = cutNum;
+
+  var sql_count_comment = 'SELECT COUNT(*) FROM Comment WHERE cut_num = ' + cutNum.toString();
+
+  conn.query(sql_count_comment, function(err, row){
+    if(err){
+      console.log(err);
+    } else {
+      console.log('cut의 comment 갯수 출력');
     }
   });
 };
@@ -373,12 +404,16 @@ exports.addUser = function addUser(userId, userName){
 exports.delUser = function delUser(userId){
   this.userId = userId;
 
-  // User Withdrawal & Cartoon like Delete
-  exports.delLike(userId);
-  // Comment Delete
-  exports.delComment(userId);
-  // cut 삭제 or 변경 - 새로 만들어야 함
-  exports.alterCuts(userId, "컷을 그려주세요.", "/img/empty.jpg");
+  var sql_del_user = [];
+
+  // ???
+
+  // Comment Delete by 'userId'
+  findCommentNum(userId);
+  // Like Log Delete by 'userId'
+  findCommentLikeNum(userId);
+  findCutLikeNum(userId);
+  findCartoonLikeNum(userId);
 
   // User Withdrawal
   var sql_leave_user = 'DELETE FROM User WHERE user_id = ' + userId.toString();
@@ -391,8 +426,75 @@ exports.delUser = function delUser(userId){
   });
 };
 
-/* "UserName Alter" alterUser(userId, userName) */
-exports.alterUser = function alterUser(userId, userName){
+/* "User Withdrawal" sub Query */
+function findCommentNum(userId){
+  this.userId = userId;
+
+  var sql_find_comnt_num = 'SELECT comnt_num FROM Comment WHERE comnt_id = ' + userId.toString();
+  conn.query(sql_select_comnt_num, function(err, rows){
+    for (var i = 0; i < rows.length; i++) {
+      exports.delComment(rows[i].comnt_id);
+    };
+  });
+};
+
+/* "User Withdrawal" sub Query */
+function findCartoonLikeNum(userId){
+  this.userId = userId;
+
+  var sql_find_cartoon_like = 'SELECT cartoon_num FROM Cartoon_like_log WHERE user_id = ' + userId.toString();
+  conn.query(sql_find_cartoon_like, function(err, rows){
+    for (var i = 0; i < rows.length; i++) {
+      exports.downCartoonLike(rows[i].cartoon_num, userId);
+    };
+  });
+};
+
+/* "User Withdrawal" sub Query */
+function findCutLikeNum(userId){
+  this.userId = userId;
+
+  var sql_find_cut_like = 'SELECT cut_num FROM Cut_like_log WHERE user_id = ' + userId.toString();
+  conn.query(sql_find_cut_like, function(err, rows){
+    for (var i = 0; i < rows.length; i++) {
+      exports.downCutLike(rows[i].cut_num, userId);
+    };
+  });
+};
+
+/* "User Withdrawal" sub Query */
+function findCommentLikeNum(userId){
+  this.userId = userId;
+
+  var sql_find_comment_like = 'SELECT comnt_num FROM Comment_like_log WHERE user_id = ' + userId.toString();
+  conn.query(sql_find_comment_like, function(err, rows){
+    for (var i = 0; i < rows.length; i++) {
+      exports.downCommentLike(rows[i].comnt_num, userId);
+    };
+  });
+};
+
+/* "Duplication UserName Check" checkUserName(userName) */
+exports.checkUserName = function checkUserName(userId, userName){
+  this.userId = userId;
+  this.userName = userName;
+
+  var sql_check_user_name = 'SELECT EXISTS (SELECT * FROM User WHERE user_name = "' + userName.toString() + '") AS Exist';
+  conn.query(sql_check_user_name, function(err, row) {
+    if(err){
+      console.log(err);
+    } else {
+      if (row[0].Exist == 1) {
+        console.log('이미 존재하는 닉네임입니다.');
+      } else {
+        alterUserName(userId, userName);
+      }
+    }
+  });
+};
+
+/* "UserName Alter" alterUserName(userId, userName) */
+function alterUserName(userId, userName){
   this.userId = userId;
   this.userName = userName;
 
