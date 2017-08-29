@@ -27,7 +27,7 @@ Step 6: Create Container from build image
 		-p : set PortForwade [out]:[in]
 		-i -t : you can use Bash-shell
 	//you must this cmd at RelayComics/Dockerfile/ directory
-	cmd = sudo docker run  -i -t --name [container name] -p 3000:3000 -v /root/Comics:. [image name] 
+	cmd = sudo docker run  -i -t --name [container name] -p 3000:3000 -v [absolute address of this directory]:/root/Comics [image name] 
 
 
 Step 7: start and attach to Container, if you not in Container
