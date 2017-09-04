@@ -85,11 +85,23 @@ function fileIn(obj) {
     if(filetype=='jpg'|| filetype=='jpeg'|| filetype=='png' || filetype=='gif'  || filetype=='bmp'){
         var reader = new FileReader();
         reader.readAsDataURL(obj.files[0]);
-        reader.onload = function  () {
+        reader.onload = function () {
             var tempImage = new Image(); //drawImage 메서드에 넣기 위해 이미지 객체화
-            tempImage.src = reader.result; //data-uri를 이미지 객체에 주입
+            tempImage.src = reader.result; //data-url를 이미지 객체에 주입
             tempImage.onload = function () {
-                viewCtx.drawImage(this, 0, 0);
+              var width = tempImage.width;
+              var height = tempImage.height;
+
+              var scalex = 500 / width;
+              var scaley = 500 / height;
+
+              // 캔버스를 full로 채울경우 주석처리
+              var scale = (scalex < scaley) ? scalex : scaley;
+
+              tempImage.width = scale * width;
+              tempImage.height = scale * height;
+
+              viewCtx.drawImage(this, 0, 0, tempImage.width, tempImage.height);
             }
         }
     }
