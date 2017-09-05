@@ -102,7 +102,6 @@ function mergeAllSave() {
 
 //서버로 캔버스를 보내는 함수이다. mainCanvas에 캔버스를 넣고, flag는 서버에 저장하려면 3을 사용하면 된다. (1과 2는 오토드로우 용이므로 사용 X)
 function sendCanvas(main_canvas, flag) {
-
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/image_receiver', true);
     xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
@@ -114,14 +113,23 @@ function sendCanvas(main_canvas, flag) {
     params +='&flag='+flag;
 
     if(flag==3) {
-        url += '&parent=' + parentNum;  //주소에서 부모의 정보를 읽어온다.
-
         var xhr_To_DB = new XMLHttpRequest();
         var url_To_DB  = '/add_cut?';
-        url_To_DB +='src='+'../images/new_' + parentNum.toString() +".png"
+
+        var today = new Date();
+        var date = today.getFullYear();
+        date += "_" + today.getMonth()+1; //January is 0!
+        date += "_" + today.getDate(); //January is 0!
+        date += "_"+ today.getHours();
+        date += "_"+ today.getMinutes();
+        date += "_"+ today.getMilliseconds();
+
+        url_To_DB +='src='+'../images/new_' + parentNum.toString() + date +".png"
         url_To_DB+='&pnum=' + parentNum.toString();
         xhr_To_DB.open('GET', url_To_DB);
         xhr_To_DB.send(null);
+        alert("서버에 저장되었습니다.")
+        return null;
     }
     else if(flag==2) {
         xhr.onreadystatechange = function rspns() {
@@ -135,7 +143,6 @@ function sendCanvas(main_canvas, flag) {
     }
 
     xhr.send(params);
-    //window.location="http://localhost:3000/";
 }
 
 //바로위 레이어와 합치는 함수이다.
