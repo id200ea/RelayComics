@@ -26,10 +26,38 @@ function selectFunc(event){
             break;
         case "edge":
             CannyJS.canny(viewCanvas);
-
+            break;
+        case "balloon":
+            draw = drawBalloon;
             break;
     }
     colorTool(event.target.id);
+}
+
+function drawBalloon(event) {
+    var cur = getPosition(event);
+    console.log("click");
+    var center_x = cur.X - ((cur.X - pos.X) / 2);
+    var center_y = cur.Y - ((cur.Y - pos.Y) / 2);
+    var size_x = (cur.X - pos.X) / 2;
+    var size_y = (cur.Y - pos.Y) / 2;
+    var arrow_y = (size_y * 4 / 3);
+    var arrow_x = -(size_x / 2);
+
+    drwaCtx.beginPath();
+    drwaCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    drwaCtx.fillStyle = "white";
+    drwaCtx.moveTo(center_x, center_y - size_y);
+    drwaCtx.quadraticCurveTo(center_x - size_x, center_y - size_y, center_x - size_x, center_y)
+    drwaCtx.quadraticCurveTo(center_x - size_x, center_y + size_y, center_x, center_y + size_y)
+    drwaCtx.quadraticCurveTo(center_x + size_x, center_y + size_y, center_x + size_x, center_y)
+    drwaCtx.quadraticCurveTo(center_x + size_x, center_y - size_y, center_x, center_y - size_y)
+    drwaCtx.moveTo(center_x + (-size_x / 3) * 2, center_y);
+    drwaCtx.lineTo(center_x + arrow_x, center_y + arrow_y);
+    drwaCtx.lineTo(center_x + (-size_x / 3), center_y);
+    drwaCtx.stroke();
+    drwaCtx.fill();
+    drwaCtx.closePath();
 }
 
 //selectFunc에 포함된 기능들 중에서 선택을 하면 색이 바뀌는 기능
