@@ -22,6 +22,7 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: '10mb'}));//Post 제한을 푼다
+app.use(bodyParser.urlencoded({limit:'10mb'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -74,14 +75,11 @@ app.post('/image_receiver', function (req, res) {
     }
     else if(req.body.flag==2){
         fs.writeFile('image_transmissions/mask.png', main_image_str);  //파일 출력
-        var bitmap = fs.readFileSync("image_transmissions/output.jpg");
-        var buff = new Buffer(bitmap).toString('base64');
-        res.end(buff);
         colorpy = new pyshell('PythonClient.py', options);
     }
     colorpy.on('close',function(message){
         //아래 파일 respon 코드
-        var bitmap = fs.readFileSync("public/images");
+        var bitmap = fs.readFileSync("image_transmissions/output.png");
         var buff = new Buffer(bitmap).toString('base64');
         res.end(buff);
     });
