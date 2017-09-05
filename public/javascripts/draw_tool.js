@@ -24,6 +24,10 @@ function selectFunc(event){
             }
             else autoColor();
             break;
+        case "edge":
+            CannyJS.canny(viewCanvas);
+
+            break;
     }
     colorTool(event.target.id);
 }

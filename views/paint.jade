@@ -9,6 +9,7 @@ html
         script(src='../javascripts/draw_tool.js')
         script(src='../javascripts/layers.js')
         script(src='../javascripts/jscolor.js')
+        script(src='../javascripts/AutoCanny.js')
     body
         #leftBox
             #pencil.drawTool(title='PEN', href='javascript:void(0)', onclick='selectFunc(event);') Pen
@@ -19,7 +20,7 @@ html
             #auto.drawTool(title='AUTOCOLOR', href='javascript:void(0)', onclick='selectFunc(event);') AutoColor
             input#image_up_file(type='file', style='display: none;', accept='image/*', onchange='fileIn(this)')
             #load.drawTool(title='LOAD', href='javascript:void(0)', onclick='loadImage();') Load
-            #edge.drawTool(title='EDGE', href='javascript:void(0)', onclick='edge();') Edge
+            #edge.drawTool(title='EDGE', href='javascript:void(0)', onclick='selectFunc(event);') Edge
             .drawTool(title='SAVE', href='javascript:void(0)', onclick='mergeAllSave();') Save
         #centerBox
             div(style='width: 500px; height: 500px; position: absolute; background-color: white; border: 1px solid black; z-index: -1;')
