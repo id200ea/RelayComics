@@ -33,7 +33,7 @@ exports.listCartoon = function listCartoon(test){
           console.log('111111111');
           console.log(test[i]);
         }
-      }, 600);
+      }, 1200);
     }
   });
 };

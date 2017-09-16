@@ -4,11 +4,28 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
+var bkfd2Password = require("pbkdf2-password");
+var passport = require('passport');
+var hasher = bkfd2Password();
+var mysql = require('mysql');
+var conn = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '111111',
+  database : 'relay_cartoon'
+});
+// conn.connect();
+
+var FacebookStrategy = require('passport-facebook').Strategy;
+var NaverStrategy = require('passport-naver').Strategy;
 
 var detail = require('./routes/cartoon_detail');
 var main = require('./routes/mian');
 var canvas = require('./routes/canvas');
 var pyshell = require('python-shell');
+var path = require('path');
 
 var sql = require('./public/javascripts/CartoonSQL');
 
@@ -26,6 +43,31 @@ app.use(bodyParser.urlencoded({limit:'10mb'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+  secret: '1234DSFs@adf1234!@#$asd',
+  resave: false,
+  saveUninitialized: true,
+  store:new MySQLStore({
+    host:'localhost',
+    port:3306,
+    user:'root',
+    password:'111111',
+    database:'relay_cartoon'
+  })
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.get('/count', function(req, res){
+  if(req.session.count) {
+    req.session.count++;
+  } else {
+    req.session.count = 1;
+  }
+  res.send('count : '+req.session.count);
+});
+
 
 app.use('/', main);
 app.use('/detail', detail);
@@ -139,6 +181,151 @@ app.get('/add_comnt', function (req, res) {
 app.get('/del_comnt', function (req, res) {
   // 뀨?
 });
+
+passport.serializeUser(function(user, done) {
+  console.log('serializeUser', user);
+  done(null, user.authId);
+});
+passport.deserializeUser(function(id, done) {
+  console.log('deserializeUser', id);
+  var sql = 'SELECT * FROM users WHERE authId=?';
+  conn.query(sql, [id], function(err, results){
+    if(err){
+      console.log(err);
+      done('There is no user.');
+    } else {
+      done(null, results[0]);
+    }
+  });
+});
+
+// app.get('/welcome', function(req, res){
+//   if(req.user && req.user.displayName) {
+//     res.send(`
+//       <h1>Hello, ${req.user.displayName}</h1>
+//       <a href="/auth/logout">logout</a>
+//     `);
+//   } else {
+//     res.send(`
+//       <h1>Welcome</h1>
+//       <ul>
+//       <li><a href="/auth/login">Login</a></li>
+//       </ul>
+//     `);
+//   }
+// });
+app.post(
+  '/auth/login',
+  passport.authenticate(
+    'local',
+    {
+      successRedirect: '/',
+      failureRedirect: '/auth/login',
+      failureFlash: false
+    }
+  )
+);
+// class 안에 onclick="_gaq.push(['_trackEvent', 'btn-social', 'click', 'btn-facebook']);"
+app.get('/auth/login', function(req, res){
+  res.sendFile(path.join(__dirname+'/public/html/login.html'));
+});
+app.get('/auth/logout', function(req, res){
+  req.logout();
+  req.session.save(function(){
+    res.redirect('/');
+  });
+});
+
+app.get('/auth/facebook',
+  passport.authenticate('facebook', {scope:'email'})
+);
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook',
+    {
+      successRedirect: '/',
+      failureRedirect: '/auth/login'
+    }
+  )
+);
+
+app.get('/auth/naver',
+	passport.authenticate('naver', null), function(req, res) {
+  	console.log('/auth/naver failed, stopped');
+  }
+);
+app.get('/auth/naver/callback',
+	passport.authenticate('naver',
+    {
+      successRedirect: '/',
+      failureRedirect: '/auth/login'
+    }
+  )
+);
+
+passport.use(new FacebookStrategy({
+  clientID: '118611395451455',
+  clientSecret: 'b1520057b275ee2b1a8f183e83b294ca',
+  callbackURL: "/auth/facebook/callback",
+  profileFields:['id', 'email', 'displayName']
+  },
+  function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    var authId = 'facebook:'+profile.id;
+    var sql = 'SELECT * FROM Users WHERE authId=?';
+    conn.query(sql, [authId], function(err, results){
+     if(results.length>0){
+       done(null, results[0]);
+     } else {
+       var newuser = {
+         'authId':authId,
+         'displayName':profile.displayName,
+         'email':profile.emails[0].value
+       };
+       var sql = 'INSERT INTO Users SET ?'
+       conn.query(sql, newuser, function(err, results){
+         if(err){
+           console.log(err);
+           done('Error');
+         } else {
+           done(null, newuser);
+         }
+       })
+     }
+   });
+ }));
+
+passport.use(new NaverStrategy({
+        clientID: 'kLpOYbvtcMTxjvB6_qRV',
+        clientSecret: '67xBbvLGgF',
+        callbackURL: "/auth/naver/callback",
+        profileFields:['id', 'email', 'displayName']
+	},
+  function(accessToken, refreshToken, profile, done) {
+      console.log(profile);
+      var authId = 'naver:'+profile.id;
+      var sql = 'SELECT * FROM Users WHERE authId=?';
+      conn.query(sql, [authId], function(err, results){
+        if(results.length>0){
+          done(null, results[0]);
+        } else {
+          var newuser = {
+            'authId':authId,
+            'displayName':profile.displayName,
+            'email':profile.emails[0].value
+          };
+          var sql = 'INSERT INTO Users SET ?'
+          conn.query(sql, newuser, function(err, results){
+            if(err){
+              console.log(err);
+              done('Error');
+            } else {
+              done(null, newuser);
+            }
+          })
+        }
+      });
+    }
+));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
