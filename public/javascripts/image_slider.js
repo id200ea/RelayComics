@@ -53,7 +53,18 @@ ImageSlider.prototype.create = function(list){
         };
         heartDiv.style.opacity = "0.5";
         crossDiv.classList.add("x-shape");
-        crossDiv.onclick = function(){this.classList.toggle("is-on")};
+        crossDiv.onclick = function(){
+            var xhr = new XMLHttpRequest();
+            var url = '/del_cut?';
+            url += 'num=' + v.num.toString();
+            url += '&child=' + v.child.length.toString();
+            console.log(url);
+            fetch(url).then(function (res) {
+                console.log(res.text()+"a");
+            }).then(function (html) {
+                console.log("a");
+            });
+        };
         if(i>0){
             li.style.opacity="0.5";
             heartDiv.style.visibility="hidden";
