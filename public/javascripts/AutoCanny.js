@@ -394,9 +394,9 @@
             }
         });
 
-        viewCtx.clearRect(0,0,500,500);
-        for(var x=0 ; x<500 ; x++){
-            for(var y=0 ; y<500 ; y++){
+        viewCtx.clearRect(0,0,imgData.data.length,imgData.data[0].length);
+        for(var x=0 ; x<imgData.data.length ; x++){
+            for(var y=0 ; y<imgData.data[0].length ; y++){
                 if(copy.data[x][y]!=0){
                     viewCtx.beginPath();
                     viewCtx.arc(x, y, 0.5, 0, 2 * Math.PI, false);
@@ -437,6 +437,19 @@
         return median;
     }
 
+    CannyJS.getStandardDeviation = function(imgData, median){
+        var varience = 0;
+        var n = imgData.data.length * imgData.data[0].length;
+
+        for(var i=0 ; i<imgData.data.length ; i++){
+            for(var j =0 ; j<imgData.data[0].length ; j++){
+                varience += Math.pow(imgData.data[i][j]-median, 2)/n;
+            }
+        }
+
+        return Math.sqrt(varience);
+    }
+
     /**
      * appy canny edge detection algorithm to canvas
      * @param {object} canvas object
@@ -447,30 +460,28 @@
      * @return {object} GrayImageData object
      */
 
-    CannyJS.canny = function(canvas, ht, lt, sigmma, kernelSize) {
+    CannyJS.canny = function(canvas, sigmma, kernelSize) {
         var blur, imgData, nms, sobel;
-
-        var median;
+        var ht, lt;
+        var median, std;
 
         if (sigmma == null) {
             sigmma = 0.33;
         }
-        if (ht == null) {
-            ht = 255;
-        }
-        if (lt == null) {
-            lt = 0;
-        }
+
         if (kernelSize == null) {
             kernelSize = 3;
         }
         imgData = new GrayImageData(canvas.width, canvas.height);
         imgData.loadCanvas(canvas);
-        median=CannyJS.getMedian(imgData);
 
-        ht = Math.min(255, parseInt((1.0+sigmma)*median));
-        lt = Math.max(0, parseInt((1.0-sigmma)*median));
-        console.log(lt+", "+ht);
+/*        median=CannyJS.getMedian(imgData);
+        std = CannyJS.getStandardDeviation(imgData, median);
+        ht = Math.min(255, parseInt(0.25*(median+std)));
+        lt = Math.max(0, parseInt(0.25*(median-std)));*/
+        ht = Math.min(255, parseInt(OtsuJS.threshold(imgData)));
+        lt = Math.max(0, parseInt(ht *0.5));
+        console.log(ht+", "+lt);
 
         blur = CannyJS.gaussianBlur(imgData, sigmma, kernelSize);
         sobel = CannyJS.sobel(blur);
