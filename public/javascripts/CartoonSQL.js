@@ -6,7 +6,7 @@ var conn = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '111111',
-  database : 'relay_cartoon'
+  database : 'relay_comics'
 });
 // conn.connect();
 
@@ -268,245 +268,245 @@ exports.addTreepaths = function addTreepaths(parentNum, cutNum){
 // };
 
 /* ======================================================= */
-/* Comment SQL Query */
+// /* Comment SQL Query */
+//
+// /* "Comment Add" addComment(cutNum, userId, comntCnt) */
+// exports.addComment = function addComment(cutNum, userId, comntCnt){
+//   this.cutNum = cutNum;
+//   this.userId = userId;
+//   this.comntCnt = comntCnt;
+//
+//   var sql_add_comment = 'INSERT INTO Comment (cut_num, comnt_id, comnt_cnt, comnt_date) VALUES (' + cutNum.toString() + ', "' + userId.toString() + '", "' + comntCnt.toString() + '", now())';
+//   conn.query(sql_add_comment, function(err, row){
+//     if(err){
+//       console.log(err);
+//     } else {
+//       log('commnet 테이블에 추가되었습니다.');
+//     }
+//   });
+// };
+//
+// /* "Comment Delete" delComment(cutNum, userId)
+//    or "User Withdrawal" delComment(null, userId)
+//    or "Cut Delete" delComment(cutNum, null) */
+// exports._delComment = function _delComment(cutNum, userId){
+//   this.cutNum = cutNum || null;
+//   this.userId = userId || null;
+//
+//   var sql_del_comment = 'DELETE FROM Comment WHERE ';
+//
+//   // 존재여부 따지는거 필요함...
+//   if(userId*cutNum) {
+//     // Comment Delete
+//     sql_del_comment = sql_del_comment + 'comnt_id = ' + userId.toString() + ' AND cut_num = ' + cutNum.toString();
+//   } else if (userId) {
+//     // User Withdrawal
+//     sql_del_comment = sql_del_comment + 'comnt_id = ' + userId.toString();
+//   } else {
+//     // Cut Delete
+//     sql_del_comment = sql_del_comment + 'cut_num = ' + cutNum.toString();
+//   }
+//
+//   conn.query(sql_del_comment, function(err, row){
+//     if(err){
+//       console.log(err);
+//     } else {
+//       console.log('댓글이 삭제되었습니다.');
+//     }
+//   });
+// };
+//
+// /* "Comment Delete" delComment(cutNum, userId) */
+// exports.delComment = function delComment(commentNum){
+//   this.commentNum = commentNum;
+//   // this.userId = userId;
+//
+//   var sql_del_comment = [];
+//   sql_del_comment[0] = 'DELETE FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString();
+//   sql_del_comment[1] = 'DELETE FROM Comment WHERE comnt_num = ' + commentNum.toString();
+//
+//   for (var i = 0; i < sql_del_comment.length; i++) {
+//     conn.query(sql_del_comment[i], function(err, row){
+//       if(err){
+//         console.log(err);
+//       } else {
+//         console.log('댓글이 삭제되었습니다.');
+//       }
+//     });
+//   }
+// };
+//
+// /* "Alter Comment" alterComment(commentNum) */
+// exports.alterComment = function alterComment(commentNum, commentCnt){
+//   this.commentNum = commentNum;
+//   this.commentCnt = commentCnt;
+//
+//   var sql_alter_comment = 'UPDATE Comment SET comnt_cnt = ' + commentCnt.toString() + ', comnt_date = now() WHERE comnt_num = ' + commentNum.toString();
+//
+//   conn.query(sql_alter_comment, function(err, row){
+//     if(err){
+//       console.log(err);
+//     } else {
+//       console.log('comment 변경');
+//     }
+//   });
+// };
+//
+// /* "Comment List Output" listComment(cutNum) */
+// exports.listComment = function listComment(cutNum){
+//   this.cutNum = cutNum;
+//
+//   var sql_list_comment = 'SELECT * FROM Comment WHERE cut_num = ' + cutNum.toString() + 'ORDER BY comnt_like DESC';
+//
+//   conn.query(sql_list_comment, function(err, row){
+//     if(err){
+//       console.log(err);
+//     } else {
+//       console.log('cut의 comment list 출력');
+//     }
+//   });
+// };
+//
+// /* "Comment Count" countComment(cutNum) */
+// exports.countComment = function countComment(cutNum){
+//   this.cutNum = cutNum;
+//
+//   var sql_count_comment = 'SELECT COUNT(*) FROM Comment WHERE cut_num = ' + cutNum.toString();
+//
+//   conn.query(sql_count_comment, function(err, row){
+//     if(err){
+//       console.log(err);
+//     } else {
+//       console.log('cut의 comment 갯수 출력');
+//     }
+//   });
+// };
 
-/* "Comment Add" addComment(cutNum, userId, comntCnt) */
-exports.addComment = function addComment(cutNum, userId, comntCnt){
-  this.cutNum = cutNum;
-  this.userId = userId;
-  this.comntCnt = comntCnt;
-
-  var sql_add_comment = 'INSERT INTO Comment (cut_num, comnt_id, comnt_cnt, comnt_date) VALUES (' + cutNum.toString() + ', "' + userId.toString() + '", "' + comntCnt.toString() + '", now())';
-  conn.query(sql_add_comment, function(err, row){
-    if(err){
-      console.log(err);
-    } else {
-      log('commnet 테이블에 추가되었습니다.');
-    }
-  });
-};
-
-/* "Comment Delete" delComment(cutNum, userId)
-   or "User Withdrawal" delComment(null, userId)
-   or "Cut Delete" delComment(cutNum, null) */
-exports._delComment = function _delComment(cutNum, userId){
-  this.cutNum = cutNum || null;
-  this.userId = userId || null;
-
-  var sql_del_comment = 'DELETE FROM Comment WHERE ';
-
-  // 존재여부 따지는거 필요함...
-  if(userId*cutNum) {
-    // Comment Delete
-    sql_del_comment = sql_del_comment + 'comnt_id = ' + userId.toString() + ' AND cut_num = ' + cutNum.toString();
-  } else if (userId) {
-    // User Withdrawal
-    sql_del_comment = sql_del_comment + 'comnt_id = ' + userId.toString();
-  } else {
-    // Cut Delete
-    sql_del_comment = sql_del_comment + 'cut_num = ' + cutNum.toString();
-  }
-
-  conn.query(sql_del_comment, function(err, row){
-    if(err){
-      console.log(err);
-    } else {
-      console.log('댓글이 삭제되었습니다.');
-    }
-  });
-};
-
-/* "Comment Delete" delComment(cutNum, userId) */
-exports.delComment = function delComment(commentNum){
-  this.commentNum = commentNum;
-  // this.userId = userId;
-
-  var sql_del_comment = [];
-  sql_del_comment[0] = 'DELETE FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString();
-  sql_del_comment[1] = 'DELETE FROM Comment WHERE comnt_num = ' + commentNum.toString();
-
-  for (var i = 0; i < sql_del_comment.length; i++) {
-    conn.query(sql_del_comment[i], function(err, row){
-      if(err){
-        console.log(err);
-      } else {
-        console.log('댓글이 삭제되었습니다.');
-      }
-    });
-  }
-};
-
-/* "Alter Comment" alterComment(commentNum) */
-exports.alterComment = function alterComment(commentNum, commentCnt){
-  this.commentNum = commentNum;
-  this.commentCnt = commentCnt;
-
-  var sql_alter_comment = 'UPDATE Comment SET comnt_cnt = ' + commentCnt.toString() + ', comnt_date = now() WHERE comnt_num = ' + commentNum.toString();
-
-  conn.query(sql_alter_comment, function(err, row){
-    if(err){
-      console.log(err);
-    } else {
-      console.log('comment 변경');
-    }
-  });
-};
-
-/* "Comment List Output" listComment(cutNum) */
-exports.listComment = function listComment(cutNum){
-  this.cutNum = cutNum;
-
-  var sql_list_comment = 'SELECT * FROM Comment WHERE cut_num = ' + cutNum.toString() + 'ORDER BY comnt_like DESC';
-
-  conn.query(sql_list_comment, function(err, row){
-    if(err){
-      console.log(err);
-    } else {
-      console.log('cut의 comment list 출력');
-    }
-  });
-};
-
-/* "Comment Count" countComment(cutNum) */
-exports.countComment = function countComment(cutNum){
-  this.cutNum = cutNum;
-
-  var sql_count_comment = 'SELECT COUNT(*) FROM Comment WHERE cut_num = ' + cutNum.toString();
-
-  conn.query(sql_count_comment, function(err, row){
-    if(err){
-      console.log(err);
-    } else {
-      console.log('cut의 comment 갯수 출력');
-    }
-  });
-};
-
-/* ======================================================= */
-/* User SQL Query */
-
-/* "User Join" addUser(userId, userName) */
-exports.addUser = function addUser(userId, userName){
-  this.userId = userId;
-  this.userName = userName;
-
-  var sql_join_user = 'INSERT INTO User (user_id, user_name) values ("' + userId.toString() + '", "'+ userName.toString() + '")';
-  conn.query(sql_join_user, function(err, row){
-    if(err){
-      console.log(err);
-    } else {
-      console.log('회원가입이 완료되었습니다.');
-    }
-  })
-};
-
-/* "User Withdrawal" delUser(userId) */
-exports.delUser = function delUser(userId){
-  this.userId = userId;
-
-  var sql_del_user = [];
-
-  // ???
-
-  // Comment Delete by 'userId'
-  findCommentNum(userId);
-  // Like Log Delete by 'userId'
-  findCommentLikeNum(userId);
-  findCutLikeNum(userId);
-  findCartoonLikeNum(userId);
-
-  // User Withdrawal
-  var sql_leave_user = 'DELETE FROM User WHERE user_id = ' + userId.toString();
-  conn.query(sql_leave_user, function(err, row){
-    if(err){
-      console.log(err);
-    } else {
-      console.log('회원 탈퇴가 완료되었습니다.');
-    }
-  });
-};
-
-/* "User Withdrawal" sub Query */
-function findCommentNum(userId){
-  this.userId = userId;
-
-  var sql_find_comnt_num = 'SELECT comnt_num FROM Comment WHERE comnt_id = ' + userId.toString();
-  conn.query(sql_select_comnt_num, function(err, rows){
-    for (var i = 0; i < rows.length; i++) {
-      exports.delComment(rows[i].comnt_id);
-    };
-  });
-};
-
-/* "User Withdrawal" sub Query */
-function findCartoonLikeNum(userId){
-  this.userId = userId;
-
-  var sql_find_cartoon_like = 'SELECT cartoon_num FROM Cartoon_like_log WHERE user_id = ' + userId.toString();
-  conn.query(sql_find_cartoon_like, function(err, rows){
-    for (var i = 0; i < rows.length; i++) {
-      exports.downCartoonLike(rows[i].cartoon_num, userId);
-    };
-  });
-};
-
-/* "User Withdrawal" sub Query */
-function findCutLikeNum(userId){
-  this.userId = userId;
-
-  var sql_find_cut_like = 'SELECT cut_num FROM Cut_like_log WHERE user_id = ' + userId.toString();
-  conn.query(sql_find_cut_like, function(err, rows){
-    for (var i = 0; i < rows.length; i++) {
-      exports.downCutLike(rows[i].cut_num, userId);
-    };
-  });
-};
-
-/* "User Withdrawal" sub Query */
-function findCommentLikeNum(userId){
-  this.userId = userId;
-
-  var sql_find_comment_like = 'SELECT comnt_num FROM Comment_like_log WHERE user_id = ' + userId.toString();
-  conn.query(sql_find_comment_like, function(err, rows){
-    for (var i = 0; i < rows.length; i++) {
-      exports.downCommentLike(rows[i].comnt_num, userId);
-    };
-  });
-};
-
-/* "Duplication UserName Check" checkUserName(userName) */
-exports.checkUserName = function checkUserName(userId, userName){
-  this.userId = userId;
-  this.userName = userName;
-
-  var sql_check_user_name = 'SELECT EXISTS (SELECT * FROM User WHERE user_name = "' + userName.toString() + '") AS Exist';
-  conn.query(sql_check_user_name, function(err, row) {
-    if(err){
-      console.log(err);
-    } else {
-      if (row[0].Exist == 1) {
-        console.log('이미 존재하는 닉네임입니다.');
-      } else {
-        alterUserName(userId, userName);
-      }
-    }
-  });
-};
-
-/* "UserName Alter" alterUserName(userId, userName) */
-function alterUserName(userId, userName){
-  this.userId = userId;
-  this.userName = userName;
-
-  var sql_alter_user = 'UPDATE User SET user_name = "' + userName.toString() + '" WHERE user_id = ' + user_id.toString();
-  conn.query(sql_alter_user, function(err, row) {
-    if(err){
-      console.log(err);
-    } else {
-      console.log("user의 닉네임이 변경되었습니다.");
-    }
-  });
-};
+// /* ======================================================= */
+// /* User SQL Query */
+//
+// /* "User Join" addUser(userId, userName) */
+// exports.addUser = function addUser(userId, userName){
+//   this.userId = userId;
+//   this.userName = userName;
+//
+//   var sql_join_user = 'INSERT INTO User (user_id, user_name) values ("' + userId.toString() + '", "'+ userName.toString() + '")';
+//   conn.query(sql_join_user, function(err, row){
+//     if(err){
+//       console.log(err);
+//     } else {
+//       console.log('회원가입이 완료되었습니다.');
+//     }
+//   })
+// };
+//
+// /* "User Withdrawal" delUser(userId) */
+// exports.delUser = function delUser(userId){
+//   this.userId = userId;
+//
+//   var sql_del_user = [];
+//
+//   // ???
+//
+//   // Comment Delete by 'userId'
+//   findCommentNum(userId);
+//   // Like Log Delete by 'userId'
+//   findCommentLikeNum(userId);
+//   findCutLikeNum(userId);
+//   findCartoonLikeNum(userId);
+//
+//   // User Withdrawal
+//   var sql_leave_user = 'DELETE FROM User WHERE user_id = ' + userId.toString();
+//   conn.query(sql_leave_user, function(err, row){
+//     if(err){
+//       console.log(err);
+//     } else {
+//       console.log('회원 탈퇴가 완료되었습니다.');
+//     }
+//   });
+// };
+//
+// /* "User Withdrawal" sub Query */
+// function findCommentNum(userId){
+//   this.userId = userId;
+//
+//   var sql_find_comnt_num = 'SELECT comnt_num FROM Comment WHERE comnt_id = ' + userId.toString();
+//   conn.query(sql_select_comnt_num, function(err, rows){
+//     for (var i = 0; i < rows.length; i++) {
+//       exports.delComment(rows[i].comnt_id);
+//     };
+//   });
+// };
+//
+// /* "User Withdrawal" sub Query */
+// function findCartoonLikeNum(userId){
+//   this.userId = userId;
+//
+//   var sql_find_cartoon_like = 'SELECT cartoon_num FROM Cartoon_like_log WHERE user_id = ' + userId.toString();
+//   conn.query(sql_find_cartoon_like, function(err, rows){
+//     for (var i = 0; i < rows.length; i++) {
+//       exports.downCartoonLike(rows[i].cartoon_num, userId);
+//     };
+//   });
+// };
+//
+// /* "User Withdrawal" sub Query */
+// function findCutLikeNum(userId){
+//   this.userId = userId;
+//
+//   var sql_find_cut_like = 'SELECT cut_num FROM Cut_like_log WHERE user_id = ' + userId.toString();
+//   conn.query(sql_find_cut_like, function(err, rows){
+//     for (var i = 0; i < rows.length; i++) {
+//       exports.downCutLike(rows[i].cut_num, userId);
+//     };
+//   });
+// };
+//
+// /* "User Withdrawal" sub Query */
+// function findCommentLikeNum(userId){
+//   this.userId = userId;
+//
+//   var sql_find_comment_like = 'SELECT comnt_num FROM Comment_like_log WHERE user_id = ' + userId.toString();
+//   conn.query(sql_find_comment_like, function(err, rows){
+//     for (var i = 0; i < rows.length; i++) {
+//       exports.downCommentLike(rows[i].comnt_num, userId);
+//     };
+//   });
+// };
+//
+// /* "Duplication UserName Check" checkUserName(userName) */
+// exports.checkUserName = function checkUserName(userId, userName){
+//   this.userId = userId;
+//   this.userName = userName;
+//
+//   var sql_check_user_name = 'SELECT EXISTS (SELECT * FROM User WHERE user_name = "' + userName.toString() + '") AS Exist';
+//   conn.query(sql_check_user_name, function(err, row) {
+//     if(err){
+//       console.log(err);
+//     } else {
+//       if (row[0].Exist == 1) {
+//         console.log('이미 존재하는 닉네임입니다.');
+//       } else {
+//         alterUserName(userId, userName);
+//       }
+//     }
+//   });
+// };
+//
+// /* "UserName Alter" alterUserName(userId, userName) */
+// function alterUserName(userId, userName){
+//   this.userId = userId;
+//   this.userName = userName;
+//
+//   var sql_alter_user = 'UPDATE User SET user_name = "' + userName.toString() + '" WHERE user_id = ' + user_id.toString();
+//   conn.query(sql_alter_user, function(err, row) {
+//     if(err){
+//       console.log(err);
+//     } else {
+//       console.log("user의 닉네임이 변경되었습니다.");
+//     }
+//   });
+// };
 
 /* ======================================================= */
 /* Cartoon_first_cut SQL Query */
@@ -629,46 +629,46 @@ exports.downCutLike = function downCutLike(cutNum, userId){
 };
 
 /* ======================================================= */
-/* Comment_like_log SQL Query */
+// /* Comment_like_log SQL Query */
+//
+// /* "Comment Like" upCommentLike(commentNum, userId) */
+// exports.upCommentLike = function upCommentLike(commentNum, userId){
+//   this.commentNum = commentNum;
+//   this.userId = userId;
+//
+//   var sql_up_comment_like = [];
+//   sql_up_comment_like[0] = 'INSERT INTO Comment_like_log values (' + commentNum.toString() + ', "' + userId.toString() + '", now())';
+//   sql_up_comment_like[1] = 'UPDATE Comment SET comnt_like = (SELECT COUNT(*) FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ') WHERE comnt_num = ' + commentNum.toString();
+//
+//   for (var i = 0; i < sql_up_comment_like.length; i++) {
+//     conn.query(sql_up_comment_like[i], function(err, rows) {
+//       if(err){
+//         console.log(err);
+//       } else {
+//         // console.log('바뀜');
+//       }
+//     });
+//   };
+// };
 
-/* "Comment Like" upCommentLike(commentNum, userId) */
-exports.upCommentLike = function upCommentLike(commentNum, userId){
-  this.commentNum = commentNum;
-  this.userId = userId;
-
-  var sql_up_comment_like = [];
-  sql_up_comment_like[0] = 'INSERT INTO Comment_like_log values (' + commentNum.toString() + ', "' + userId.toString() + '", now())';
-  sql_up_comment_like[1] = 'UPDATE Comment SET comnt_like = (SELECT COUNT(*) FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ') WHERE comnt_num = ' + commentNum.toString();
-
-  for (var i = 0; i < sql_up_comment_like.length; i++) {
-    conn.query(sql_up_comment_like[i], function(err, rows) {
-      if(err){
-        console.log(err);
-      } else {
-        // console.log('바뀜');
-      }
-    });
-  };
-};
-
-/* "Comment Dislike" downCommentLike(commentNum, userId) */
-exports.downCommentLike = function downCommentLike(commentNum, userId){
-  this.commentNum = commentNum;
-  this.userId = userId;
-
-  var sql_down_comment_like = [];
-  sql_down_comment_like[0] = 'DELETE FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ' AND user_id = "' + userId.toString() + '"';
-  sql_down_comment_like[1] = 'UPDATE Comment SET comnt_like = (SELECT COUNT(*) FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ') WHERE comnt_num = ' + commentNum.toString();
-
-  for (var i = 0; i < sql_down_comment_like.length; i++) {
-    conn.query(sql_down_comment_like[i], function(err, rows) {
-      if(err){
-        console.log(err);
-      } else {
-        // console.log('바뀜');
-      }
-    });
-  };
-};
-
-/* ======================================================= */
+// /* "Comment Dislike" downCommentLike(commentNum, userId) */
+// exports.downCommentLike = function downCommentLike(commentNum, userId){
+//   this.commentNum = commentNum;
+//   this.userId = userId;
+//
+//   var sql_down_comment_like = [];
+//   sql_down_comment_like[0] = 'DELETE FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ' AND user_id = "' + userId.toString() + '"';
+//   sql_down_comment_like[1] = 'UPDATE Comment SET comnt_like = (SELECT COUNT(*) FROM Comment_like_log WHERE comnt_num = ' + commentNum.toString() + ') WHERE comnt_num = ' + commentNum.toString();
+//
+//   for (var i = 0; i < sql_down_comment_like.length; i++) {
+//     conn.query(sql_down_comment_like[i], function(err, rows) {
+//       if(err){
+//         console.log(err);
+//       } else {
+//         // console.log('바뀜');
+//       }
+//     });
+//   };
+// };
+//
+// /* ======================================================= */
