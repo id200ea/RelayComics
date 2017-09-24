@@ -90,8 +90,11 @@ function sendCanvas(main_canvas, flag) {
             if (xhr.readyState == 4) {
                 addLayer();
                 var img = new Image();
-                img.onload = function () { viewCtx.drawImage(img, 0, 0); };
                 img.src = "data:image/png;base64," + xhr.responseText;
+                img.onload = function () {
+                    var image = new fabric.Image(this);
+                    canvas.add(image);
+                }
             }
         };
     }
