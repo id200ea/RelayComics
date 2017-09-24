@@ -254,6 +254,18 @@ window.onload = function() {
                 drawingModeEl.click();
             autoFlag = 0;
 
+
+            for( i=0;i<objs.length;i++){
+                if(objs[i].layer == curLayer.innerText){
+                    objs[i].selectable = true;
+                    objs[i].evented = true;
+                }
+                else{
+                    objs[i].selectable = false;
+                    objs[i].evented = false;
+                }
+            }
+
             alert('자동채색 취소');
         }
     }
@@ -266,6 +278,11 @@ window.onload = function() {
 
     canvas.on('object:selected', function () {
         if(autoFlag === 1) {
+            for(var i=0;i<objs.length;i++) {
+                objs[i].selectable = false;
+                objs[i].evented = false;
+            }
+
             var selected = fabric.util.object.clone(canvas.getActiveObject());
 
             var canvasForColor = document.createElement("canvas");
@@ -291,6 +308,17 @@ window.onload = function() {
                 canvas = tempCanvas;
                 tempCanvas = null;
                 drawingModeEl.click();  //무조건 열린다.
+
+                for( i=0;i<objs.length;i++){
+                    if(objs[i].layer == curLayer.innerText){
+                        objs[i].selectable = true;
+                        objs[i].evented = true;
+                    }
+                    else{
+                        objs[i].selectable = false;
+                        objs[i].evented = false;
+                    }
+                }
                 autoFlag = 0;
             }
             GetElement('canvas-box').appendChild(sendButton);
@@ -300,6 +328,7 @@ window.onload = function() {
             fabric.Object.prototype.transparentCorners = false;
             canvas.selection = false;
             selected.selectable= false;
+            selected.evented = false;
 
             canvas.freeDrawingBrush.color = drawingColorEl.value;
             canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
