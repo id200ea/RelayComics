@@ -1,32 +1,60 @@
 doctype html
-html
+html(lang='en')
     head
-        title Painter
-        link(rel='stylesheet', type='text/css', href='../stylesheets/paint_style.css')
-        script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js')
-        script(src='../javascripts/edge.js')
-        script(src='../javascripts/canvas.js')
-        script(src='../javascripts/draw_tool.js')
-        script(src='../javascripts/layers.js')
-        script(src='../javascripts/jscolor.js')
-        script(src='../javascripts/AutoCanny.js')
-        script(src='../javascripts/OtsuThreshold.js')
-    body
-        #leftBox
-            #pencil.drawTool(title='PEN', href='javascript:void(0)', onclick='selectFunc(event);') Pen
-            #line.drawTool(title='LINE', href='javascript:void(0)', onclick='selectFunc(event);') Line
-            #rect.drawTool(title='RECT', href='javascript:void(0)', onclick='selectFunc(event);') Rect
-            #goeun.drawTool(title='RESIZE', href='javascript:void(0)', onclick='selectFunc(event);') Resize
-            #juyuong.drawTool(title='SPEECH', href='javascript:void(0)', onclick='selectFunc(event);') Speech
-            #auto.drawTool(title='AUTOCOLOR', href='javascript:void(0)', onclick='selectFunc(event);') AutoColor
-            input#image_up_file(type='file', style='display: none;', accept='image/*', onchange='fileIn(this)')
-            #load.drawTool(title='LOAD', href='javascript:void(0)', onclick='loadImage();') Load
-            #edge.drawTool(title='EDGE', href='javascript:void(0)', onclick='selectFunc(event);') Edge
-            #balloon.drawTool(title='BALLOON', href='javascript:void(0)', onclick='selectFunc(event);') Balloon
-            .drawTool(title='SAVE', href='javascript:void(0)', onclick='mergeAllSave();') Save
-        #centerBox
-            div(style='width: 500px; height: 500px; position: absolute; background-color: white; border: 1px solid black; z-index: -1;')
-            canvas#drawBox.canvasBox(width='500', height='500')
-        #optionBox
-            input#colorBox.jscolor(value='66E398', onchange='changeColor()')
-            #plusBox(title='PLUS', href='javascript:void(0)', onclick='addLayer();')
+        meta(charset='UTF-8')
+        title Test
+        script(type='text/javascript', src='../javascripts/canvas.js')
+        script(type='text/javascript', src='../javascripts/draw_tool.js')
+        script(type='text/javascript', src='../javascripts/fabric.js')
+    body(style='background: #CDBB99')
+        div(style='background: white; width: 500px; margin: 10px; float: left')
+            canvas#c(width='500px', height='500px', style='border: 1px solid gold; ')
+        div(style='width: 270px; float: left; margin: 10px; font-size: 14px; line-height: 1.5; color: #333; text-align: left')
+            div(style='width: 100%; padding: 10px; border-radius: 5px; background-color: #FBCEB1 ')
+                #func(style='padding-bottom: 5px;')
+                    button#clear-canvas.btn.btn-info(style='margin: 0 auto;') Clear
+                    input#image_up_file(type='file', style='display: none;', accept='image/*', onchange='Image_Load(this)')
+                    button#load-object.btn.btn-info(style='margin: 0 auto;') Load
+                    button#delete-object.btn.btn-info(style='margin: 0 auto;') Delete
+                    button#undo-canvas.btn.btn-info(style='margin: 0 auto;') Undo
+                    button#redo-canvas.btn.btn-info(style='margin: 0 auto;') Redo
+                    button#Color-object.btn.btn-info(style='margin: 0 auto;') Auto Color
+                    button#save-canvas.btn.btn-info(style='margin: 0 auto;') Save
+                button#drawing-mode.btn.btn-info Cancel drawing mode
+                br
+                #drawing-mode-options(style='margin: 10px;')
+                    label(for='drawing-mode-selector') Mode:
+                    select#drawing-mode-selector
+                        option Pencil
+                        option Circle
+                        option Spray
+                        option Pattern
+                        option hline
+                        option vline
+                        option square
+                        option diamond
+                    br
+                    label(for='drawing-line-width') Line width:
+                    span.info 30
+                    input#drawing-line-width(type='range', value='30', min='0', max='150')
+                    br
+                    label(for='drawing-color') Line color:
+                    input#drawing-color(type='color', value='#005E7A')
+                    br
+                    label(for='drawing-shadow-color') Shadow color:
+                    input#drawing-shadow-color(type='color', value='#005E7A')
+                    br
+                    label(for='drawing-shadow-width') Shadow width:
+                    span.info 0
+                    input#drawing-shadow-width(type='range', value='0', min='0', max='50')
+                    br
+                    label(for='drawing-shadow-offset') Shadow offset:
+                    span.info 0
+                    input#drawing-shadow-offset(type='range', value='0', min='0', max='50')
+                    br
+            div(style='width: 100%; height: 250px; overflow: auto; padding: 10px; border-radius: 5px; margin-top: 10px; background-color: #FBCEB1; position: relative')
+                div(style='height: 20px')
+                    #add-layer(style='border-radius: 5px; background: blue; width: 20px; height: 20px; float: left;')
+                    #merge-layer-objects(style='border-radius: 5px; background: red; width: 20px; height: 20px; float: right;')
+                #layer-objects(style='text-align: center;')
+        #canvas-box(style='float: right; background: white; ')
