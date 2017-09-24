@@ -1,155 +1,103 @@
-var color;
-function changeColor(){
-    color = "#" + document.getElementById("colorBox").value;
-}
-//현재 선택된 컬러의 값을 가져오는 함수 자동 실행되므로, color 변수만 사용하면 된다.
-
-//함수 포인터, 그리기 도구를 함수 포인터에 넣어 각각 다르게 사용하는 것.
-function selectFunc(event){
-    switch(event.target.id){
-        case "pencil":  //id 값을 사용한다.
-    		draw = drawPen;  //함수 포인터 사용 기본 Pen 등록
-            break;
-        case "line":
-    		draw = drawLine;  //함수 포인터 사용
-            break;
-        case "rect":
-    		draw = drawRect;  //함수 포인터 사용
-            break;
-        case "auto":
-            draw = 0; //draw기능 초기화.
-            if(auto_Color_Flag == 1 || auto_Color_Flag == 2) {
-                auto_Color_Flag = 0;
-                alert("취소되었습니다.");
-            }
-            else autoColor();
-            break;
-        case "edge":
-            CannyJS.canny(viewCanvas);
-            break;
-        case "balloon":
-            draw = drawBalloon;
-            break;
-    }
-    colorTool(event.target.id);
-}
-
-function drawBalloon(event) {
-    var cur = getPosition(event);
-    console.log("click");
-    var center_x = cur.X - ((cur.X - pos.X) / 2);
-    var center_y = cur.Y - ((cur.Y - pos.Y) / 2);
-    var size_x = (cur.X - pos.X) / 2;
-    var size_y = (cur.Y - pos.Y) / 2;
-    var arrow_y = (size_y * 4 / 3);
-    var arrow_x = -(size_x / 2);
-
-    drwaCtx.beginPath();
-    drwaCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    drwaCtx.fillStyle = "white";
-    drwaCtx.moveTo(center_x, center_y - size_y);
-    drwaCtx.quadraticCurveTo(center_x - size_x, center_y - size_y, center_x - size_x, center_y)
-    drwaCtx.quadraticCurveTo(center_x - size_x, center_y + size_y, center_x, center_y + size_y)
-    drwaCtx.quadraticCurveTo(center_x + size_x, center_y + size_y, center_x + size_x, center_y)
-    drwaCtx.quadraticCurveTo(center_x + size_x, center_y - size_y, center_x, center_y - size_y)
-    drwaCtx.moveTo(center_x + (-size_x / 3) * 2, center_y);
-    drwaCtx.lineTo(center_x + arrow_x, center_y + arrow_y);
-    drwaCtx.lineTo(center_x + (-size_x / 3), center_y);
-    drwaCtx.stroke();
-    drwaCtx.fill();
-    drwaCtx.closePath();
-}
-
-//selectFunc에 포함된 기능들 중에서 선택을 하면 색이 바뀌는 기능
-var tool;
-function colorTool(id){
-    if(tool)
-        tool.style.backgroundColor = "#FFFFFF";
-    tool = document.getElementById(id);
-    tool.style.backgroundColor = 'pink';
-}
-
-//Pen 그닥 어렵진 않다. 찬찬히 살펴보자.
-function drawPen(event){
-    drwaCtx.save();
-    drwaCtx.beginPath();
-    drwaCtx.lineCap = "round";
-    drwaCtx.moveTo(pos.X,pos.Y);
-
-    var cur = getPosition(event);
-    drwaCtx.lineTo(cur.X, cur.Y);
-    pos.X = cur.X;
-    pos.Y = cur.Y;
-    drwaCtx.strokeStyle=color;      //color
-    drwaCtx.stroke();
-
-    drwaCtx.closePath();
-    drwaCtx.restore();
-}
-
-//Line 순서대로 보면 어려운건 없을 듯하다.
-function drawLine(event){
-    drwaCtx.beginPath();
-    drwaCtx.moveTo(pos.X,pos.Y);
-    var cur = getPosition(event);
-    drwaCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
-    drwaCtx.strokeStyle=color;      //color
-    drwaCtx.lineTo(cur.X,cur.Y);
-    drwaCtx.stroke();
-    drwaCtx.closePath();
-}
-
-//사각형 기능
-function drawRect(event){
-    drwaCtx.beginPath();
-    var cur = getPosition(event);
-    drwaCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
-    drwaCtx.fillStyle=color;      //color
-    drwaCtx.fillRect(pos.X, pos.Y, cur.X - pos.X, cur.Y - pos.Y);
-    drwaCtx.closePath();
-}
-
-//Load 기능, (볼필요 없을 듯하다)
-function fileIn(obj) {
+//Load
+function Image_Load(obj) {
     var pathpoint = obj.value.lastIndexOf('.');
     var filepoint = obj.value.substring(pathpoint+1,obj.length);
     var filetype = filepoint.toLowerCase();
     if(filetype=='jpg'|| filetype=='jpeg'|| filetype=='png' || filetype=='gif'  || filetype=='bmp'){
         var reader = new FileReader();
         reader.readAsDataURL(obj.files[0]);
-        reader.onload = function () {
+        reader.onload = function  () {
             var tempImage = new Image(); //drawImage 메서드에 넣기 위해 이미지 객체화
-            tempImage.src = reader.result; //data-url를 이미지 객체에 주입
+            tempImage.src = reader.result; //data-uri를 이미지 객체에 주입
             tempImage.onload = function () {
-              var width = tempImage.width;
-              var height = tempImage.height;
-
-              var scalex = 500 / width;
-              var scaley = 500 / height;
-
-              // 캔버스를 full로 채울경우 주석처리
-              var scale = (scalex < scaley) ? scalex : scaley;
-
-              tempImage.width = scale * width;
-              tempImage.height = scale * height;
-
-              viewCtx.drawImage(this, 0, 0, tempImage.width, tempImage.height);
+                var image = new fabric.Image(this);
+                canvas.add(image);
             }
         }
     }
     else{
         alert("이미지 파일만 선택할 수 있습니다.");
     }
-}
-//위의 함수를 호출하기 위한 함수. (볼 필요는 없다)
-function loadImage() {
-    var upload = document.getElementById("image_up_file");
-    upload.click();
+    obj.value = "";
 }
 
-//오토 컬러를 하기위해 Flag값을 바뀌가며 레이어를 선택하려는 함수, Layer.js 에 changeLayer와 연관이 있다.
-var auto_Color_Flag;
-function autoColor() {
-    alert("두개의 레이어를 선택해 주세요.");
-    auto_Color_Flag = 1;
+var curLayer;
+var LayerCount = 1;
+function addLayer() {
+    var newLayer = document.createElement("div");
+    newLayer.style.borderRadius = "5px";
+    newLayer.style.marginTop = "5px";
+    newLayer.style.width = "100%";
+    newLayer.style.background="#FFCC66";
+    newLayer.style.color="white";
+    newLayer.innerText = "Layer" + LayerCount++;
+    newLayer.onclick = function changeLayer() {
+        if(curLayer)
+            curLayer.style.background = "#FFCC66";
+        this.style.background = "gray";
+        curLayer = this;
+    }
+    GetElement('layer-objects').appendChild(newLayer);
+    newLayer.click();
+}
+
+function mergeObjectsByLayer() {
+
+    if(autoFlag==0) {
+        var i, temp = [], group;
+
+        for (i = 0; i < objs.length; i++) {
+            if (objs[i].layer === curLayer.innerText) {
+                temp.push(objs[i]);
+            }
+        }
+
+        group = new fabric.Group(temp);
+
+        for (i = 0; i < temp.length; i++) {
+            canvas.remove(temp[i]);
+        }
+
+        canvas.add(group);
+    }
+}
+
+//서버로 캔버스를 보내는 함수이다. mainCanvas에 캔버스를 넣고, flag는 서버에 저장하려면 3을 사용하면 된다. (1과 2는 오토드로우 용이므로 사용 X)
+function sendCanvas(main_canvas, flag) {
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/image_receiver', true);
+    xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+    xhr.setRequestHeader("Cache-Control","no-cache, must-revalidate");
+    xhr.setRequestHeader("Pragma","no-cache");
+
+    var params = "image=";
+    params += main_canvas.toDataURL('image/png');
+    params +='&flag='+flag;
+
+    if(flag==3) {
+        url += '&parent=' + parentNum;  //주소에서 부모의 정보를 읽어온다.
+
+        var xhr_To_DB = new XMLHttpRequest();
+        var url_To_DB  = '/add_cut?';
+        url_To_DB +='src='+'../images/new_' + parentNum.toString() +".png"
+        url_To_DB+='&pnum=' + parentNum.toString();
+        xhr_To_DB.open('GET', url_To_DB);
+        xhr_To_DB.send(null);
+    }
+    else if(flag==2) {
+        xhr.onreadystatechange = function rspns() {
+            if (xhr.readyState == 4) {
+                var img = new Image();
+                img.src = "data:image/png;base64," + xhr.responseText;
+                img.onload = function () {
+                    var image = new fabric.Image(this);
+                    canvas.add(image);
+                }
+            }
+        };
+    }
+
+    xhr.send(params);
+    //window.location="http://localhost:3000/";
 }
