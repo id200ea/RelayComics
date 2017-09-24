@@ -36,6 +36,18 @@ function addLayer() {
             curLayer.style.background = "#FFCC66";
         this.style.background = "gray";
         curLayer = this;
+
+        var i;
+        for(i=0;i<objs.length;i++){
+            if(objs[i].layer == curLayer.innerText){
+                objs[i].selectable = true;
+                objs[i].evented = true;
+            }
+            else{
+                objs[i].selectable = false;
+                objs[i].evented = false;
+            }
+        }
     }
     GetElement('layer-objects').appendChild(newLayer);
     newLayer.click();
