@@ -88,7 +88,6 @@ function sendCanvas(main_canvas, flag) {
     else if(flag==2) {
         xhr.onreadystatechange = function rspns() {
             if (xhr.readyState == 4) {
-                addLayer();
                 var img = new Image();
                 img.src = "data:image/png;base64," + xhr.responseText;
                 img.onload = function () {
