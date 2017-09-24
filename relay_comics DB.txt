@@ -77,10 +77,10 @@ INSERT INTO Users VALUES (100002, 'jje', 'jje', 'jje@gmail.com');
 INSERT INTO Users VALUES (100003, 'bgh', 'bgh', 'bgh@gmail.com');
 INSERT INTO Users VALUES (100004, 'pjy', 'pjy', 'pjy@gmail.com');
 
-//Cartoon_list
+//Cartoon
 
-INSERT INTO Cartoon_list (cartoon_title, cartoon_tag1, cartoon_tag2, cartoon_tag3) VALUES ('1st cartoon', '#romance', '#fantasy' ,'#action');
-INSERT INTO Cartoon_list (cartoon_title, cartoon_tag1, cartoon_tag2, cartoon_tag3) VALUES ('2nd cartoon', '#drama', '#daily' ,'#gag');
+INSERT INTO Cartoon (cartoon_title, cartoon_tag1, cartoon_tag2, cartoon_tag3) VALUES ('1st cartoon', '#romance', '#fantasy' ,'#action');
+INSERT INTO Cartoon (cartoon_title, cartoon_tag1, cartoon_tag2, cartoon_tag3) VALUES ('2nd cartoon', '#drama', '#daily' ,'#gag');
 
 //Cut(cut_num)
 		title1(1)
@@ -94,8 +94,8 @@ INSERT INTO Cartoon_list (cartoon_title, cartoon_tag1, cartoon_tag2, cartoon_tag
 	£µ(7)
      ¦£¦¡¦ª¦¡¦¤
     £¶(8)   £·(9)
-insert into Cut (cartoon_num, cut_author, cut_story, cut_date, cut_src) values (1,"kke","1st cartoon title cut", now(), "/img/title1.jpg");
-insert into Cut (cartoon_num, cut_author, cut_story, cut_date, cut_src) values (2,"kke","2nd cartoon title cut", now(), "/img/title2.jpg");
+insert into Cut (cut_author, cut_story, cut_date, cut_src) values ("kke","1st cartoon title cut", now(), "../images/root.png");
+insert into Cut (cut_author, cut_story, cut_date, cut_src) values ("kke","2nd cartoon title cut", now(), "../images/root.png");
 
 //Cartoon_first_cut
 
