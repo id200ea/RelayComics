@@ -88,14 +88,7 @@ function sendCanvas(main_canvas, flag) {
     params +='&flag='+flag;
 
     if(flag==3) {
-        url += '&parent=' + parentNum;  //주소에서 부모의 정보를 읽어온다.
-
-        var xhr_To_DB = new XMLHttpRequest();
-        var url_To_DB  = '/add_cut?';
-        url_To_DB +='src='+'../images/new_' + parentNum.toString() +".png"
-        url_To_DB+='&pnum=' + parentNum.toString();
-        xhr_To_DB.open('GET', url_To_DB);
-        xhr_To_DB.send(null);
+        params += '&parent=' + 10;
     }
     else if(flag==2) {
         xhr.onreadystatechange = function rspns() {
