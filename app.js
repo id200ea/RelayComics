@@ -66,8 +66,8 @@ app.use('/canvas', canvas);
 
 //주영 코드
 var arg = {
-    img_path : './image_transmissions/input.png',
-    mask_path : './image_transmissions/mask.png',
+    img_path : './image_transmissions/line/input.png',
+    mask_path : './image_transmissions/ref/input.png',
     out_path : './image_transmissions/output.png'
 }
 function set_img_path(_imgPath){
@@ -104,10 +104,10 @@ app.post('/image_receiver', function (req, res) {
         fs.writeFile('public/images/new_' + req.body.parent +".png", main_image_str);  //파일 출력
     }
     else if(req.body.flag==1) {
-        fs.writeFile('image_transmissions/input.png', main_image_str);  //파일 출력
+        fs.writeFile('image_transmissions/line/input.png', main_image_str);  //파일 출력
     }
     else if(req.body.flag==2){
-        fs.writeFile('image_transmissions/mask.png', main_image_str);  //파일 출력
+        fs.writeFile('image_transmissions/ref/input.png', main_image_str);  //파일 출력
         colorpy = new pyshell('PythonClient.py', options);
     }
     colorpy.on('close',function(message){
