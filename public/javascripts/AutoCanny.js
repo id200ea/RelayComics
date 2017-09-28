@@ -395,7 +395,20 @@
         });
 
 
-            canvas.add(imgData);
+        var tempCanvas = GetElement("canvasForColor");
+        var viewCtx = tempCanvas.getContext('2d');
+        viewCtx.clearRect(0,0,copy.data.length,copy.data[0].length);
+        for(var x=0 ; x<copy.data.length ; x++){
+            for(var y=0 ; y<copy.data[0].length ; y++){
+                if(copy.data[x][y]!=0){
+                    viewCtx.beginPath();
+                    viewCtx.arc(x, y, 0.5, 0, 2 * Math.PI, false);
+                    viewCtx.fillStyle = 'black';
+                    viewCtx.fill();
+                    viewCtx.beginPath();
+                }
+            }
+        }
 
         return copy;
     };

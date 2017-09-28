@@ -49,39 +49,6 @@
                 threshold = t;
             }
         }
-
-        viewCtx.clearRect(0,0,500,500);
-        for(var x=0 ; x<501 ; x+=2) {
-            for (var y = 0; y < histogram[x/2]/8; y++) {
-                viewCtx.beginPath();
-                viewCtx.arc(x, 500-y, 0.5, 0, 2 * Math.PI, false);
-                viewCtx.fillStyle = 'black';
-                viewCtx.fill();
-                viewCtx.beginPath();
-
-                viewCtx.beginPath();
-                viewCtx.arc(x + 1, 500-y, 0.5, 0, 2 * Math.PI, false);
-                viewCtx.fillStyle = 'black';
-                viewCtx.fill();
-                viewCtx.beginPath();
-            }
-
-        }
-        console.log("threshold", threshold);
-
-        for(var y=0 ; y<501 ; y++){
-            viewCtx.beginPath();
-            viewCtx.arc(threshold*2, y, 0.5, 0, 2 * Math.PI, false);
-            viewCtx.fillStyle = 'red';
-            viewCtx.fill();
-            viewCtx.beginPath();
-
-            viewCtx.beginPath();
-            viewCtx.arc(threshold*2+1, y, 0.5, 0, 2 * Math.PI, false);
-            viewCtx.fillStyle = 'red';
-            viewCtx.fill();
-            viewCtx.beginPath();
-        }
         return threshold;
     };
 

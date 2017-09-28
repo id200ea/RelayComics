@@ -88,7 +88,7 @@ function sendCanvas(main_canvas, flag) {
 
     var params = "image=";
     params += main_canvas.toDataURL('image/png');
-    params +='&flag='+flag;
+    params +='&flag=' + flag;
 
     if(flag==3) {
         params += '&parent=' + parentNum;

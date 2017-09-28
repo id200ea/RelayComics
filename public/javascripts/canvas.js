@@ -400,13 +400,18 @@ window.onload = function() {
             sendButton.innerText="Send";
             sendButton.style.width = "100%";
             sendButton.onclick = function sendObject() {
-//                CannyJS.canny();
+                CannyJS.canny(canvasForColor);
+                var tempImage = new Image(); //drawImage 메서드에 넣기 위해 이미지 객체화
+                tempImage.src = canvasForColor.toDataURL(); //data-uri를 이미지 객체에 주입
+                tempImage.onload = function () {
+                    var image = new fabric.Image(this);
+                    canvas.add(image);
+                }
 
                 //캔버스 삭제 부분.
                 var canvasBox = GetElement('canvas-box');
-                while (canvasBox.hasChildNodes()) {
+                while (canvasBox.hasChildNodes())
                     canvasBox.removeChild(canvasBox.firstChild);
-                }
                 drawingModeEl.click();  //무조건 열린다.
 
                 for (i = 0; i < objs.length; i++) {
