@@ -55,7 +55,7 @@ function addLayer() {
 
 function mergeObjectsByLayer() {
 
-    if(autoFlag==0) {
+    if(Flag==0) {
         var i, temp = [], group;
 
         for (i = 0; i < objs.length; i++) {
@@ -71,6 +71,9 @@ function mergeObjectsByLayer() {
         }
 
         canvas.add(group);
+    }
+    else {
+        alert("자동채색이나 Edge-Detect가 끝난 후에 할수 있습니다.");
     }
 }
 

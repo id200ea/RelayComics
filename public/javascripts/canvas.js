@@ -1,6 +1,6 @@
 ﻿var parentNum; //부모 번호
 
-var autoFlag = 0;
+var Flag = 0;
 var canvas, objs;
 var GetElement = function (id) {
     return document.getElementById(id)
@@ -218,17 +218,19 @@ window.onload = function() {
         GetElement("image_up_file").click();
     }
 
-
     var tempCanvas;
     GetElement('Color-object').onclick = function () {
-        if(autoFlag == 0) {
-            autoFlag = 1;
+        if(Flag == 0) {
+            Flag = 1;
             if(canvas.isDrawingMode)
                 drawingModeEl.click();
             canvas.discardActiveObject();
             canvas.requestRenderAll();
 
             alert('자동채색 시작, 오브젝트 하나를 선택해 주세요.');
+        }
+        else if(Flag === 2) {
+            alert("이미 Edge Detect가 진행 중 입니다. 먼저 자동채색을 종료하고 해주십시오.");
         }
         else {
             //캔버스 삭제
@@ -243,7 +245,7 @@ window.onload = function() {
 
             if(canvas.isDrawingMode)
                 drawingModeEl.click();
-            autoFlag = 0;
+            Flag = 0;
 
 
             for( i=0;i<objs.length;i++){
@@ -256,7 +258,49 @@ window.onload = function() {
                     objs[i].evented = false;
                 }
             }
+            alert('자동채색 취소');
+        }
+    }
 
+    GetElement('edge-object').onclick = function () {
+        if(Flag == 0) {
+            Flag = 2;
+            if(canvas.isDrawingMode)
+                drawingModeEl.click();
+            canvas.discardActiveObject();
+            canvas.requestRenderAll();
+
+            alert('Edge-Detect 시작, 오브젝트 하나를 선택해 주세요.');
+        }
+        else if(Flag === 1){
+            alert("이미 자동채색이 진행 중 입니다. 먼저 자동채색을 종료하고 해주십시오.");
+        }
+        else {
+            //캔버스 삭제
+            var canvasBox = GetElement('canvas-box');
+            while ( canvasBox.hasChildNodes() ) {
+                canvasBox.removeChild(canvasBox.firstChild );
+            }
+
+            if(tempCanvas)
+                canvas = tempCanvas;
+            tempCanvas = null;
+
+            if(canvas.isDrawingMode)
+                drawingModeEl.click();
+            Flag = 0;
+
+
+            for( i=0;i<objs.length;i++){
+                if(objs[i].layer == curLayer.innerText){
+                    objs[i].selectable = true;
+                    objs[i].evented = true;
+                }
+                else{
+                    objs[i].selectable = false;
+                    objs[i].evented = false;
+                }
+            }
             alert('자동채색 취소');
         }
     }
@@ -268,7 +312,7 @@ window.onload = function() {
 
 
     canvas.on('object:selected', function () {
-        if(autoFlag === 1) {
+        if(Flag === 1) {
             for(var i=0;i<objs.length;i++) {
                 objs[i].selectable = false;
                 objs[i].evented = false;
@@ -291,26 +335,27 @@ window.onload = function() {
                 canvas.renderAll();
 
                 sendCanvas(GetElement('canvasForColor'), 2);  //canvas 보내기
+
                 //캔버스 삭제 부분.
                 var canvasBox = GetElement('canvas-box');
-                while ( canvasBox.hasChildNodes() ) {
-                    canvasBox.removeChild(canvasBox.firstChild );
+                while (canvasBox.hasChildNodes()) {
+                    canvasBox.removeChild(canvasBox.firstChild);
                 }
                 canvas = tempCanvas;
                 tempCanvas = null;
                 drawingModeEl.click();  //무조건 열린다.
 
-                for( i=0;i<objs.length;i++){
-                    if(objs[i].layer == curLayer.innerText){
+                for (i = 0; i < objs.length; i++) {
+                    if (objs[i].layer == curLayer.innerText) {
                         objs[i].selectable = true;
                         objs[i].evented = true;
                     }
-                    else{
+                    else {
                         objs[i].selectable = false;
                         objs[i].evented = false;
                     }
                 }
-                autoFlag = 0;
+                Flag = 0;
             }
             GetElement('canvas-box').appendChild(sendButton);
 
@@ -333,9 +378,59 @@ window.onload = function() {
 
             canvas.centerObject(selected);
             canvas.add(selected);
-
             canvas.renderAll(); //canvas에 그린다.
+
             sendCanvas(GetElement('canvasForColor'), 1);  //canvas 보내기
+        }
+        if(Flag === 2){
+            for(var i=0;i<objs.length;i++) {
+                objs[i].selectable = false;
+                objs[i].evented = false;
+            }
+
+            var canvasForColor = document.createElement("canvas");
+            var selected = fabric.util.object.clone(canvas.getActiveObject());
+            canvasForColor.id = 'canvasForColor';
+            canvasForColor.width = selected.width.valueOf()+selected.strokeWidth;
+            canvasForColor.height = selected.height.valueOf()+selected.strokeWidth;
+            canvasForColor.style.border = "1px solid gold";
+            GetElement('canvas-box').appendChild(canvasForColor);
+
+            var sendButton = document.createElement("button");
+            sendButton.innerText="Send";
+            sendButton.style.width = "100%";
+            sendButton.onclick = function sendObject() {
+//                CannyJS.canny();
+
+                //캔버스 삭제 부분.
+                var canvasBox = GetElement('canvas-box');
+                while (canvasBox.hasChildNodes()) {
+                    canvasBox.removeChild(canvasBox.firstChild);
+                }
+                drawingModeEl.click();  //무조건 열린다.
+
+                for (i = 0; i < objs.length; i++) {
+                    if (objs[i].layer == curLayer.innerText) {
+                        objs[i].selectable = true;
+                        objs[i].evented = true;
+                    }
+                    else {
+                        objs[i].selectable = false;
+                        objs[i].evented = false;
+                    }
+                }
+                Flag = 0;
+            }
+            GetElement('canvas-box').appendChild(sendButton);
+
+            tempCanvas = canvas;
+            canvas = new fabric.Canvas('canvasForColor', {isDrawingMode: false});
+            fabric.Object.prototype.transparentCorners = false;
+            canvas.selection = false;
+            canvas.centerObject(selected);
+            canvas.add(selected);
+            canvas.renderAll(); //canvas에 그린다.
+            canvas = tempCanvas;
         }
     });
 

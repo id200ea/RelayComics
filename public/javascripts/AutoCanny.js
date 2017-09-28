@@ -394,20 +394,10 @@
             }
         });
 
-        viewCtx.clearRect(0,0,imgData.data.length,imgData.data[0].length);
-        for(var x=0 ; x<imgData.data.length ; x++){
-            for(var y=0 ; y<imgData.data[0].length ; y++){
-                if(copy.data[x][y]!=0){
-                    viewCtx.beginPath();
-                    viewCtx.arc(x, y, 0.5, 0, 2 * Math.PI, false);
-                    viewCtx.fillStyle = 'black';
-                    viewCtx.fill();
-                    viewCtx.beginPath();
-                }
-            }
-        }
-        return copy;
 
+            canvas.add(imgData);
+
+        return copy;
     };
 
     CannyJS.getMedian = function(imgData){

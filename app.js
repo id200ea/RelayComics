@@ -9,14 +9,14 @@ var MySQLStore = require('express-mysql-session')(session);
 var bkfd2Password = require("pbkdf2-password");
 var passport = require('passport');
 var hasher = bkfd2Password();
-var mysql = require('mysql');
-var conn = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '111111',
-  database : 'relay_comics'
-});
-conn.connect();
+// var mysql = require('mysql');
+// var conn = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'root',
+//   password : '111111',
+//   database : 'relay_comics'
+// });
+// conn.connect();
 
 var FacebookStrategy = require('passport-facebook').Strategy;
 var NaverStrategy = require('passport-naver').Strategy;
@@ -36,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: '10mb'}));//Post 제한을 푼다
 //app.use(bodyParser.urlencoded({limit:'10mb'}));
@@ -193,25 +193,25 @@ passport.deserializeUser(function(id, done) {
 });
 
 // main 화면에서 login/logout script 해결되면 삭제
-app.get('/welcome', function(req, res){
-  if(req.user && req.user.displayName) {
-    res.send(`
-      <h1>Hello, ${req.user.displayName}</h1>
-      <ul>
-      <li><a href="/">home</a></li>
-      <li><a href="/auth/logout">logout</a></li>
-      </ul>
-    `);
-  } else {
-    res.send(`
-      <h1>Welcome</h1>
-      <ul>
-      <li><a href="/">home</a></li>
-      <li><a href="/auth/login">Login</a></li>
-      </ul>
-    `);
-  }
-});
+// app.get('/welcome', function(req, res){
+//   if(req.user && req.user.displayName) {
+//     res.send(`
+//       <h1>Hello, ${req.user.displayName}</h1>
+//       <ul>
+//       <li><a href="/">home</a></li>
+//       <li><a href="/auth/logout">logout</a></li>
+//       </ul>
+//     `);
+//   } else {
+//     res.send(`
+//       <h1>Welcome</h1>
+//       <ul>
+//       <li><a href="/">home</a></li>
+//       <li><a href="/auth/login">Login</a></li>
+//       </ul>
+//     `);
+//   }
+// });
 
 // LocalStrategy가 없으므로 필요 없음
 app.post(
