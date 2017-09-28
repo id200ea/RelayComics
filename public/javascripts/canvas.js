@@ -310,6 +310,9 @@ window.onload = function() {
         sendCanvas(GetElement('c'), 3);  //canvas 보내기
     }
 
+    GetElement('balloon-object').onclick = addBalloon;
+
+
 
     canvas.on('object:selected', function () {
         if(Flag === 1) {
