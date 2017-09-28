@@ -1,23 +1,15 @@
-﻿function getQuerystring(){
-    var _tempUrl = window.location.search.substring(1); //url에서 처음부터 '?'까지 삭제
-    var _tempArray = _tempUrl.split('&'); // '&'을 기준으로 분리하기
+﻿var parentNum; //부모 번호
 
-    for(var i = 0; _tempArray.length; i++) {
-        var _keyValuePair = _tempArray[i].split('=');
-        if(_keyValuePair[0] == paramName){
-            return _keyValuePair[1];
-        }
-    }
-}
-var parentNum; //부모 번호
-
-var autoFlag = 10;
+var autoFlag = 0;
 var canvas, objs;
 var GetElement = function (id) {
     return document.getElementById(id)
 };
 
 window.onload = function() {
+    var url = new URL(location.href);
+    parentNum = url.searchParams.get("parentNum");
+
     //기본 호출.
     canvas = new fabric.Canvas('c', {isDrawingMode: true});
     fabric.Object.prototype.transparentCorners = false;

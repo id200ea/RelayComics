@@ -88,7 +88,7 @@ function sendCanvas(main_canvas, flag) {
     params +='&flag='+flag;
 
     if(flag==3) {
-        params += '&parent=' + 10;
+        params += '&parent=' + parentNum;
     }
     else if(flag==2) {
         xhr.onreadystatechange = function rspns() {

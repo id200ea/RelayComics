@@ -5,18 +5,18 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-// var MySQLStore = require('express-mysql-session')(session);
+var MySQLStore = require('express-mysql-session')(session);
 var bkfd2Password = require("pbkdf2-password");
 var passport = require('passport');
 var hasher = bkfd2Password();
 var mysql = require('mysql');
-// var conn = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : '111111',
-//   database : 'relay_comics'
-// });
-// conn.connect();
+var conn = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '111111',
+  database : 'relay_comics'
+});
+conn.connect();
 
 var FacebookStrategy = require('passport-facebook').Strategy;
 var NaverStrategy = require('passport-naver').Strategy;
@@ -36,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: '10mb'}));//Post 제한을 푼다
 //app.use(bodyParser.urlencoded({limit:'10mb'}));
@@ -45,18 +45,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(session({
-//   secret: '2a3#FSdfl#$@DFaER',
-//   resave: false,
-//   saveUninitialized: true,
-//   store:new MySQLStore({
-//     host:'localhost',
-//     port:3306,
-//     user:'root',
-//     password:'111111',
-//     database:'relay_comics'
-//   })
-// }));
+app.use(session({
+  secret: '2a3#FSdfl#$@DFaER',
+  resave: false,
+  saveUninitialized: true,
+  store:new MySQLStore({
+    host:'localhost',
+    port:3306,
+    user:'root',
+    password:'111111',
+    database:'relay_comics'
+  })
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -101,12 +101,13 @@ app.post('/image_receiver', function (req, res) {
     main_image_str = new Buffer(main_image_base64, 'base64');  //Decoding 부분
 
     if(req.body.flag==3){
-        var fileName = "new_" + req.body.parent +".png";
+        var date = new Date();
+        var timeStr = date.getFullYear() +"_"+ date.getMonth()+"_"+ date.getDate()+"_"+date.getHours()+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+date.getMilliseconds();
+        var fileName = "new_" + timeStr +".png";
         fs.writeFile("public/images/" + fileName, main_image_str);  //파일 출력
-        cutSrc = fileName;
         parentNum = parseInt(req.body.parent);
         // sql.addCut(null, cutAuthor, cutStory, cutSrc, parentNum)
-        sql.addCut(null, 'kke', "asd", cutSrc, parentNum);
+        sql.addCut(null, 'kke', "asd", fileName, parentNum);
     }
     else if(req.body.flag==1) {
         fs.writeFile('image_transmissions/line/input.png', main_image_str);  //파일 출력
@@ -190,7 +191,7 @@ passport.deserializeUser(function(id, done) {
     }
   });
 });
-/*
+
 // main 화면에서 login/logout script 해결되면 삭제
 app.get('/welcome', function(req, res){
   if(req.user && req.user.displayName) {
@@ -211,19 +212,19 @@ app.get('/welcome', function(req, res){
     `);
   }
 });
-*/
-// // LocalStrategy가 없으므로 필요 없음
-// app.post(
-//   '/auth/login',
-//   passport.authenticate(
-//     'local',
-//     {
-//       successRedirect: '/welcome',
-//       failureRedirect: '/auth/login',
-//       failureFlash: false
-//     }
-//   )
-// );
+
+// LocalStrategy가 없으므로 필요 없음
+app.post(
+  '/auth/login',
+  passport.authenticate(
+    'local',
+    {
+      successRedirect: '/welcome',
+      failureRedirect: '/auth/login',
+      failureFlash: false
+    }
+  )
+);
 
 app.get('/auth/login', function(req, res){
   res.sendFile(path.join(__dirname+'/public/html/login.html'));
