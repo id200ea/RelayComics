@@ -8,6 +8,7 @@ html(lang='en')
         script(type='text/javascript', src='../javascripts/fabric.js')
         script(type='text/javascript', src='../javascripts/AutoCanny.js')
         script(type='text/javascript', src='../javascripts/OtsuThreshold.js')
+        script(type='text/javascript', src='../javascripts/balloon.js')
     body(style='background: #CDBB99')
         div(style='background: white; width: 500px; margin: 10px; float: left')
             canvas#c(width='500px', height='500px', style='border: 1px solid gold; ')
@@ -22,7 +23,7 @@ html(lang='en')
                     button#redo-canvas.btn.btn-info(style='margin: 0 auto;') Redo
                     button#Color-object.btn.btn-info(style='margin: 0 auto;') Auto Color
                     button#edge-object.btn.btn-info(style='margin: 0 auto;') Edge
-                    button#ballon-object.btn.btn-info(style='margin: 0 auto;') balloon
+                    button#balloon-object.btn.btn-info(style='margin: 0 auto;') balloon
                     button#save-canvas.btn.btn-info(style='margin: 0 auto;') Save
                 button#drawing-mode.btn.btn-info Cancel drawing mode
                 br
