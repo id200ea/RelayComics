@@ -7,7 +7,6 @@ import socket
 import cv2
 import numpy as np
 import sys
-from _socket import gethostbyname
 
 # def parse_args():
 #     parser = argparse.ArgumentParser(description='parser to send image to colorization')
@@ -50,7 +49,7 @@ if __name__ == '__main__':
     ap = ap.astype(np.uint8)*255
     img[:,:,0:3] += ap
     img = img[:,:,:3]
-
+    cv2.imwrite('./image_transmissions/line/input.png',img)
     mask = cv2.imread(sys.argv[2],cv2.IMREAD_UNCHANGED)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
@@ -60,13 +59,13 @@ if __name__ == '__main__':
     result, maskencode = cv2.imencode('.png',mask)
 
     stringData = imgencode.tostring()
-    s.send(str(len(stringData)).ljust(16).encode('utf-8'))
+    s.send((str(len(stringData)).ljust(16)).encode('utf-8'))
     s.send(stringData)
     print('Send Image file size('+str(len(stringData)).ljust(16)+')')
     
     print('Send Mask file size')
     stringData = maskencode.tostring()
-    s.send(str(len(stringData)).ljust(16).encode('utf-8'))
+    s.send((str(len(stringData)).ljust(16)).encode('utf-8'))
     s.send(stringData)
     print('Send Mask file size('+str(len(stringData)).ljust(16)+')')
     
