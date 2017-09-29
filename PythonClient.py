@@ -40,10 +40,10 @@ if __name__ == '__main__':
     # HOST = gethostbyname('colorization')
     
     # if you use the Win & Linux uncomment sentence
-    HOST = socket.gethostbyname('colorization')
+    HOST = '127.0.0.1'
     
     PORT = 50007
-    print(socket.gethostname(), HOST, PORT)
+    print(HOST, PORT)
 
     img = cv2.imread(sys.argv[1],cv2.IMREAD_UNCHANGED)
     ap = (img[:,:,3:4] == 0)
@@ -60,13 +60,13 @@ if __name__ == '__main__':
     result, maskencode = cv2.imencode('.png',mask)
 
     stringData = imgencode.tostring()
-    s.send(str(len(stringData)).ljust(16))
+    s.send(str(len(stringData)).ljust(16).encode('utf-8'))
     s.send(stringData)
     print('Send Image file size('+str(len(stringData)).ljust(16)+')')
     
     print('Send Mask file size')
     stringData = maskencode.tostring()
-    s.send(str(len(stringData)).ljust(16))
+    s.send(str(len(stringData)).ljust(16).encode('utf-8'))
     s.send(stringData)
     print('Send Mask file size('+str(len(stringData)).ljust(16)+')')
     
