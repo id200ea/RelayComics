@@ -104,10 +104,10 @@ app.post('/image_receiver', function (req, res) {
         var date = new Date();
         var timeStr = date.getFullYear() +"_"+ date.getMonth()+"_"+ date.getDate()+"_"+date.getHours()+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+date.getMilliseconds();
         var fileName = "new_" + timeStr +".png";
-        fs.writeFile("public/images/" + fileName, main_image_str);  //파일 출력
+        fs.writeFile("public/images/"+fileName, main_image_str);  //파일 출력
         parentNum = parseInt(req.body.parent);
         // sql.addCut(null, cutAuthor, cutStory, cutSrc, parentNum)
-        sql.addCut(null, 'kke', "asd", fileName, parentNum);
+        sql.addCut(null, 'kke', "asd", "../images/"+fileName, parentNum);
     }
     else if(req.body.flag==1) {
         fs.writeFile('image_transmissions/line/input.png', main_image_str);  //파일 출력
