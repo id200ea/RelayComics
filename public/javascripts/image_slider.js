@@ -54,16 +54,19 @@ ImageSlider.prototype.create = function(list){
         heartDiv.style.opacity = "0.5";
         crossDiv.classList.add("x-shape");
         crossDiv.onclick = function(){
-            var xhr = new XMLHttpRequest();
-            var url = '/del_cut?';
-            url += 'num=' + v.num.toString();
-            url += '&child=' + v.child.length.toString();
-            console.log(url);
-            fetch(url).then(function (res) {
-                console.log(res.text()+"a");
-            }).then(function (html) {
-                console.log("a");
-            });
+            var con_test = confirm("정말 삭제하시겠습니까?");
+            if(con_test == true){
+                var xhr = new XMLHttpRequest();
+                var url = '/del_cut?';
+                url += 'num=' + v.num.toString();
+                url += '&child=' + v.child.length.toString();
+                console.log(url);
+                fetch(url).then(function (res) {
+                    console.log(res.text()+"a");
+                }).then(function (html) {
+                    console.log("a");
+                });
+            }
         };
         if(i>0){
             li.style.opacity="0.5";

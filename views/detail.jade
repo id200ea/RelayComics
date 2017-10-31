@@ -83,10 +83,10 @@ html
                 slider[index] = sliderData[index].create(temp.child);
                 document.body.appendChild(slider[index]);
                 sliderData[index].prev.addEventListener("click", function (event) {
-                    storyChange(event)
+                    storyDelete(event, storyAdd);
                 }, false);
                 sliderData[index].next.addEventListener("click", function (event) {
-                    storyChange(event)
+                    storyDelete(event, storyAdd);
                 }, false);
             }
             console.log(story);
@@ -111,10 +111,10 @@ html
                         slider[index] = sliderData[index].create(temp.child);
                         document.body.appendChild(slider[index]);
                         sliderData[index].prev.addEventListener("click", function (event) {
-                            storyChange(event)
+                            storyDelete(event, storyAdd)
                         }, false);
                         sliderData[index].next.addEventListener("click", function (event) {
-                            storyChange(event)
+                            storyChange(event, storyAdd)
                         }, false);
                     }
                 }
@@ -143,42 +143,51 @@ html
                     v.changeWindowSize();
                 });
             }
-            function storyChange(e) {
-                var info = e.target.id.split("_");
+
+            function storyDelete(e, callback){
+                var id =e.target.id;
+                var info = id.split("_");
+                console.log(info);
                 var eventType = info[0];
                 var sliderNum = parseInt(info[1]);
-                var eventSlider = sliderData[sliderNum];
                 while (sliderNum + 1 < slider.length) {
                     sliderData.pop();
                     story.pop();
                     slider.pop().remove();
                 };
-                var temp
-                if(eventType=="prev"){
-                    if(sliderData[sliderNum].currentImage==0)
-                        temp = story[sliderNum][eventSlider.li_items.length-1];
+                console.log(slider);
+                if (typeof callback === "function"){
+                    console.log(callback);
+                    callback(sliderNum, eventType);
+                }
+            }
+            storyAdd = function (sliderNum, eventType){
+                var eventSlider = sliderData[sliderNum];
+                var temp;
+                if (eventType == "prev") {
+                    if (sliderData[sliderNum].currentImage == 0)
+                        temp = story[sliderNum][eventSlider.li_items.length - 1];
                     else
                         temp = story[sliderNum][eventSlider.currentImage - 1];
-                } else if(eventType=="next"){
-                    if (sliderData[sliderNum].currentImage == eventSlider.li_items.length-1)
+                } else if (eventType == "next") {
+                    if (sliderData[sliderNum].currentImage == eventSlider.li_items.length - 1)
                         temp = story[sliderNum][0];
                     else
                         temp = story[sliderNum][eventSlider.currentImage + 1];
                 }
-                for(index=sliderNum+1 ; temp.child.length>0 && index<sliderNum+1+loadCnt; temp = temp.child[0], index++)
-                {
+                console.log(temp);
+                for (index = sliderNum + 1; temp.child.length > 0 && index < sliderNum + 1 + loadCnt; temp = temp.child[0], index++) {
                     story.push(temp.child);
                     sliderData[index] = new ImageSlider(index, sliderOpt);
                     slider[index] = sliderData[index].create(temp.child);
                     document.body.appendChild(slider[index]);
                     sliderData[index].prev.addEventListener("click", function (event) {
-                        storyChange(event)
+                        storyDelete(event, storyAdd);
                     }, false);
                     sliderData[index].next.addEventListener("click", function (event) {
-                        storyChange(event)
+                        storyDelete(event, storyAdd);
                     }, false);
                 }
                 console.log(index);
             }
-
 // #endregion Jssor Slider End
