@@ -33,8 +33,8 @@ function addLayer() {
     newLayer.innerText = "Layer" + LayerCount++;
     newLayer.onclick = function changeLayer() {
         if(curLayer)
-            curLayer.style.background = "#FFCC66";
-        this.style.background = "gray";
+            curLayer.style.background = "gray";
+        this.style.background = "#FFCC66";
         curLayer = this;
 
         var i;
@@ -55,7 +55,7 @@ function addLayer() {
 
 function mergeObjectsByLayer() {
 
-    if(Flag==0) {
+    if(autoFlag==0) {
         var i, temp = [], group;
 
         for (i = 0; i < objs.length; i++) {
@@ -72,9 +72,6 @@ function mergeObjectsByLayer() {
 
         canvas.add(group);
     }
-    else {
-        alert("자동채색이나 Edge-Detect가 끝난 후에 할수 있습니다.");
-    }
 }
 
 //서버로 캔버스를 보내는 함수이다. mainCanvas에 캔버스를 넣고, flag는 서버에 저장하려면 3을 사용하면 된다. (1과 2는 오토드로우 용이므로 사용 X)
@@ -88,10 +85,10 @@ function sendCanvas(main_canvas, flag) {
 
     var params = "image=";
     params += main_canvas.toDataURL('image/png');
-    params +='&flag=' + flag;
+    params +='&flag='+flag;
 
     if(flag==3) {
-        params += '&parent=' + parentNum;
+        params += '&parent=' + 10;
     }
     else if(flag==2) {
         xhr.onreadystatechange = function rspns() {

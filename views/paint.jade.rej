@@ -1,0 +1,34 @@
+diff a/views/paint.jade b/views/paint.jade	(rejected hunks)
+@@ -1,4 +1,27 @@
+-//
+-   Created by bgh29 on 2017-07-24.
+-
+-include ../public/html/canvas.html
+\ No newline at end of file
++doctype html
++html
++    head
++        title Painter
++        link(rel='stylesheet', type='text/css', href='../stylesheets/paint_style.css')
++        script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js')
++        script(src='../javascripts/edge.js')
++        script(src='../javascripts/canvas.js')
++        script(src='../javascripts/draw_tool.js')
++        script(src='../javascripts/layers.js')
++        script(src='../javascripts/jscolor.js')
++    body
++        #leftBox
++            #pencil.drawTool(title='PEN', href='javascript:void(0)', onclick='selectFunc(event);') Pen
++            #line.drawTool(title='LINE', href='javascript:void(0)', onclick='selectFunc(event);') Line
++            #rect.drawTool(title='RECT', href='javascript:void(0)', onclick='selectFunc(event);') Rect
++            #auto.drawTool(title='AUTOCOLOR', href='javascript:void(0)', onclick='selectFunc(event);') AutoColor
++            input#image_up_file(type='file', style='display: none;', accept='image/*', onchange='fileIn(this)')
++            #load.drawTool(title='LOAD', href='javascript:void(0)', onclick='loadImage();') Load
++            #edge.drawTool(title='EDGE', href='javascript:void(0)', onclick='edge();') Edge
++            .drawTool(title='SAVE', href='javascript:void(0)', onclick='mergeAllSave();') Save
++        #centerBox
++            div(style='width: 500px; height: 500px; position: absolute; background-color: white; border: 1px solid black; z-index: -1;')
++            canvas#drawBox.canvasBox(width='500', height='500')
++        #optionBox
++            input#colorBox.jscolor(value='66E398', onchange='changeColor()')
++            #plusBox(title='PLUS', href='javascript:void(0)', onclick='addLayer();')

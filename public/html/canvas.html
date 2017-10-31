@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script type="text/javascript" src="../javascripts/canvas.js"></script>
+    <script type="text/javascript" src="../javascripts/draw_tool.js"></script>
+    <script type="text/javascript" src="../javascripts/fabric.js"></script>
+    <script type="text/javascript" src="../javascripts/AutoCanny.js"></script>
+    <script type="text/javascript" src="../javascripts/OtsuThreshold.js"></script>
+    <script type="text/javascript" src="../javascripts/balloon.js"></script>
+</head>
+<body style="background: #2F2F2F;">
+    <div style="min-width: 870px; width: 100%; border-radius: 5px; background-color: #4F4F4F; margin: 2px; box-shadow: 0px -1px #8F8F8F;">
+        <button id="clear-canvas" style="background-color: #4F4F4F; border: none; margin-left: 20px;"><img src="../images/clear.png" style="width: 15px; height: 15px;"/></button>
+        <input id="image_up_file" type="file" style="display: none;" accept="image/*" onchange="Image_Load(this)">
+        <button id="load-object" style="background-color: #4F4F4F; border: none; margin-left: 20px;" class="btn btn-info"><img src="../images/upload.png" style="width: 15px; height: 15px;"/></button>
+        <button id="undo-canvas" style="background-color: #4F4F4F; border: none; margin-left: 20px;" class="btn btn-info"><img src="../images/undo.png" style="width: 15px; height: 15px;"/></button>
+        <button id="redo-canvas" style="background-color: #4F4F4F; border: none; margin-left: 20px;" class="btn btn-info"><img src="../images/redo.png" style="width: 15px; height: 15px;"/></button>
+        <button id="save-canvas" style="background-color: #4F4F4F; border: none; margin-left: 20px;" class="btn btn-info"><img src="../images/save.png" style="width: 15px; height: 15px;"/></button>
+    </div>
+
+    <div style="width: 870px">
+        <div style="width: 30px; padding: 10px; border-radius: 5px; background-color: #4F4F4F; margin: 2px; float: left; box-shadow: 0px -1px #8F8F8F;">
+            <div id="func" style="padding-bottom: 5px;">
+                <button id="delete-object" style="background-color: #4F4F4F; border: none; box-shadow: 1px 1px #8F8F8F;" class="btn btn-info"><img src="../images/delete.png" style="width: 15px; height: 15px;"/></button><br>
+                <button id="Color-object" style="background-color: #4F4F4F; border: none; box-shadow: 1px 1px #8F8F8F;" class="btn btn-info"><img src="../images/auto.png" style="width: 15px; height: 15px;"/></button><br>
+                <button id="edge-object" style="background-color: #4F4F4F; border: none; box-shadow: 1px 1px #8F8F8F;" class="btn btn-info"><img src="../images/edges.png" style="width: 15px; height: 15px;"/></button><br>
+                <button id="balloon-object" style="background-color: #4F4F4F; border: none; box-shadow: 1px 1px #8F8F8F;" class="btn btn-info"><img src="../images/ballon.png" style="width: 15px; height: 15px;"/></button><br>
+            </div>
+            <button id="drawing-mode" class="btn btn-info">Cancel drawing mode</button>
+            <br>
+            <div id="drawing-mode-options" style="margin: 10px;">
+                <select id="drawing-mode-selector">
+                    <option>Pencil</option>
+                    <option>Circle</option>
+                    <option>Spray</option>
+                    <option>Pattern</option>
+                    <option>hline</option>
+                    <option>vline</option>
+                    <option>square</option>
+                    <option>diamond</option>
+                </select>
+                <br>
+                <input id="drawing-line-width" type="range" value="30" min="0" max="150">
+                <br>
+                <input id="drawing-color" type="color" value="#005E7A">
+                <br>
+            </div>
+        </div>
+
+        <div style="background: white; width: 500px; margin: 2px; float: left;">
+            <canvas id="c" width="500px" height="500px"></canvas>
+        </div>
+
+        <div style="width: 270px; height: 250px; overflow: auto; padding: 10px; border-radius: 5px; margin: 2px; background-color: #4F4F4F; position: relative; float: left; box-shadow: 0px -1px #8F8F8F;">
+            <div style="height: 20px">
+                <div id="add-layer" style="border-radius: 5px; background: blue; width: 20px; height: 20px; float: left;"></div>
+                <div id="merge-layer-objects" style="border-radius: 5px; background: red; width: 20px; height: 20px; float: right;"></div>
+            </div>
+            <div id="layer-objects" style="text-align: center;"></div>
+        </div>
+    </div>
+
+    <div id="canvas-box" style="float: right; background: white;"></div>
+</body>
+</html>
