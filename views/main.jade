@@ -38,6 +38,9 @@ html
         script(src='../javascripts/image_slider.js', type='text/javascript')
         script(src='../javascripts/CartoonModel.js', type='text/javascript')
         link(rel='stylesheet', type='text/css', href='../stylesheets/image_slider.css')
+        link(rel='stylesheet', type='text/css', href='../stylesheets/floating_button.css')
+        button#sub-scrn-btn.floating-btn.is--off
+            span.menu-icon
         script(type='text/javascript').
             sliderOpt = {
                 imageWidth:500,
@@ -84,3 +87,12 @@ html
                     create_slider("Title"+index.toString(), index++);
                 }
             };
+            (function () {
+                "use strict";
+                var floatingBtn = document.getElementById("sub-scrn-btn");
+                floatingBtn.addEventListener("click", function (e) {
+                    var btn = e.currentTarget;
+                    btn.classList.toggle("is--off");
+                    
+                });
+            })();
