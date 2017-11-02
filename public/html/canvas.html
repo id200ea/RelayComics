@@ -9,43 +9,64 @@
     <script type="text/javascript" src="../javascripts/AutoCanny.js"></script>
     <script type="text/javascript" src="../javascripts/OtsuThreshold.js"></script>
     <script type="text/javascript" src="../javascripts/balloon.js"></script>
+    <style>
+        button{
+            background:#4F4F4F;
+            color:#AFAfAf;
+            border:none;
+            position:relative;
+            height:30px;
+            font-size:20px;
+            transition:800ms ease all;
+            vertical-align: middle;
+            padding: 2px;
+            border-radius: 10px;
+        }
+        button:hover{
+            background:#AfAfAf;
+            color:#4F4F4F;
+        }
+        button:hover:before,button:hover:after{
+            width:100%;
+            transition:800ms ease all;
+        }
+    </style>
 </head>
 <body style="background: #2F2F2F;">
-    <div style="min-width: 870px; width: 100%; border-radius: 5px; background-color: #4F4F4F; margin: 2px; box-shadow: 0px -1px #8F8F8F;">
-        <button id="clear-canvas" style="background-color: #4F4F4F; border: none; margin-left: 20px;"><img src="../images/clear.png" style="width: 15px; height: 15px;"/></button>
+    <div style="min-width: 870px; width: 100%; border-radius: 5px; background-color: #4F4F4F; padding: 5px; margin: 2px; box-shadow: 0px -1px #8F8F8F; ">
+        &nbsp;&nbsp;
+        <button id="clear-canvas" >ClrearCanvas</button>
+        <span style="color:#DFDFDF">|</span>
         <input id="image_up_file" type="file" style="display: none;" accept="image/*" onchange="Image_Load(this)">
-        <button id="load-object" style="background-color: #4F4F4F; border: none; margin-left: 20px;" class="btn btn-info"><img src="../images/upload.png" style="width: 15px; height: 15px;"/></button>
-        <button id="undo-canvas" style="background-color: #4F4F4F; border: none; margin-left: 20px;" class="btn btn-info"><img src="../images/undo.png" style="width: 15px; height: 15px;"/></button>
-        <button id="redo-canvas" style="background-color: #4F4F4F; border: none; margin-left: 20px;" class="btn btn-info"><img src="../images/redo.png" style="width: 15px; height: 15px;"/></button>
-        <button id="save-canvas" style="background-color: #4F4F4F; border: none; margin-left: 20px;" class="btn btn-info"><img src="../images/save.png" style="width: 15px; height: 15px;"/></button>
+        <button id="load-object" >Load Image</button>
+        <span style="color:#DFDFDF">|</span>
+        <button id="undo-canvas" >Undo</button>
+        <span style="color:#DFDFDF">|</span>
+        <button id="redo-canvas" >Redo</button>
+        <span style="color:#DFDFDF">|</span>
+        <button id="save-canvas" >Save & Exit</button>
     </div>
 
-    <div style="width: 870px">
-        <div style="width: 30px; padding: 10px; border-radius: 5px; background-color: #4F4F4F; margin: 2px; float: left; box-shadow: 0px -1px #8F8F8F;">
+    <div style="width: 1000px">
+        <div style="width: 150px; padding: 10px; border-radius: 5px; background-color: #4F4F4F; margin: 2px; float: left; box-shadow: 0px -1px #8F8F8F;">
             <div id="func" style="padding-bottom: 5px;">
-                <button id="delete-object" style="background-color: #4F4F4F; border: none; box-shadow: 1px 1px #8F8F8F;" class="btn btn-info"><img src="../images/delete.png" style="width: 15px; height: 15px;"/></button><br>
-                <button id="Color-object" style="background-color: #4F4F4F; border: none; box-shadow: 1px 1px #8F8F8F;" class="btn btn-info"><img src="../images/auto.png" style="width: 15px; height: 15px;"/></button><br>
-                <button id="edge-object" style="background-color: #4F4F4F; border: none; box-shadow: 1px 1px #8F8F8F;" class="btn btn-info"><img src="../images/edges.png" style="width: 15px; height: 15px;"/></button><br>
-                <button id="balloon-object" style="background-color: #4F4F4F; border: none; box-shadow: 1px 1px #8F8F8F;" class="btn btn-info"><img src="../images/ballon.png" style="width: 15px; height: 15px;"/></button><br>
+                <button id="delete-object" style="font-size: 15px;">DeleteObject</button><br>
+                <button id="Color-object" style="font-size: 15px;">AutoPainting</button><br>
+                <button id="edge-object" style="font-size: 15px;">EdgeDetect</button><br>
+                <button id="balloon-object" style="font-size: 15px;">Balloon</button><br>
             </div>
-            <button id="drawing-mode" class="btn btn-info">Cancel drawing mode</button>
-            <br>
+            <button id="drawing-mode" style="font-size: 15px;">Cancel drawing mode</button>
             <div id="drawing-mode-options" style="margin: 10px;">
-                <select id="drawing-mode-selector">
-                    <option>Pencil</option>
-                    <option>Circle</option>
-                    <option>Spray</option>
-                    <option>Pattern</option>
-                    <option>hline</option>
-                    <option>vline</option>
-                    <option>square</option>
-                    <option>diamond</option>
-                </select>
-                <br>
-                <input id="drawing-line-width" type="range" value="30" min="0" max="150">
-                <br>
-                <input id="drawing-color" type="color" value="#005E7A">
-                <br>
+                <button id="Pencil" style="font-size: 15px;">Pencil</button>
+                <button id="Circle" style="font-size: 15px;">Circle</button>
+                <button id="Spray" style="font-size: 15px;">Spray</button>
+                <button id="Pattern" style="font-size: 15px;">Pattern</button>
+                <button id="hline" style="font-size: 15px;">hLine</button>
+                <button id="vline" style="font-size: 15px;">vLine</button>
+                <button id="square" style="font-size: 15px;">Square</button>
+                <button id="diamond" style="font-size: 15px;">Diamond</button>
+                <input id="drawing-line-width" type="range" value="30" min="0" max="150" style="width: 100%; margin: 0px; padding: 0px;">
+                <input id="drawing-color" type="color" value="#005E7A" style="border: none; width: 100%;">
             </div>
         </div>
 
