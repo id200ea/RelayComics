@@ -5,7 +5,7 @@ var mysql = require('mysql');
 var conn = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : '111111',
+  password : 'qorl11my',
   database : 'relay_comics'
 });
 // conn.connect();
@@ -57,23 +57,27 @@ function makeCartoon(cutNode){
 
 /* ======================================================= */
 /* Make Tree SQL Query */
-
+var count=0;
 /* "Make Tree" makeTree(cutNode) */
-exports.makeTree = function makeTree(cutNode){
-  this.cutNode = cutNode;
-  console.log(cutNode);
-
-  var sql_descendants = 'SELECT c.* FROM Cut AS c JOIN Treepaths AS t ON c.cut_num = t.descendant WHERE t.ancestor = ' + cutNode.num.toString() + ' ORDER BY cut_like DESC';
-  conn.query(sql_descendants, function(err, rows) {
-    if(err){
-      console.log(err);
-    } else {
-      for(var i=0; i<rows.length; i++){
-        cutNode.addChild(rows[i].cut_num, rows[i].cut_src, rows[i].cut_like);
-        makeTree(cutNode.child[i]);
-      }
-    }
-  });
+exports.makeTree = function makeTree(cutNode, callback){
+    this.cutNode = cutNode;
+    console.log(cutNode);
+    count++;
+    var sql_descendants = 'SELECT c.* FROM Cut AS c JOIN Treepaths AS t ON c.cut_num = t.descendant WHERE t.ancestor = ' + cutNode.num.toString() + ' ORDER BY cut_like DESC';
+    conn.query(sql_descendants, function(err, rows) {
+        if(err){
+            console.log(err);
+        } else {
+            var i;
+            for(i=0; i<rows.length; i++){
+                cutNode.addChild(rows[i].cut_num, rows[i].cut_src, rows[i].cut_like);
+                makeTree(cutNode.child[i], callback);
+            }
+            count--;
+            if(count==0 && typeof callback === "function")
+                callback();
+        }
+    });
 };
 
 /* ======================================================= */
@@ -166,8 +170,9 @@ exports.delCut = function delCut(cutNum, childExist){
   // Exist : 1
   this.childExist = childExist || null;
 
+  console.log(this.cutNum+", "+this.childExist);
   var sql_del_cut = [];
-  selectCommentNum(cutNum);
+  //selectCommentNum(cutNum);
   if(childExist){
     // Child Exist Cut Alter
     sql_del_cut[0] = 'DELETE FROM Cut_like_log WHERE cut_num = ' + cutNum.toString();
@@ -190,16 +195,16 @@ exports.delCut = function delCut(cutNum, childExist){
 };
 
 /* "Cut Delete" sub Query */
-function selectCommentNum(cutNum){
-  this.cutNum = cutNum;
-
-  var sql_select_comnt_num = 'SELECT comnt_num FROM Comment WHERE cut_num = ' + cutNum.toString();
-  conn.query(sql_select_comnt_num, function(err, rows){
-    for (var i = 0; i < rows.length; i++) {
-      exports.delComment(rows[i].comnt_num);
-    };
-  });
-};
+// function selectCommentNum(cutNum){
+//   this.cutNum = cutNum;
+//
+//   var sql_select_comnt_num = 'SELECT comnt_num FROM Comment WHERE cut_num = ' + cutNum.toString();
+//   conn.query(sql_select_comnt_num, function(err, rows){
+//     for (var i = 0; i < rows.length; i++) {
+//       exports.delComment(rows[i].comnt_num);
+//     };
+//   });
+// };
 
 /* "Cut Alter" alterCut(cutNum, cutAuthor, cutStory, cutSrc) */
 exports.alterCut = function alterCut(cutNum, cutAuthor, cutStory, cutSrc){

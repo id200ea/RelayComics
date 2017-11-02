@@ -20,12 +20,16 @@ router.get('/', function(req, res, next) {
 
   // makeTree 테스트
   var test = new Cartoon(req.query.title, 1, parseInt(req.query.rootCutNum), "img");
-  sql.makeTree(test.root);
+  sql.makeTree(test.root, function () {
+      console.log(test);
+      res.render('detail', {cartoon:circularStringify(test)});
+  });
+  /*
   setTimeout(function(){
     console.log(test);
     res.render('detail', {cartoon:circularStringify(test)});
   }, 600);
-  
+  */
 /*
     test = new Cartoon("testComic", 1, "../images/001.jpg");
     test.root.addChild(2, "../images/a.png");
