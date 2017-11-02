@@ -1,4 +1,5 @@
 var express = require('express');
+var app = express();
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -9,14 +10,14 @@ var MySQLStore = require('express-mysql-session')(session);
 var bkfd2Password = require("pbkdf2-password");
 var passport = require('passport');
 var hasher = bkfd2Password();
-// var mysql = require('mysql');
-// var conn = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : '111111',
-//   database : 'relay_comics'
-// });
-// conn.connect();
+var mysql = require('mysql');
+var conn = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '111111',
+  database : 'relay_comics'
+});
+conn.connect();
 
 var FacebookStrategy = require('passport-facebook').Strategy;
 var NaverStrategy = require('passport-naver').Strategy;
@@ -25,12 +26,9 @@ var createCartoon = require('./routes/create_cartoon')
 var detail = require('./routes/cartoon_detail');
 var main = require('./routes/mian');
 var canvas = require('./routes/canvas');
+var sql = require('./public/javascripts/CartoonSQL');
 var pyshell = require('python-shell');
 var path = require('path');
-
-var sql = require('./public/javascripts/CartoonSQL');
-
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -128,45 +126,6 @@ app.post('/image_receiver', function (req, res) {
 //지응 코드 끝
 
 // DB 저장
-// Cartoon: 추가,삭제(?) / Cut: 추가,삭제 / Like: 만화, 컷
-// Cut Like
-app.get('/modi_like', function (req, res) {
-  cutNum = parseInt(req.query.num);
-  // 좋아요 누른 사람 authId
-  // userId = req.query.authId;
-  console.log(req.query.num.toString()+", "+ req.query.flag);
-  if(req.query.flag=='add'){
-    // sql.upCutLike(cutNum, userId)
-    sql.upCutLike(cutNum, 'bgh');
-  }else {
-    // sql.downCutLike(cutNum, userId)
-    sql.downCutLike(cutNum, 'bgh');
-  }
-});
-
-// Add Cut
-app.get('/add_cut', function (req, res) {
-  // 컷 그린 사람 authId
-  // cutAuthor = req.query.authId;
-  // 컷 내용 story
-  // cutStory = req.query.story;
-  cutSrc = req.query.src;
-  parentNum = parseInt(req.query.pnum);
-  // sql.addCut(null, cutAuthor, cutStory, cutSrc, parentNum)
-  sql.addCut(null, 'kke', "asd", cutSrc, parentNum);
-});
-
-// Delete Cut
-app.get('/del_cut', function (req, res) {
-  cutNum = parseInt(req.query.num);
-  // Exist : 1
-  childExist = parseInt(req.query.child);
-  console.log("app.js "+cutNum+", "+childExist);
-//  if(req.query.flag == 'del'){
-    sql.delCut(cutNum, childExist);
-//  }
-});
-
 // Add Cartoon
 app.post('/add_cartoon', function (req, res) {
   cartoonTitle = req.body.cartoon_name;
@@ -197,18 +156,59 @@ app.post('/add_cartoon', function (req, res) {
         tag.push('historical');
     if(req.body.sport)
         tag.push('sport');
-  // cartoonTag1 = req.query.tag1;
-  // cartoonTag2 = req.query.tag2;
-  // cartoonTag3 = req.query.tag3;
     console.log(cartoonTitle);
     console.log(tag[0]+", "+tag[1]+", "+tag[2])
+    // sql.addCartoon(cartoonTitle, '#드라마', '#학원', '#일상');
    sql.addCartoon(cartoonTitle, tag[0], tag[1], tag[2], function(rootCutNum){
        return res.redirect('/detail?title='+cartoonTitle+'&rootCutNum='+rootCutNum);
    });
- // sql.addCartoon(cartoonTitle, '#드라마', '#학원', '#일상');
+});
 
+// Add Cut
+app.get('/add_cut', function (req, res) {
+  // 컷 그린 사람 authId
+  // cutAuthor = req.query.authId;
+  // 컷 내용 story
+  // cutStory = req.query.story;
+  cutSrc = req.query.src;
+  parentNum = parseInt(req.query.pnum);
+  // sql.addCut(null, cutAuthor, cutStory, cutSrc, parentNum)
+  sql.addCut(null, 'kke', "asd", cutSrc, parentNum);
+});
+
+// Delete Cut
+app.get('/del_cut', function (req, res) {
+  cutNum = parseInt(req.query.num);
+  // Exist : 1
+  childExist = parseInt(req.query.child);
+  console.log("app.js "+cutNum+", "+childExist);
+  sql.delCut(cutNum, childExist);
+});
+
+// Cut Like
+app.get('/modi_like', function (req, res) {
+  cutNum = parseInt(req.query.num);
+  // 좋아요 누른 사람 authId
+  // userId = req.query.authId;
+  console.log(req.query.num.toString()+", "+ req.query.flag);
+  if(req.query.flag=='add'){
+    // sql.upCutLike(cutNum, userId)
+    sql.upCutLike(cutNum, 'bgh');
+  }else {
+    // sql.downCutLike(cutNum, userId)
+    sql.downCutLike(cutNum, 'bgh');
+  }
 });
 // DB 저장 끝
+
+global.User = {
+  id : '',
+  authId : '',
+  displayName : '',
+  email : ''
+};
+console.log('User.displayName.length');
+console.log(User.displayName.length);
 
 passport.serializeUser(function(user, done) {
   console.log('serializeUser', user);
@@ -223,52 +223,35 @@ passport.deserializeUser(function(id, done) {
       done('There is no user.');
     } else {
       done(null, results[0]);
+      User.id = results[0].id;
+      User.authId = results[0].authId;
+      User.displayName = results[0].displayName;
+      User.email = results[0].email;
     }
   });
 });
 
-// main 화면에서 login/logout script 해결되면 삭제
-// app.get('/welcome', function(req, res){
-//   if(req.user && req.user.displayName) {
-//     res.send(`
-//       <h1>Hello, ${req.user.displayName}</h1>
-//       <ul>
-//       <li><a href="/">home</a></li>
-//       <li><a href="/auth/logout">logout</a></li>
-//       </ul>
-//     `);
-//   } else {
-//     res.send(`
-//       <h1>Welcome</h1>
-//       <ul>
-//       <li><a href="/">home</a></li>
-//       <li><a href="/auth/login">Login</a></li>
-//       </ul>
-//     `);
-//   }
-// });
-
 // LocalStrategy가 없으므로 필요 없음
-app.post(
-  '/auth/login',
-  passport.authenticate(
-    'local',
-    {
-      successRedirect: '/welcome',
-      failureRedirect: '/auth/login',
-      failureFlash: false
-    }
-  )
-);
+// app.post(
+//   '/auth/login',
+//   passport.authenticate(
+//     'local',
+//     {
+//       successRedirect: '/',
+//       failureRedirect: '/auth/login',
+//       failureFlash: false
+//     }
+//   )
+// );
 
 app.get('/auth/login', function(req, res){
   res.sendFile(path.join(__dirname+'/public/html/login.html'));
 });
 app.get('/auth/logout', function(req, res){
   req.logout();
-  req.session.save(function(){
-    res.redirect('/welcome');
-  });
+  // req.session.save(function(){
+    res.redirect('/');
+  // });
 });
 
 app.get('/auth/facebook',
@@ -277,7 +260,7 @@ app.get('/auth/facebook',
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook',
     {
-      successRedirect: '/welcome',
+      successRedirect: '/',
       failureRedirect: '/auth/login'
     }
   )
@@ -291,7 +274,7 @@ app.get('/auth/naver',
 app.get('/auth/naver/callback',
 	passport.authenticate('naver',
     {
-      successRedirect: '/welcome',
+      successRedirect: '/',
       failureRedirect: '/auth/login'
     }
   )

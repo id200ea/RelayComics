@@ -21,14 +21,16 @@ html
           });
         title
     body
-      #cssmenu
-        ul
-          li
-            a(href='/')
-              span Relay Comics
-          li.login
+    #cssmenu
+      ul
+        li
+          a(href='/')
+            span Relay Comics
+        - if( User.displayName.length == 0 )
+          li.last.login
             a(href='/auth/login')
               span Login
+        - else
           li.last.logout
             a(href='/auth/logout')
               span Logout
