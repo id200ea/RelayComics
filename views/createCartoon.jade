@@ -1,0 +1,61 @@
+doctype html
+html
+    head
+        meta(charset='UTF-8')
+        title title
+    body
+
+        script.
+            function count_ck(obj) {
+                var chkbox = document.getElementsByClassName("tag_checkbox");
+                var chkCnt = 0;
+                for (var i = 0; i < chkbox.length; i++) {
+                    if (chkbox[i].checked) {
+                        chkCnt++;
+                    }
+                }
+                if (chkCnt > 3) {
+                    alert("3개까지 선택 가능합니다.");
+                    obj.checked = false;
+                    return false;
+                }
+            }
+
+        form(method='post', action='/add_cartoon')
+            div
+                label(for='cartoon_name_textarea') 만화 제목
+                p
+                    textarea(id='cartoon_name_textarea', name="cartoon_name" rows="2", cols="50", style="resize:none;")
+            div
+                label 만화 타입
+                p
+                    input(type="checkbox" class ="tag_checkbox" id="episode_tag" name="episode" onClick="count_ck(this);")
+                    label(for="episode_tag") 에피소드
+                    input(type="checkbox" class="tag_checkbox" id="omnibus_tag" name="omnibus" onClick="count_ck(this);")
+                    label(for="omnibus_tag") 옴니버스
+                    input(type="checkbox" class="tag_checkbox" id="story_tag" name="story" onClick="count_ck(this);")
+                    label(for="story_tag") 스토리
+                    input(type="checkbox" class="tag_checkbox" id="daily_tag" name="daily" onClick="count_ck(this);")
+                    label(for="daily_tag") 일상
+                p
+                    input(type="checkbox" class="tag_checkbox" id="gag_tag" name="gag" onClick="count_ck(this);")
+                    label(for="gag_tag") 개그
+                    input(type="checkbox" class="tag_checkbox" id="fantasy_tag" name="fantasy" onClick="count_ck(this);")
+                    label(for="fantasy_tag") 판타지
+                    input(type="checkbox" class="tag_checkbox" id="action_tag" name="action" onClick="count_ck(this);")
+                    label(for="action_tag") 액션
+                    input(type="checkbox" class="tag_checkbox" id="drama_tag" name="drama" onClick="count_ck(this);")
+                    label(for="drama_tag") 드라마
+                p
+                    input(type="checkbox" class="tag_checkbox" id="pure_tag" name="pure" onClick="count_ck(this);")
+                    label(for="pure_tag") 순정
+                    input(type="checkbox" class="tag_checkbox" id="emotion_tag" name="emotion" onClick="count_ck(this);")
+                    label(for="emotion_tag") 감성
+                    input(type="checkbox" class="tag_checkbox" id="thriller_tag" name="thriller" onClick="count_ck(this);")
+                    label(for="thriller_tag") 스릴러
+                    input(type="checkbox" class="tag_checkbox" id="historical_tag" name="historical" onClick="count_ck(this);")
+                    label(for="historical_tag") 시대극
+                p
+                    input(type="checkbox" class="tag_checkbox" id="sport_tag" name="sport" onClick="count_ck(this);")
+                    label(for="sport_tag") 스포츠
+            input(type='submit', value='Submit')

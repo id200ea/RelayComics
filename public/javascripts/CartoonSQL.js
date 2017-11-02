@@ -17,14 +17,14 @@ var conn = mysql.createConnection({
 exports.listCartoon = function listCartoon(test){
   this.test = test;
   var list = [];
-  var sql_list_cartoon = 'SELECT cartoon_num, cartoon_title, cartoon_like, first_cut, cut_src FROM Cartoon JOIN Cartoon_first_cut USING (cartoon_num) JOIN Cut WHERE first_cut = cut_num ORDER BY cartoon_like DESC';
+  var sql_list_cartoon = 'SELECT cartoon_num, cartoon_title, cartoon_tag1, cartoon_tag2, cartoon_tag3, cartoon_like, first_cut, cut_src FROM Cartoon JOIN Cartoon_first_cut USING (cartoon_num) JOIN Cut WHERE first_cut = cut_num ORDER BY cartoon_like DESC';
 
   conn.query(sql_list_cartoon, function(err, rows){
     if(err){
       console.log(err);
     } else {
       for (var i = 0; i < rows.length; i++) {
-        list[i] = new Cartoon(rows[i].cartoon_title, rows[i].cartoon_like, rows[i].first_cut, rows[i].cut_src);
+        list[i] = new Cartoon(rows[i].cartoon_title, rows[i].cartoon_tag1, rows[i].cartoon_tag2, rows[i].cartoon_tag3, rows[i].cartoon_like, rows[i].first_cut, rows[i].cut_src);
         makeCartoon(list[i].root);
       }
       setTimeout(function() {
@@ -63,7 +63,7 @@ exports.makeTree = function makeTree(cutNode, callback){
     this.cutNode = cutNode;
     console.log(cutNode);
     count++;
-    var sql_descendants = 'SELECT c.* FROM Cut AS c JOIN Treepaths AS t ON c.cut_num = t.descendant WHERE t.ancestor = ' + cutNode.num.toString() + ' ORDER BY cut_like DESC';
+      var sql_descendants = 'SELECT c.* FROM Cut AS c JOIN Treepaths AS t ON c.cut_num = t.descendant WHERE t.ancestor = ' + cutNode.num.toString() + ' ORDER BY cut_like DESC';
     conn.query(sql_descendants, function(err, rows) {
         if(err){
             console.log(err);
@@ -84,19 +84,26 @@ exports.makeTree = function makeTree(cutNode, callback){
 /* Cartoon SQL Query */
 
 /* "Cartoon Create" addCartoon(cartoonTitle, cartoonTag1, cartoonTag2, cartoonTag3) */
-exports.addCartoon = function addCartoon(cartoonTitle, cartoonTag1, cartoonTag2, cartoonTag3){
+exports.addCartoon = function addCartoon(cartoonTitle, cartoonTag1, cartoonTag2, cartoonTag3, callback){
   this.cartoonTitle = cartoonTitle;
   this.cartoonTag1 = cartoonTag1;
   this.cartoonTag2 = cartoonTag2;
   this.cartoonTag3 = cartoonTag3;
 
-  var sql_add_cartoon = 'INSERT INTO Cartoon (cartoon_title, cartoon_tag1, cartoon_tag2, cartoon_tag3) VALUES ("' + cartoonTitle.toString() + '", "' + cartoonTag1.toString() + '", "' + cartoonTag3.toString() + '", "' + cartoonTag3.toString() + '")';
+  if(cartoonTag3) {
+      var sql_add_cartoon = 'INSERT INTO Cartoon (cartoon_title, cartoon_tag1, cartoon_tag2, cartoon_tag3) VALUES ("' + cartoonTitle.toString() + '", "' + cartoonTag1.toString() + '", "' + cartoonTag2.toString() + '", "' + cartoonTag3.toString() + '")';
+  } else if(cartoonTag2) {
+      var sql_add_cartoon = 'INSERT INTO Cartoon (cartoon_title, cartoon_tag1, cartoon_tag2) VALUES ("' + cartoonTitle.toString() + '", "' + cartoonTag1.toString() + '", "' + cartoonTag2.toString() + '")';
+  } else {
+      var sql_add_cartoon = 'INSERT INTO Cartoon (cartoon_title, cartoon_tag1) VALUES ("' + cartoonTitle.toString() + '", "' + cartoonTag1.toString() + '")';
+  }
+
   conn.query(sql_add_cartoon, function(err, row) {
     if(err){
       console.log(err);
     } else {
       console.log('cartoon 테이블에 추가되었습니다.');
-      exports.addCut(row.insertId, "anyone", "타이틀입니다.", "/img/empty.jpg");
+      exports.addCut(row.insertId, "anyone", "타이틀입니다.", "../images/empty.jpg", null, callback);
     }
   });
 };
@@ -140,7 +147,7 @@ function _delCartoon(cartoonNum){
 
 /* "Cut Add" addCut(null, cutAuthor, cutStory, cutSrc, parentNum)
    or "Cartoon First Cut Create" addCut(cartoonNum, cutAuthor, cutStory, cutSrc)*/
-exports.addCut = function addCut(cartoonNum, cutAuthor, cutStory, cutSrc, parentNum){
+exports.addCut = function addCut(cartoonNum, cutAuthor, cutStory, cutSrc, parentNum, callback){
   this.cartoonNum = cartoonNum;
   this.cutAuthor = cutAuthor;
   this.cutStory = cutStory;
@@ -158,8 +165,11 @@ exports.addCut = function addCut(cartoonNum, cutAuthor, cutStory, cutSrc, parent
     } else {
       // Cartoon First Cut Create
       console.log('title cut이 생성되었습니다.');
-      exports.addFirstCut(cartoonNum, row.insertId)
+      exports.addFirstCut(cartoonNum, row.insertId);
+      if(callback)
+        callback(row.insertId);
     }
+
   });
 };
 

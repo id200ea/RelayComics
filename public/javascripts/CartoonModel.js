@@ -10,8 +10,11 @@ function Cut(num, imgSrc, like, parent){
     this.child = [];
 }
 
-function Cartoon(title, like, rootNum, rootImgSrc){
+function Cartoon(title, tag1, tag2, tag3, like, rootNum, rootImgSrc){
     this.title = title;
+    this.tag1 = tag1;
+    this.tag2 = tag2;
+    this.tag3 = tag3;
     this.like = like;
 
     this.root = new Cut(rootNum, rootImgSrc, 0);

@@ -21,6 +21,7 @@ var hasher = bkfd2Password();
 var FacebookStrategy = require('passport-facebook').Strategy;
 var NaverStrategy = require('passport-naver').Strategy;
 
+var createCartoon = require('./routes/create_cartoon')
 var detail = require('./routes/cartoon_detail');
 var main = require('./routes/mian');
 var canvas = require('./routes/canvas');
@@ -63,6 +64,7 @@ app.use(passport.session());
 app.use('/', main);
 app.use('/detail', detail);
 app.use('/canvas', canvas);
+app.use('/create_cartoon', createCartoon);
 
 //주영 코드
 var arg = {
@@ -159,20 +161,53 @@ app.get('/del_cut', function (req, res) {
   cutNum = parseInt(req.query.num);
   // Exist : 1
   childExist = parseInt(req.query.child);
-  if(req.query.flag == 'del'){
+  console.log("app.js "+cutNum+", "+childExist);
+//  if(req.query.flag == 'del'){
     sql.delCut(cutNum, childExist);
-  }
+//  }
 });
 
 // Add Cartoon
-app.get('/add_cartoon', function (req, res) {
-  cartoonTitle = req.query.title;
+app.post('/add_cartoon', function (req, res) {
+  cartoonTitle = req.body.cartoon_name;
+  var tag = [];
+    if(req.body.episode)
+        tag.push('episode');
+    if(req.body.omnibus)
+        tag.push('omnibus');
+    if(req.body.story)
+        tag.push('story');
+    if(req.body.daily)
+        tag.push('daily');
+    if(req.body.gag)
+        tag.push('gag');
+    if(req.body.fantasy)
+        tag.push('fantasy');
+    if(req.body.action)
+        tag.push('action');
+    if(req.body.drama)
+        tag.push('drama');
+    if(req.body.pure)
+        tag.push('pure');
+    if(req.body.emotion)
+        tag.push('emotion');
+    if(req.body.thriller)
+        tag.push('thriller');
+    if(req.body.historical)
+        tag.push('historical');
+    if(req.body.sport)
+        tag.push('sport');
   // cartoonTag1 = req.query.tag1;
   // cartoonTag2 = req.query.tag2;
   // cartoonTag3 = req.query.tag3;
-  // sql.addCartoon(cartoonTitle, cartoonTag1, cartoonTag2, cartoonTag3);
-  sql.addCartoon(cartoonTitle, '#드라마', '#학원', '#일상');
-})
+    console.log(cartoonTitle);
+    console.log(tag[0]+", "+tag[1]+", "+tag[2])
+   sql.addCartoon(cartoonTitle, tag[0], tag[1], tag[2], function(rootCutNum){
+       return res.redirect('/detail?title='+cartoonTitle+'&rootCutNum='+rootCutNum);
+   });
+ // sql.addCartoon(cartoonTitle, '#드라마', '#학원', '#일상');
+
+});
 // DB 저장 끝
 
 passport.serializeUser(function(user, done) {

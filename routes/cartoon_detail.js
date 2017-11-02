@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
     console.log(req.query.rootCutNum);
 
   // makeTree 테스트
-  var test = new Cartoon(req.query.title, 1, parseInt(req.query.rootCutNum), "img");
+  var test = new Cartoon(req.query.title, req.query.tag1, req.query.tag2, req.query.tag3, 1, parseInt(req.query.rootCutNum), "img");
   sql.makeTree(test.root, function () {
       console.log(test);
       res.render('detail', {cartoon:circularStringify(test)});

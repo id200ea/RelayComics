@@ -49,10 +49,12 @@ html
             cartoonlist = JSON.parse(!{JSON.stringify(cartoon)});
             var tempStory =[];
             var tempCut;
+            console.log(cartoonlist);
             for(var i=0 ; i<cartoonlist.length ; i++){
                 tempStory[i]=[];
-                for(tempCut = cartoonlist[i].root.child[0]; tempCut.child.length>0 ; tempCut = tempCut.child[0])
-                    tempStory[i].push(tempCut);
+                if(cartoonlist[i].root.child.length>0)
+                    for(tempCut = cartoonlist[i].root.child[0]; tempCut.child.length>0 ; tempCut = tempCut.child[0])
+                        tempStory[i].push(tempCut);
 
             }
 
@@ -68,6 +70,12 @@ html
                 title.appendChild(titleFont);
                 var link = document.createElement("a");
                 link.href= "detail?title="+cartoonlist[i].title+"&rootCutNum="+cartoonlist[i].root.num.toString();
+                if (cartoonlist[i].tag1)
+                    link.href+="&tag1="+cartoonlist[i].tag1;
+                if (cartoonlist[i].tag2)
+                    link.href += "&tag2=" + cartoonlist[i].tag2;
+                if (cartoonlist[i].tag3)
+                    link.href += "&tag3=" + cartoonlist[i].tag3;
                 link.style.textDecoration="none";
                 link.innerHTML = cartoonlist[i].title;
                 titleFont.appendChild(link);
@@ -77,7 +85,12 @@ html
                 var tagFont = document.createElement("font");
                 tagFont.size=5;
                 tag.appendChild(tagFont);
-                tagFont.innerHTML = "#tag1 #tag2 #tag3";
+                if (cartoonlist[i].tag1)
+                    tagFont.innerHTML = " #"+cartoonlist[i].tag1;
+                if (cartoonlist[i].tag2)
+                    tagFont.innerHTML += " #"+cartoonlist[i].tag2;
+                if (cartoonlist[i].tag3)
+                    tagFont.innerHTML += " #"+cartoonlist[i].tag3;
                 cartoonDiv.appendChild(new ImageSlider(i, sliderOpt).create(tempStory[i]));
                 document.body.appendChild(cartoonDiv);
             }
@@ -93,6 +106,6 @@ html
                 floatingBtn.addEventListener("click", function (e) {
                     var btn = e.currentTarget;
                     btn.classList.toggle("is--off");
-                    
+                    window.location = "http://localhost:3000/create_cartoon";
                 });
             })();

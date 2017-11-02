@@ -35,30 +35,32 @@ html
         // #region Jssor Slider Begin
         // Generator: Jssor Slider Maker
         // Source: https://www.jssor.com
-        script(src='../javascripts/image_slider.js', type='text/javascript')
-        script(src='../javascripts/CartoonModel.js', type='text/javascript')
-        script(src='../javascripts/TreeModel.js', type='text/javascript')
-        link(rel='stylesheet', type='text/css', href='../stylesheets/image_slider.css')
-        link(rel='stylesheet', type='text/css', href='../stylesheets/floating_button.css')
-        link(rel='stylesheet', type='text/css', href='../stylesheets/heart_shape.css')
-        link(rel='stylesheet', type='text/css', href='../stylesheets/x_shape.css')
-        style.
-            #info {
-                background:#FFF;
-                padding-top:100px;
-                padding-bottom: 50px;
-                margin-left: auto;
-                margin-right: auto;
-                text-align: center;
-            }
-        button#sub-scrn-btn.floating-btn.is--off
-            span.menu-icon
-        div#info
-            p
-                strong
-                    font(size='7') This is Title
-            p
-                font(size='5') #tag1 #tag2 #tag3
+      script(src='../javascripts/image_slider.js', type='text/javascript')
+      script(src='../javascripts/CartoonModel.js', type='text/javascript')
+      script(src='../javascripts/TreeModel.js', type='text/javascript')
+      link(rel='stylesheet', type='text/css', href='../stylesheets/image_slider.css')
+      link(rel='stylesheet', type='text/css', href='../stylesheets/floating_button.css')
+      link(rel='stylesheet', type='text/css', href='../stylesheets/heart_shape.css')
+      link(rel='stylesheet', type='text/css', href='../stylesheets/x_shape.css')
+      style.
+          #info {
+              background:#FFF;
+              padding-top:100px;
+              padding-bottom: 50px;
+              margin-left: auto;
+              margin-right: auto;
+              text-align: center;
+          }
+      button#sub-scrn-btn.floating-btn.is--off
+          span.menu-icon
+      div#info
+          p
+              strong
+                  font(size='7') This is Title
+          p
+              font(size='5') #tag1 #tag2 #tag3
+      div#cartoon
+      button#addCut 컷을 추가하거라
         script(type='text/javascript').
             sliderOpt = {
                 imageWidth: 500,
@@ -68,6 +70,7 @@ html
             story = [];
             slider = [];
             sliderData = [];
+            cartoonDiv =document.getElementById("cartoon");
             loadCnt = 2;
             var test;
             var i;
@@ -81,7 +84,7 @@ html
                 story.push(temp.child);
                 sliderData[index] = new ImageSlider(index, sliderOpt);
                 slider[index] = sliderData[index].create(temp.child);
-                document.body.appendChild(slider[index]);
+                cartoonDiv.appendChild(slider[index]);
                 sliderData[index].prev.addEventListener("click", function (event) {
                     storyDelete(event, storyAdd);
                 }, false);
@@ -109,7 +112,7 @@ html
                         story.push(temp.child);
                         sliderData[index] = new ImageSlider(index, sliderOpt);
                         slider[index] = sliderData[index].create(temp.child);
-                        document.body.appendChild(slider[index]);
+                        cartoonDiv.appendChild(slider[index]);
                         sliderData[index].prev.addEventListener("click", function (event) {
                             storyDelete(event, storyAdd)
                         }, false);
@@ -180,7 +183,7 @@ html
                     story.push(temp.child);
                     sliderData[index] = new ImageSlider(index, sliderOpt);
                     slider[index] = sliderData[index].create(temp.child);
-                    document.body.appendChild(slider[index]);
+                    cartoonDiv.appendChild(slider[index]);
                     sliderData[index].prev.addEventListener("click", function (event) {
                         storyDelete(event, storyAdd);
                     }, false);
@@ -190,4 +193,6 @@ html
                 }
                 console.log(index);
             }
+
+
 // #endregion Jssor Slider End
