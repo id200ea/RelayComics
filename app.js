@@ -249,6 +249,10 @@ app.get('/auth/login', function(req, res){
 });
 app.get('/auth/logout', function(req, res){
   req.logout();
+  User.id = '';
+  User.authId = '';
+  User.displayName = '';
+  User.email = '';
   // req.session.save(function(){
     res.redirect('/');
   // });

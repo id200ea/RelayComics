@@ -29,12 +29,14 @@ html
           li
             a(href='/')
               span Relay Comics
-          li.login
-            a(href='/auth/login')
-              span Login
-          li.last.logout
-            a(href='/auth/logout')
-              span Logout
+          - if( User.displayName.length == 0 )
+            li.last.login
+              a(href='/auth/login')
+                span Login
+          - else
+            li.last.logout
+              a(href='/auth/logout')
+                span Logout
         script(src='../javascripts/image_slider.js', type='text/javascript')
         script(src='../javascripts/CartoonModel.js', type='text/javascript')
         link(rel='stylesheet', type='text/css', href='../stylesheets/image_slider.css')
