@@ -30,6 +30,30 @@
             width:100%;
             transition:800ms ease all;
         }
+        .textbox {
+            background: #1F2124;
+            background: -moz-linear-gradient(#1F2124, #27292C);
+            background: -ms-linear-gradient(#1F2124, #27292C);
+            background: -o-linear-gradient(#1F2124, #27292C);
+            background: -webkit-gradient(linear, 0 0, 0 100%, from(#1F2124), to(#27292C));
+            background: -webkit-linear-gradient(#1F2124, #27292C);
+            background: linear-gradient(#1F2124, #27292C);
+            margin: 2px;
+            border: 1px solid #000;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-family: 'Ubuntu', 'Lato', sans-serif;
+            color: #FFF;
+            width: 285px;
+            height: 200px;
+            resize: none;
+        }
+        .textbox:focus {
+            box-shadow: inset 0 0 2px #000;
+            background: #494D54;
+            border-color: #51CBEE;
+            outline: none;
+        }
     </style>
 </head>
 <body style="background: #2F2F2F;">
@@ -81,6 +105,7 @@
             </div>
             <div id="layer-objects" style="text-align: center;"></div>
         </div>
+        <textarea id="text-box" class="textbox" placeholder="Comment for This Cut..."></textarea>
     </div>
 
     <div id="canvas-box" style="float: right; background: white;"></div>

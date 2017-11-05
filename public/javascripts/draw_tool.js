@@ -106,3 +106,36 @@ function sendCanvas(main_canvas, flag) {
     xhr.send(params);
     //window.location="http://localhost:3000/";
 }
+
+function sendCanvas(main_canvas, flag, text) {
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/image_receiver', true);
+    xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+    xhr.setRequestHeader("Cache-Control","no-cache, must-revalidate");
+    xhr.setRequestHeader("Pragma","no-cache");
+
+    var params = "image=";
+    params += main_canvas.toDataURL('image/png');
+    params +='&flag='+flag;
+
+    if(flag==3) {
+        params += '&parent=' + 10;
+        params += '&text=' +text;
+    }
+    else if(flag==2) {
+        xhr.onreadystatechange = function rspns() {
+            if (xhr.readyState == 4) {
+                var img = new Image();
+                img.src = "data:image/png;base64," + xhr.responseText;
+                img.onload = function () {
+                    var image = new fabric.Image(this);
+                    canvas.add(image);
+                }
+            }
+        };
+    }
+
+    xhr.send(params);
+    //window.location="http://localhost:3000/";
+}
