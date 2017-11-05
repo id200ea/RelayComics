@@ -107,7 +107,7 @@ app.post('/image_receiver', function (req, res) {
         fs.writeFile("public/images/"+fileName, main_image_str);  //파일 출력
         parentNum = parseInt(req.body.parent);
         // sql.addCut(null, cutAuthor, cutStory, cutSrc, parentNum)
-        sql.addCut(null, 'kke', "asd", "../images/"+fileName, parentNum);
+        sql.addCut(null, 'kke', req.body.text, "../images/"+fileName, parentNum);
     }
     else if(req.body.flag==1) {
         fs.writeFile('image_transmissions/line/input.png', main_image_str);  //파일 출력
