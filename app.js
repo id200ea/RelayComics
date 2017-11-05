@@ -166,14 +166,12 @@ app.post('/add_cartoon', function (req, res) {
 
 // Add Cut
 app.get('/add_cut', function (req, res) {
-  // 컷 그린 사람 authId
-  // cutAuthor = req.query.authId;
   // 컷 내용 story
   // cutStory = req.query.story;
   cutSrc = req.query.src;
   parentNum = parseInt(req.query.pnum);
   // sql.addCut(null, cutAuthor, cutStory, cutSrc, parentNum)
-  sql.addCut(null, 'kke', "asd", cutSrc, parentNum);
+  sql.addCut(null, User.authId, "asd", cutSrc, parentNum);
 });
 
 // Delete Cut
@@ -188,15 +186,13 @@ app.get('/del_cut', function (req, res) {
 // Cut Like
 app.get('/modi_like', function (req, res) {
   cutNum = parseInt(req.query.num);
-  // 좋아요 누른 사람 authId
-  // userId = req.query.authId;
   console.log(req.query.num.toString()+", "+ req.query.flag);
   if(req.query.flag=='add'){
     // sql.upCutLike(cutNum, userId)
-    sql.upCutLike(cutNum, 'bgh');
+    sql.upCutLike(cutNum, User.authId);
   }else {
     // sql.downCutLike(cutNum, userId)
-    sql.downCutLike(cutNum, 'bgh');
+    sql.downCutLike(cutNum, User.authId);
   }
 });
 // DB 저장 끝
