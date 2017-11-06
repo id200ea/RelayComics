@@ -2,11 +2,12 @@
  * Created by bgh29 on 2017-07-18.
  */
 
-function Cut(num, imgSrc, like, parent){
+function Cut(num, imgSrc, like, parent, cutlike){
     this.num = num;
     this.imgSrc = imgSrc;
     this.like = like;
     this.parent = parent || null;
+    this.cutlike = cutlike;
     this.child = [];
 }
 
@@ -17,11 +18,11 @@ function Cartoon(title, tag1, tag2, tag3, like, rootNum, rootImgSrc){
     this.tag3 = tag3;
     this.like = like;
 
-    this.root = new Cut(rootNum, rootImgSrc, 0);
+    this.root = new Cut(rootNum, rootImgSrc, 0, null, false);
 }
 
-Cut.prototype.addChild = function(num, imgSrc, like) {
-    var child = new Cut(num, imgSrc, like, this);
+Cut.prototype.addChild = function(num, imgSrc, like, parent, cutlike) {
+    var child = new Cut(num, imgSrc, like, this, cutlike);
     this.child.push(child);
     return child;
 };

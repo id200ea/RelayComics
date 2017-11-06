@@ -63,15 +63,16 @@ exports.makeTree = function makeTree(cutNode, callback){
     this.cutNode = cutNode;
     console.log(cutNode);
     count++;
-      var sql_descendants = 'SELECT c.* FROM Cut AS c JOIN Treepaths AS t ON c.cut_num = t.descendant WHERE t.ancestor = ' + cutNode.num.toString() + ' ORDER BY cut_like DESC';
+    var sql_descendants = 'SELECT c.*, (case when exists (select * from cut_like_log where user_id="' + User.authId.toString() + '" and cut_num=c.cut_num) then "true" else "false" end) AS Exist FROM Cut AS c JOIN Treepaths AS t ON c.cut_num = t.descendant WHERE t.ancestor = ' + cutNode.num.toString() + ' ORDER BY cut_like DESC';
     conn.query(sql_descendants, function(err, rows) {
         if(err){
             console.log(err);
         } else {
-            var i;
+            var i, Exist;
             for(i=0; i<rows.length; i++){
-                cutNode.addChild(rows[i].cut_num, rows[i].cut_src, rows[i].cut_like);
-                makeTree(cutNode.child[i], callback);
+              // 존재할 경우 true 반환
+              cutNode.addChild(rows[i].cut_num, rows[i].cut_src, rows[i].cut_like, null, rows[i].Exist);
+              makeTree(cutNode.child[i], callback);
             }
             count--;
             if(count==0 && typeof callback === "function")

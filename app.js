@@ -204,8 +204,7 @@ global.User = {
   displayName : '',
   email : ''
 };
-console.log('User.displayName.length');
-console.log(User.displayName.length);
+console.log('User.displayName.length: ' + User.displayName.length);
 
 passport.serializeUser(function(user, done) {
   console.log('serializeUser', user);
@@ -224,6 +223,8 @@ passport.deserializeUser(function(id, done) {
       User.authId = results[0].authId;
       User.displayName = results[0].displayName;
       User.email = results[0].email;
+      console.log('deserializeUser : ');
+      console.log(User);
     }
   });
 });
@@ -250,6 +251,8 @@ app.get('/auth/logout', function(req, res){
   User.authId = '';
   User.displayName = '';
   User.email = '';
+  console.log('logout :');
+  console.log(User);
   // req.session.save(function(){
     res.redirect('/');
   // });

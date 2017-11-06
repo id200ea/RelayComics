@@ -15,13 +15,6 @@ function circularStringify(circularObject){
 }
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  console.log('====================');
-  console.log('main.js');
-  console.log(User);
-  console.log('====================');
-  console.log('User.displayName.length');
-  console.log(User.displayName.length);
-
   // listCartoon 테스트
   var test = [];
   sql.listCartoon(test);

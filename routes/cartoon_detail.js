@@ -24,10 +24,6 @@ router.get('/', function(req, res, next) {
       console.log(test);
       res.render('detail', {cartoon:circularStringify(test)});
   });
-  console.log('====================');
-  console.log('detail.js');
-  console.log(User);
-  console.log('====================');
   /*
   setTimeout(function(){
     console.log(test);
