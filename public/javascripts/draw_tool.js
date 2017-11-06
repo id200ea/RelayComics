@@ -88,7 +88,8 @@ function sendCanvas(main_canvas, flag) {
     params +='&flag='+flag;
 
     if(flag==3) {
-        params += '&parent=' + 10;
+        console.log(parentNum);
+        params += '&parent=' + parentNum;
     }
     else if(flag==2) {
         xhr.onreadystatechange = function rspns() {
@@ -120,8 +121,9 @@ function sendCanvas(main_canvas, flag, text) {
     params +='&flag='+flag;
 
     if(flag==3) {
-        params += '&parent=' + 10;
-        params += '&text=' +text;
+        console.log(parentNum);
+        params += '&parent=' + parentNum;
+        params += '&text=' + text;
     }
     else if(flag==2) {
         xhr.onreadystatechange = function rspns() {
@@ -138,4 +140,4 @@ function sendCanvas(main_canvas, flag, text) {
 
     xhr.send(params);
     //window.location="http://localhost:3000/";
-}
+}ㅁ

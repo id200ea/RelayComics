@@ -46,7 +46,8 @@ html
         script(type='text/javascript').
             sliderOpt = {
                 imageWidth:500,
-                imageHeigth:350
+                imageHeigth:350,
+                button:"visible"
             };
             cartoonlist = JSON.parse(!{JSON.stringify(cartoon)});
             var tempStory =[];
@@ -54,9 +55,14 @@ html
             console.log(cartoonlist);
             for(var i=0 ; i<cartoonlist.length ; i++){
                 tempStory[i]=[];
-                if(cartoonlist[i].root.child.length>0)
-                    for(tempCut = cartoonlist[i].root.child[0]; tempCut.child.length>0 ; tempCut = tempCut.child[0])
+                if(cartoonlist[i].root.child.length>0){
+                    console.log(i);
+                    for(tempCut = cartoonlist[i].root.child[0]; tempCut.child.length>0 ; tempCut = tempCut.child[0]){
+                        console.log(tempCut);
                         tempStory[i].push(tempCut);
+                    }
+                    tempStory[i].push(tempCut);
+                }
 
             }
 
@@ -98,9 +104,10 @@ html
             }
             var index = 5;
             window.onscroll = function (ev) {
+                /*
                 if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
                     create_slider("Title"+index.toString(), index++);
-                }
+                }*/
             };
             (function () {
                 "use strict";

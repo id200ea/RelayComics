@@ -12,6 +12,7 @@ function ImageSlider(num, opt) {
     this.imageWidth = opt.imageWidth;
     this.imageHeigth = opt.imageHeigth;
     this.gravity = opt.gravity;
+    this.button = opt.button;
     this.prev;
     this.next;
     this.nextHandler = function() {instance.onClickNext()};
@@ -34,45 +35,48 @@ ImageSlider.prototype.create = function(list){
         var heartDiv = document.createElement("div");
         var crossDiv = document.createElement("div");
         fitImageSize(img, v.imgSrc, instance.imageWidth, instance.imageHeigth);
-        heartDiv.classList.add("heart-shape");
-        heartDiv.onclick = function(){
-          this.classList.toggle("is-on");
-          var xhr = new XMLHttpRequest();
-          var url = '/modi_like?';
-          url += 'num=' + v.num.toString();
-          if(this.classList.length==1){
-            url += '&flag=del';
-          } else {
-            url += '&flag=add';
-          }
-          fetch(url).then(function (res) {
-                console.log(res.text()+"a");
-            }).then(function (html) {
-                console.log("a");
-            });
-        };
-        heartDiv.style.opacity = "0.5";
-        crossDiv.classList.add("x-shape");
-        crossDiv.onclick = function(){
-            var con_test = confirm("정말 삭제하시겠습니까?");
-            if(con_test == true){
-                var xhr = new XMLHttpRequest();
-                var url = '/del_cut?';
-                url += 'num=' + v.num.toString();
-                url += '&child=' + v.child.length.toString();
-                console.log(url);
-                fetch(url).then(function (res) {
+        if(instance.button!='none'){
+            heartDiv.classList.add("heart-shape");
+            heartDiv.onclick = function(){
+              this.classList.toggle("is-on");
+              var xhr = new XMLHttpRequest();
+              var url = '/modi_like?';
+              url += 'num=' + v.num.toString();
+              if(this.classList.length==1){
+                url += '&flag=del';
+              } else {
+                url += '&flag=add';
+              }
+              fetch(url).then(function (res) {
                     console.log(res.text()+"a");
                 }).then(function (html) {
                     console.log("a");
                 });
+            };
+            heartDiv.style.opacity = "0.5";
+            crossDiv.classList.add("x-shape");
+            crossDiv.onclick = function(){
+                var con_test = confirm("정말 삭제하시겠습니까?");
+                if(con_test == true){
+                    var xhr = new XMLHttpRequest();
+                    var url = '/del_cut?';
+                    url += 'num=' + v.num.toString();
+                    url += '&child=' + v.child.length.toString();
+                    console.log(url);
+                    fetch(url).then(function (res) {
+                        console.log(res.text()+"a");
+                    }).then(function (html) {
+                        console.log("a");
+                    });
+                }
+            };
+            if(i>0){
+                heartDiv.style.visibility="hidden";
+                crossDiv.style.visibility="hidden";
             }
-        };
-        if(i>0){
-            li.style.opacity="0.5";
-            heartDiv.style.visibility="hidden";
-            crossDiv.style.visibility="hidden";
         }
+        if(i>0)
+            li.style.opacity="0.5";
         li.appendChild(img);
         li.appendChild(heartDiv);
         li.appendChild(crossDiv);
