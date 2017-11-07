@@ -140,4 +140,4 @@ function sendCanvas(main_canvas, flag, text) {
 
     xhr.send(params);
     //window.location="http://localhost:3000/";
-}ㅁ
+}

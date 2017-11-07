@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | 3dModelPose</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>  
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/last.json", {onProgress: UnityProgress});
+      function SaySomethingToUnity() {
+          gameInstance.SendMessage("target","setPose","");
+      }
+      var canvas, gl;
+      function asdasd() {
+          var c = document.getElementById('copyCanvas');
+          var cCtx = c.getContext('2d');
+          var img = new Image();
+          img.src = canvas.toDataURL()
+          img.onload = function () {
+              cCtx.drawImage(img,0,0);
+          }
+      }
+      function draw() {
+          canvas = document.getElementById('#canvas');
+          canvas.preserveDrawingBuffer=true;
+          gl = canvas.getContext('webgl2',{ preserveDrawingBuffer: true});
+      }
+
+    </script>
+  </head>
+  <body style="background-color: black;" onload="draw();">
+  <button onclick="SaySomethingToUnity();">위로 올라가라</button>
+  <button onclick="asdasd();">메롱</button>
+  <canvas id="copyCanvas" style="position: absolute; top: 1000px; cursor: default;" width="960" height="600"></canvas>
+  <div class="webgl-content">
+      <div id="gameContainer" style="width: 960px; height: 600px"></div>
+      <div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
+        <div class="title">3dModelPose</div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,8 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>Test</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | 3dModelPose</title>
+    <link rel="shortcut icon" href="../TemplateData/favicon.ico">
+    <link rel="stylesheet" href="../TemplateData/style.css">
+    <script src="../TemplateData/UnityProgress.js"></script>
+    <script src="../Build/UnityLoader.js"></script>
+    <script>
+        var gameInstance = UnityLoader.instantiate("gameContainer", "Build/last.json", {onProgress: UnityProgress});
+        function SaySomethingToUnity() {
+            gameInstance.SendMessage("target","setPose","");
+        }
+        var canvas1, gl;
+        function asdasd() {
+            var tempImage = new Image(); //drawImage 메서드에 넣기 위해 이미지 객체화
+            tempImage.src = canvas1.toDataURL(); //data-uri를 이미지 객체에 주입
+            tempImage.onload = function () {
+                var image = new fabric.Image(this);
+                canvas.add(image);
+            }
+        }
+    </script>
     <script type="text/javascript" src="../javascripts/canvas.js"></script>
     <script type="text/javascript" src="../javascripts/draw_tool.js"></script>
     <script type="text/javascript" src="../javascripts/fabric.js"></script>
@@ -57,7 +78,7 @@
     </style>
 </head>
 <body style="background: #2F2F2F;">
-    <div style="min-width: 870px; width: 100%; border-radius: 5px; background-color: #4F4F4F; padding: 5px; margin: 2px; box-shadow: 0px -1px #8F8F8F; ">
+    <div style="min-width: 870px; width: 99%; border-radius: 5px; background-color: #4F4F4F; padding: 5px; margin: 2px; box-shadow: 0px -1px #8F8F8F; ">
         &nbsp;&nbsp;
         <button id="clear-canvas" >ClrearCanvas</button>
         <span style="color:#DFDFDF">|</span>
@@ -109,5 +130,13 @@
     </div>
 
     <div id="canvas-box" style="float: right; background: white;"></div>
+
+    <button onclick="SaySomethingToUnity();">자세변경</button>
+    <button onclick="asdasd();">캔버스로 가져오기</button>
+    <div style="visibility: hidden;">
+        <div class="webgl-content">
+            <div id="gameContainer" style="width: 160px; height: 100px"></div>
+        </div>
+    </div>
 </body>
 </html>

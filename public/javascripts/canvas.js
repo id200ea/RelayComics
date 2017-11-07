@@ -19,6 +19,11 @@ var GetElement = function (id) {
 };
 
 window.onload = function() {
+    canvas1 = document.getElementById('#canvas');
+    canvas1.preserveDrawingBuffer=true;
+    gl = canvas1.getContext('webgl2',{ preserveDrawingBuffer: true}); //유니티
+
+
     parentNum = parseInt(getQuerystring('parentNum'));
 
     //기본 호출.
