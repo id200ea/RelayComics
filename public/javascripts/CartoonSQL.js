@@ -68,7 +68,7 @@ exports.makeTree = function makeTree(cutNode, callback){
         if(err){
             console.log(err);
         } else {
-            var i, Exist;
+            var i;
             for(i=0; i<rows.length; i++){
               // 존재할 경우 true 반환
               cutNode.addChild(rows[i].cut_num, rows[i].cut_src, rows[i].cut_like, null, rows[i].Exist);

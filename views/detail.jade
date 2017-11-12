@@ -31,9 +31,12 @@ html
             a(href='/auth/login')
               span Login
         - else
-          li.last.logout
+          li.logout
             a(href='/auth/logout')
               span Logout
+          li.last.welcome
+            a
+              span= "Welcome! " + User.displayName
         // #region Jssor Slider Begin
         // Generator: Jssor Slider Maker
         // Source: https://www.jssor.com
