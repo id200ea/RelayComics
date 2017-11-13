@@ -10,12 +10,12 @@
     <script src="../TemplateData/UnityProgress.js"></script>
     <script src="../Build/UnityLoader.js"></script>
     <script>
-        var gameInstance = UnityLoader.instantiate("gameContainer", "Build/last.json", {onProgress: UnityProgress});
+        var gameInstance = UnityLoader.instantiate("gameContainer", "Build/Desktop.json", {onProgress: UnityProgress});
         function SaySomethingToUnity() {
-            gameInstance.SendMessage("target","setPose","");
+            gameInstance.SendMessage("target", "asdasdasd", "36.916002,23.705510,33.271859,39.750000,26.250000,36.810000,33.750000,40.250000,44.510000,36.250000,54.750000,51.030000,36.250000,28.750000,29.170000,33.750000,43.250000,32.440000,39.250000,58.750000,35.640000,36.694009,22.762436,33.336106,35.801687,18.970068,33.594879,34.945283,15.330353,33.843236,33.000000,7.750000,34.500000,32.250000,5.250000,34.810000,32.020494,10.682358,32.672354,29.750000,11.250000,30.680000,22.750000,13.750000,35.750000,23.750000,9.250000,44.680000,35.695622,10.682358,35.716225,38.250000,11.250000,37.720000,38.250000,15.750000,45.660000,24.250000,9.750000,44.520000");
+            setTimeout(poseChange, 300);
         }
-        var canvas1, gl;
-        function asdasd() {
+        function poseChange() {
             var tempImage = new Image(); //drawImage 메서드에 넣기 위해 이미지 객체화
             tempImage.src = canvas1.toDataURL(); //data-uri를 이미지 객체에 주입
             tempImage.onload = function () {
@@ -23,6 +23,7 @@
                 canvas.add(image);
             }
         }
+        var canvas1, gl;
     </script>
     <script type="text/javascript" src="../javascripts/canvas.js"></script>
     <script type="text/javascript" src="../javascripts/draw_tool.js"></script>
@@ -133,11 +134,10 @@
 
     <div id="canvas-box" style="position: absolute; background: white; top:70px; left: 980px;"></div>
 
-    <button onclick="SaySomethingToUnity();">자세변경</button>
-    <button onclick="asdasd();">캔버스로 가져오기</button>
+    <button onclick="SaySomethingToUnity();">캔버스로 가져오기</button>
     <div style="visibility: hidden;">
         <div class="webgl-content">
-            <div id="gameContainer" style="width: 160px; height: 100px"></div>
+            <div id="gameContainer" style="width: 320px; height: 200px"></div>
         </div>
     </div>
 </body>
