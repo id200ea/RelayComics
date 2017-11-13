@@ -331,6 +331,8 @@ window.onload = function() {
             }
 
             var selected = fabric.util.object.clone(canvas.getActiveObject());
+            canvas.remove(canvas.getActiveObject());
+
 
             var canvasForColor = document.createElement("canvas");
             canvasForColor.id = 'canvasForColor';
@@ -338,6 +340,7 @@ window.onload = function() {
             canvasForColor.height = selected.height.valueOf()+selected.strokeWidth;
             canvasForColor.style.border = "1px solid gold";
             GetElement('canvas-box').appendChild(canvasForColor);
+
 
             var sendButton = document.createElement("button");
             sendButton.innerText="Send";
