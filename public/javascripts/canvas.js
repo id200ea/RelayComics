@@ -227,6 +227,10 @@ window.onload = function() {
         GetElement("image_up_file").click();
     }
 
+    GetElement('poseload-object').onclick = function loadPoseImage() {
+        GetElement("poseup-file").click();
+    }
+
     var tempCanvas;
     var Flag  = 0;
     GetElement('Color-object').onclick = function () {

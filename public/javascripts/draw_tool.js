@@ -21,6 +21,39 @@ function Image_Load(obj) {
     obj.value = "";
 }
 
+//Load
+function Pose_Image_Load(obj) {
+    var pathpoint = obj.value.lastIndexOf('.');
+    var filepoint = obj.value.substring(pathpoint+1,obj.length);
+    var filetype = filepoint.toLowerCase();
+    if(filetype=='jpg'|| filetype=='jpeg'|| filetype=='png' || filetype=='gif'  || filetype=='bmp'){
+        var reader = new FileReader();
+        reader.readAsDataURL(obj.files[0]);
+        reader.onload = function  () {
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/pose_image_receiver', true);
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+            xhr.setRequestHeader("Cache-Control","no-cache, must-revalidate");
+            xhr.setRequestHeader("Pragma","no-cache");
+
+            var params = "image="+reader.result;
+
+            xhr.onreadystatechange = function rspnsaa() {
+                if (xhr.readyState == 4) {
+                    alert(xhr.responseText);
+                }
+            };
+            xhr.send(params);
+        }
+    }
+    else{
+        alert("이미지 파일만 선택할 수 있습니다.");
+    }
+    obj.value = "";
+}
+
+
 var curLayer;
 var LayerCount = 1;
 function addLayer() {

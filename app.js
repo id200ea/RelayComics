@@ -124,6 +124,31 @@ app.post('/image_receiver', function (req, res) {
         res.end(buff);
     });
 });
+//지응 코드
+app.post('/pose_image_receiver', function (req, res) {
+
+    var main_image_base64, main_image_str;
+    var come = req.body.image.replace(/\s/gi, '+');
+    //a 바꾸어질 문자, b 는 바뀔 문자가 되겠다.  g: 전역 검색 i: 대/소문자 구분 안함
+
+    main_image_base64 = come.replace('data:image/png;base64,','');  //Decoding 전처리
+    main_image_base64 = main_image_base64.replace('data:image/jpeg;base64,','');  //Decoding 전처리
+    main_image_base64 = main_image_base64.replace('data:image/jpg;base64,','');  //Decoding 전처리
+    main_image_base64 = main_image_base64.replace('data:image/bmp;base64,','');  //Decoding 전처리
+    main_image_str = new Buffer(main_image_base64, 'base64');  //Decoding 부분
+
+    var fs = require('fs');  //파일 입출력 모듈
+    fs.writeFile('image_transmissions/ref/pose_input.png', main_image_str);  //파일 출력
+
+    res.end("asdasdasdsad");
+    // colorpy.on('close',function(message){
+    //     //아래 파일 respon 코드
+    //     var bitmap = fs.readFileSync("image_transmissions/output.png");
+    //     var buff = new Buffer(bitmap).toString('base64');
+    //     res.end(buff);
+    // });
+});
+
 //지응 코드 끝
 
 // DB 저장
