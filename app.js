@@ -139,14 +139,13 @@ app.post('/pose_image_receiver', function (req, res) {
 
     var fs = require('fs');  //파일 입출력 모듈
     fs.writeFile('image_transmissions/ref/pose_input.png', main_image_str);  //파일 출력
-
-    res.end("asdasdasdsad");
-    // colorpy.on('close',function(message){
-    //     //아래 파일 respon 코드
-    //     var bitmap = fs.readFileSync("image_transmissions/output.png");
-    //     var buff = new Buffer(bitmap).toString('base64');
-    //     res.end(buff);
-    // });
+	posepy = new pyshell('poseClient.py');
+    posepy.on('close',function(message){
+        //아래 파일 respon 코드
+        var txt = fs.readFileSync("./image_transmissions/ref/3d_pose.txts");
+        var buff = new Buffer(txt).toString('base64');
+   		res.end("asdasdasdsad");
+    });
 });
 
 //지응 코드 끝
