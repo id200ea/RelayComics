@@ -3,7 +3,7 @@ function Image_Load(obj) {
     var pathpoint = obj.value.lastIndexOf('.');
     var filepoint = obj.value.substring(pathpoint+1,obj.length);
     var filetype = filepoint.toLowerCase();
-    if(filetype=='jpg'|| filetype=='jpeg'|| filetype=='png' || filetype=='gif'  || filetype=='bmp'){
+    if(filetype=='png'){
         var reader = new FileReader();
         reader.readAsDataURL(obj.files[0]);
         reader.onload = function  () {
@@ -16,7 +16,7 @@ function Image_Load(obj) {
         }
     }
     else{
-        alert("이미지 파일만 선택할 수 있습니다.");
+        alert("png 이미지만 사용할 수 있습니다.");
     }
     obj.value = "";
 }
