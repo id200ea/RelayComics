@@ -124,6 +124,93 @@ app.post('/image_receiver', function (req, res) {
         res.end(buff);
     });
 });
+
+
+
+function swapPose(pose1, pose2){
+    var temp;
+    for(var i=0 ; i<3 ; i++) {
+        temp = pose1[i];
+        pose1[i] = pose2[i];
+        pose2[i] = temp;
+    }
+}
+
+function copyPose(from, to){
+    for(var i=0 ; i<3 ; i++){
+        to[i] = from[i];
+    }
+}
+function copyMidPose(from1, from2, to){
+    for(var i=0 ; i<3 ; i++){
+        to[i] = (from1[i]+from2[i])/2;
+    }
+}
+
+function changePoseToKinect(poseString, callback){
+    var poseNum = 15;
+    var kinectPoseNum = 25;
+    var pose = poseString.split(",");
+    var posePoint = [];
+    var kinectPosePoint = [];
+    var kinectPose = "";
+    for(var i = 0 ; i<kinectPoseNum ; i++) {
+        kinectPosePoint[i] = [];
+    }
+
+    for(var i=0 ; i<poseNum ; i++){
+        posePoint[i] = [];
+        posePoint[i].push(parseFloat(pose[i*3]));
+        posePoint[i].push(parseFloat(pose[i*3+1]));
+        posePoint[i].push(parseFloat(pose[i*3+2]));
+    }
+
+    swapPose(posePoint[0], posePoint[6]);
+    swapPose(posePoint[1], posePoint[2]);
+    swapPose(posePoint[3], posePoint[6]);
+    swapPose(posePoint[4], posePoint[6]);
+    swapPose(posePoint[5], posePoint[6]);
+    swapPose(posePoint[9], posePoint[12]);
+    swapPose(posePoint[10], posePoint[13]);
+    swapPose(posePoint[11], posePoint[14]);
+    swapPose(posePoint[12], posePoint[14]);
+
+    var zeroPoint = [ 0, 0, 0];
+    copyPose(posePoint[0], kinectPosePoint[0]);
+    copyMidPose(posePoint[0], posePoint[7], kinectPosePoint[1]);
+    copyMidPose(posePoint[7], posePoint[8], kinectPosePoint[2]);
+    copyPose(posePoint[8], kinectPosePoint[3]);
+    copyPose(posePoint[9], kinectPosePoint[4]);
+    copyPose(posePoint[10], kinectPosePoint[5]);
+    copyPose(posePoint[11], kinectPosePoint[6]);
+    copyPose(zeroPoint, kinectPosePoint[7]);
+    copyPose(posePoint[12], kinectPosePoint[8]);
+    copyPose(posePoint[13], kinectPosePoint[9]);
+    copyPose(posePoint[14], kinectPosePoint[10]);
+    copyPose(zeroPoint, kinectPosePoint[11]);
+    copyPose(posePoint[4], kinectPosePoint[12]);
+    copyPose(posePoint[5], kinectPosePoint[13]);
+    copyPose(posePoint[6], kinectPosePoint[14]);
+    copyPose(zeroPoint, kinectPosePoint[15]);
+    copyPose(posePoint[1], kinectPosePoint[16]);
+    copyPose(posePoint[2], kinectPosePoint[17]);
+    copyPose(posePoint[3], kinectPosePoint[18]);
+    copyPose(zeroPoint, kinectPosePoint[19]);
+    copyPose(posePoint[7], kinectPosePoint[20]);
+    copyPose(zeroPoint, kinectPosePoint[21]);
+    copyPose(zeroPoint, kinectPosePoint[22]);
+    copyPose(zeroPoint, kinectPosePoint[23]);
+    copyPose(zeroPoint, kinectPosePoint[24]);
+
+    for(var i=0 ; i<kinectPoseNum ;i++){
+        if(i==kinectPoseNum-1)
+            kinectPose += kinectPosePoint[i][0]+","+kinectPosePoint[i][1]+","+kinectPosePoint[i][2];
+        else
+            kinectPose += kinectPosePoint[i][0]+","+kinectPosePoint[i][1]+","+kinectPosePoint[i][2]+",";
+    }
+    callback(kinectPose);
+}
+
 //지응 코드
 app.post('/pose_image_receiver', function (req, res) {
 
@@ -142,9 +229,9 @@ app.post('/pose_image_receiver', function (req, res) {
 	posepy = new pyshell('poseClient.py');
     posepy.on('close',function(message){
         //아래 파일 respon 코드
-        var txt = fs.readFileSync("./image_transmissions/ref/3d_pose.txts");
-        var buff = new Buffer(txt).toString('base64');
-   		res.end("asdasdasdsad");
+        var txt = fs.readFileSync("./image_transmissions/ref/3d_pose.txt");
+        changePoseToKinect(txt, function(pose) {res.end(pose);})
+
     });
 });
 
