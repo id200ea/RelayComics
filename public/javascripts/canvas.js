@@ -330,9 +330,8 @@ window.onload = function() {
                 objs[i].evented = false;
             }
 
+            var ooo = canvas.getActiveObject();
             var selected = fabric.util.object.clone(canvas.getActiveObject());
-            canvas.remove(canvas.getActiveObject());
-
 
             var canvasForColor = document.createElement("canvas");
             canvasForColor.id = 'canvasForColor';
@@ -358,6 +357,7 @@ window.onload = function() {
                 }
                 canvas = tempCanvas;
                 tempCanvas = null;
+                canvas.remove(ooo);
                 drawingModeEl.click();  //무조건 열린다.
 
                 for (i = 0; i < objs.length; i++) {
