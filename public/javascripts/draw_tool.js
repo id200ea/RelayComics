@@ -41,6 +41,7 @@ function Pose_Image_Load(obj) {
 
             xhr.onreadystatechange = function rspnsaa() {
                 if (xhr.readyState == 4) {
+                    SaySomethingToUnity(xhr.responseText);
                     alert(xhr.responseText);
                 }
             };
