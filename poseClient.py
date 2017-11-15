@@ -39,15 +39,16 @@ if __name__ == '__main__':
     
     HOST = '127.0.0.1'
     PORT = 50006
+    buffsize = 16
     print(HOST, PORT)
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
     
 
-    s.send(b"../../image_transmissions/ref/pose_input.png");
-    time.sleep(1)
-	
+    s.send(b"gg\n")
+
+    s.recv(buffsize)
 
 
     

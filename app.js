@@ -91,6 +91,7 @@ var options = {
 
 //지응 코드
 app.post('/image_receiver', function (req, res) {
+	console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1");
 
     var main_image_base64, main_image_str;
     var come = req.body.image.replace(/\s/gi, '+');
@@ -99,16 +100,18 @@ app.post('/image_receiver', function (req, res) {
     var fs = require('fs');  //파일 입출력 모듈
     main_image_base64 = come.replace('data:image/png;base64,','');  //Decoding 전처리
     main_image_str = new Buffer(main_image_base64, 'base64');  //Decoding 부분
-
+	console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3");
     if(req.body.flag==3){
         var date = new Date();
         var timeStr = date.getFullYear() +"_"+ date.getMonth()+"_"+ date.getDate()+"_"+date.getHours()+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+date.getMilliseconds();
         var fileName = "new_" + timeStr +".png";
+	console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2");
         fs.writeFile("public/images/"+fileName, main_image_str);  //파일 출력
         parentNum = parseInt(req.body.parent);
         console.log(parentNum+"이다");
         // sql.addCut(null, cutAuthor, cutStory, cutSrc, parentNum)
         sql.addCut(null, User.authId, req.body.text, "../images/"+fileName, parentNum);
+		res.end();
     }
     else if(req.body.flag==1) {
         fs.writeFile('image_transmissions/line/input.png', main_image_str);  //파일 출력
@@ -118,98 +121,12 @@ app.post('/image_receiver', function (req, res) {
         colorpy = new pyshell('PythonClient.py', options);
     }
     colorpy.on('close',function(message){
-        //아래 파일 respon 코드
-        var bitmap = fs.readFileSync("image_transmissions/output.png");
-        var buff = new Buffer(bitmap).toString('base64');
-        res.end(buff);
+	  		//아래 파일 respon 코드
+		var bitmap = fs.readFileSync("image_transmissions/output.png");
+		var buff = new Buffer(bitmap).toString('base64');
+		res.end(buff);
     });
 });
-
-
-
-function swapPose(pose1, pose2){
-    var temp;
-    for(var i=0 ; i<3 ; i++) {
-        temp = pose1[i];
-        pose1[i] = pose2[i];
-        pose2[i] = temp;
-    }
-}
-
-function copyPose(from, to){
-    for(var i=0 ; i<3 ; i++){
-        to[i] = from[i];
-    }
-}
-function copyMidPose(from1, from2, to){
-    for(var i=0 ; i<3 ; i++){
-        to[i] = (from1[i]+from2[i])/2;
-    }
-}
-
-function changePoseToKinect(poseString, callback){
-    var poseNum = 15;
-    var kinectPoseNum = 25;
-    var pose = poseString.split(",");
-    var posePoint = [];
-    var kinectPosePoint = [];
-    var kinectPose = "";
-    for(var i = 0 ; i<kinectPoseNum ; i++) {
-        kinectPosePoint[i] = [];
-    }
-
-    for(var i=0 ; i<poseNum ; i++){
-        posePoint[i] = [];
-        posePoint[i].push(parseFloat(pose[i*3]));
-        posePoint[i].push(parseFloat(pose[i*3+1]));
-        posePoint[i].push(parseFloat(pose[i*3+2]));
-    }
-
-    swapPose(posePoint[0], posePoint[6]);
-    swapPose(posePoint[1], posePoint[2]);
-    swapPose(posePoint[3], posePoint[6]);
-    swapPose(posePoint[4], posePoint[6]);
-    swapPose(posePoint[5], posePoint[6]);
-    swapPose(posePoint[9], posePoint[12]);
-    swapPose(posePoint[10], posePoint[13]);
-    swapPose(posePoint[11], posePoint[14]);
-    swapPose(posePoint[12], posePoint[14]);
-
-    var zeroPoint = [ 0, 0, 0];
-    copyPose(posePoint[0], kinectPosePoint[0]);
-    copyMidPose(posePoint[0], posePoint[7], kinectPosePoint[1]);
-    copyMidPose(posePoint[7], posePoint[8], kinectPosePoint[2]);
-    copyPose(posePoint[8], kinectPosePoint[3]);
-    copyPose(posePoint[9], kinectPosePoint[4]);
-    copyPose(posePoint[10], kinectPosePoint[5]);
-    copyPose(posePoint[11], kinectPosePoint[6]);
-    copyPose(zeroPoint, kinectPosePoint[7]);
-    copyPose(posePoint[12], kinectPosePoint[8]);
-    copyPose(posePoint[13], kinectPosePoint[9]);
-    copyPose(posePoint[14], kinectPosePoint[10]);
-    copyPose(zeroPoint, kinectPosePoint[11]);
-    copyPose(posePoint[4], kinectPosePoint[12]);
-    copyPose(posePoint[5], kinectPosePoint[13]);
-    copyPose(posePoint[6], kinectPosePoint[14]);
-    copyPose(zeroPoint, kinectPosePoint[15]);
-    copyPose(posePoint[1], kinectPosePoint[16]);
-    copyPose(posePoint[2], kinectPosePoint[17]);
-    copyPose(posePoint[3], kinectPosePoint[18]);
-    copyPose(zeroPoint, kinectPosePoint[19]);
-    copyPose(posePoint[7], kinectPosePoint[20]);
-    copyPose(zeroPoint, kinectPosePoint[21]);
-    copyPose(zeroPoint, kinectPosePoint[22]);
-    copyPose(zeroPoint, kinectPosePoint[23]);
-    copyPose(zeroPoint, kinectPosePoint[24]);
-
-    for(var i=0 ; i<kinectPoseNum ;i++){
-        if(i==kinectPoseNum-1)
-            kinectPose += kinectPosePoint[i][0]+","+kinectPosePoint[i][1]+","+kinectPosePoint[i][2];
-        else
-            kinectPose += kinectPosePoint[i][0]+","+kinectPosePoint[i][1]+","+kinectPosePoint[i][2]+",";
-    }
-    callback(kinectPose);
-}
 
 //지응 코드
 app.post('/pose_image_receiver', function (req, res) {
@@ -229,9 +146,14 @@ app.post('/pose_image_receiver', function (req, res) {
 	posepy = new pyshell('poseClient.py');
     posepy.on('close',function(message){
         //아래 파일 respon 코드
-        var txt = fs.readFileSync("./image_transmissions/ref/3d_pose.txt");
-        changePoseToKinect(txt, function(pose) {res.end(pose);})
-
+		
+        var txt = fs.readFileSync("image_transmissions/ref/3d_pose.txt");
+		res.end(txt)
+		fs.unlink("image_transmissions/ref/3d_pose.txt", function(error) {
+			if(!error) console.log("Deleted!!!");
+		});
+		console.log("apfhd"+txt)
+		
     });
 });
 
@@ -323,7 +245,7 @@ passport.serializeUser(function(user, done) {
 });
 passport.deserializeUser(function(id, done) {
   console.log('deserializeUser', id);
-  var sql = 'SELECT * FROM users WHERE authId=?';
+  var sql = 'SELECT * FROM Users WHERE authId=?';
   conn.query(sql, [id], function(err, results){
     if(err){
       console.log(err);

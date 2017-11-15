@@ -19,7 +19,6 @@ model = torch.load('../models/hgreg-3d.t7')
 print('model loaded')
 
 
-
 function posedetect()
 	
 	local J = 16
@@ -33,8 +32,7 @@ function posedetect()
 	local size = math.max(h, w)
 	local inp = crop(img, c, 1 * size / 200.0, 0, inputRes)
 
-	local model = torch.load('../models/hgreg-3d.t7')
-	print('model loaded')
+	
 	local output = model:forward(inp:view(1, 3, inputRes, inputRes):cuda())
 	local tmpOutput = output[#output - 1]
 	local p = getPreds(tmpOutput)
@@ -60,15 +58,19 @@ function posedetect()
 	if file then
 		for i=1,16 do
 		    for j=1,3 do
-				file:write(pred[i][j])
-				if j ~= 3 then
+				file:write(-pred[i][j])
+				
+				if(j ~= 3) then
 					file:write(',')
 				end
-			print(pred[i][j])
+			end
+			if(i~=16) then
+				file:write(',')
 			end
 		end
 	end
 	file:close()
+	print("finished")
 end
 
 
@@ -85,12 +87,13 @@ print (ip)
 while 1 do
   -- wait for a connection from any client
   local client = server:accept()
+  print("connected")
   -- posedetect()
-  local line,err = client:receive()
-  print(line)
   posedetect()
+  print(client:receive('*l'))
+  print("received")
+  client:send("done")
   client:close()
-  --client:close()
 end
 
 

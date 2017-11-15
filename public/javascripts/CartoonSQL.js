@@ -63,7 +63,7 @@ exports.makeTree = function makeTree(cutNode, callback){
     this.cutNode = cutNode;
     console.log(cutNode);
     count++;
-    var sql_descendants = 'SELECT c.*, (case when exists (select * from cut_like_log where user_id="' + User.authId.toString() + '" and cut_num=c.cut_num) then "true" else "false" end) AS Exist FROM Cut AS c JOIN Treepaths AS t ON c.cut_num = t.descendant WHERE t.ancestor = ' + cutNode.num.toString() + ' ORDER BY cut_like DESC';
+    var sql_descendants = 'SELECT c.*, (case when exists (select * from Cut_like_log where user_id="' + User.authId.toString() + '" and cut_num=c.cut_num) then "true" else "false" end) AS Exist FROM Cut AS c JOIN Treepaths AS t ON c.cut_num = t.descendant WHERE t.ancestor = ' + cutNode.num.toString() + ' ORDER BY cut_like DESC';
     conn.query(sql_descendants, function(err, rows) {
         if(err){
             console.log(err);

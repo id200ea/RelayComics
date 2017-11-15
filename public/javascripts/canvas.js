@@ -320,7 +320,8 @@ window.onload = function() {
     GetElement('save-canvas').onclick = function () {
         canvas.renderAll();
         sendCanvas(GetElement('c'), 3, GetElement('text-box').value);  //canvas 보내기
-        location.replace("http://127.0.0.1:3000");
+
+        
     }
     
     canvas.on('object:selected', function () {

@@ -59,7 +59,7 @@ html
         #addCut {
             background-color:White;
             border: none;
-            padding-bottom:350px;
+            padding-bottom:500px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -91,7 +91,7 @@ html
         slider = [];
         sliderData = [];
         cartoonDiv =document.getElementById("cartoon");
-        loadCnt = 2;
+        loadCnt = 5;
         var test;
         var i;
 
@@ -106,7 +106,7 @@ html
         addCutDiv.appendChild(slider[0]);
 
         var temp = test.root;
-        for (index = 1; temp.child.length > 0 && index<=loadCnt+2 ; temp = temp.child[0], index++) {
+        for (index = 1; temp.child.length > 0 ; temp = temp.child[0], index++) {
             story.push(temp.child);
             sliderData[index] = new ImageSlider(index, sliderOpt);
             slider[index] = sliderData[index].create(temp.child);
@@ -120,20 +120,20 @@ html
         }
         pre=1;
         cur=1;
-        slider[0].style.border = "3px solid green"
+        slider[1].style.border = "3px solid green"
         window.onscroll = function (ev) {
             var top  = (window.pageYOffset || document.documentElement.scrollTop)- document.getElementById("info").clientHeight;
             var imageHeight = 380;
             cur = (parseInt((top+window.innerHeight/2)/imageHeight)+1).toString();
-            console.log(cur);
+            console.log(cur+","+index);
             if(pre!=cur){
-                if(cur==slider.length)
+                if(cur==slider.length-1)
                     cur=0;
                 slider[pre].style.border="none";
                 slider[cur].style.border = "3px solid green"
                 pre = cur;
             }
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            if (cur>=index-1){//(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
                 console.log("scroll end");
                 temp = story[index-1][0];
                 for (preindex = index; temp.child.length > 0 && index <= preindex+loadCnt; temp = temp.child[0], index++) {
@@ -159,7 +159,7 @@ html
                 if(cur==1)
                     window.location = "http://localhost:3000/canvas?parentNum=" + test.root.num.toString();
                 else if (cur==0)
-                    window.location = "http://localhost:3000/canvas?parentNum=" + story[story.length-1][sliderData[0].currentImage].num.toString();
+                    window.location = "http://localhost:3000/canvas?parentNum=" + story[story.length-1][sliderData[story.length].currentImage].num.toString();
                 else
                     window.location = "http://localhost:3000/canvas?parentNum="+story[cur-2][sliderData[cur-1].currentImage].num.toString();
              /*   var xmlhttp = new XMLHttpRequest();

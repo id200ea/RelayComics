@@ -26,7 +26,7 @@ function Pose_Image_Load(obj) {
     var pathpoint = obj.value.lastIndexOf('.');
     var filepoint = obj.value.substring(pathpoint+1,obj.length);
     var filetype = filepoint.toLowerCase();
-    if(filetype=='jpg'|| filetype=='jpeg'|| filetype=='png' || filetype=='gif'  || filetype=='bmp'){
+    if(filetype=='png'){
         var reader = new FileReader();
         reader.readAsDataURL(obj.files[0]);
         reader.onload = function  () {
@@ -42,7 +42,6 @@ function Pose_Image_Load(obj) {
             xhr.onreadystatechange = function rspnsaa() {
                 if (xhr.readyState == 4) {
                     SaySomethingToUnity(xhr.responseText);
-                    alert(xhr.responseText);
                 }
             };
             xhr.send(params);
@@ -155,9 +154,13 @@ function sendCanvas(main_canvas, flag, text) {
     params +='&flag='+flag;
 
     if(flag==3) {
-        console.log(parentNum);
         params += '&parent=' + parentNum;
         params += '&text=' + text;
+		xhr.onreadystatechange = function rspns() {
+            if (xhr.readyState == 4) {
+				location.replace("http://127.0.0.1:3000");
+            }
+        };
     }
     else if(flag==2) {
         xhr.onreadystatechange = function rspns() {
