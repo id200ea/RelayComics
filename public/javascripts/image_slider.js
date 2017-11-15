@@ -37,6 +37,9 @@ ImageSlider.prototype.create = function(list){
         fitImageSize(img, v.imgSrc, instance.imageWidth, instance.imageHeigth);
         if(instance.button!='none'){
             heartDiv.classList.add("heart-shape");
+            console.log(v.num+" : "+v.cutlike);
+            if(v.cutlike=="true")
+                heartDiv.classList.toggle("is-on");
             heartDiv.onclick = function(){
               this.classList.toggle("is-on");
               var xhr = new XMLHttpRequest();
