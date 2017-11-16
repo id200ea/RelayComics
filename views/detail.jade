@@ -71,7 +71,7 @@ html
             strong
                 font(size='7') This is Title
         p
-            font(size='5') #tag1 #tag2 #tag3
+            font#tag(size='5')
     div#cartoon
     div#addCut
     script(type='text/javascript').
@@ -96,7 +96,7 @@ html
         var i;
 
         test = JSON.parse(!{JSON.stringify(cartoon)});
-
+        tagFont = document.getElementById("tag").innerHTML="#"+test.tag1+" #"+test.tag2+" #"+test.tag3;
         document.getElementById("info").children[0].children[0].children[0].innerHTML = test.title;
         addCutDiv =document.getElementById("addCut");
         var tempList =[];
@@ -118,17 +118,17 @@ html
                 storyDelete(event, storyAdd);
             }, false);
         }
-        pre=1;
-        cur=1;
-        slider[1].style.border = "3px solid green"
+        pre=0;
+        cur=0;
+        slider[cur].style.border = "3px solid green"
         window.onscroll = function (ev) {
             var top  = (window.pageYOffset || document.documentElement.scrollTop)- document.getElementById("info").clientHeight;
             var imageHeight = 380;
             cur = (parseInt((top+window.innerHeight/2)/imageHeight)+1).toString();
-            console.log(cur+","+index);
             if (cur>=index-1){//(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
                 console.log("scroll end");
-                temp = story[index-2][0];
+                if(story[index-1]!=undefined)
+                    temp = story[index-1][0];
                 for (preindex = index; temp.child.length > 0 && index <= preindex+loadCnt; temp = temp.child[0], index++) {
                     story.push(temp.child);
                     sliderData[index] = new ImageSlider(index, sliderOpt);
